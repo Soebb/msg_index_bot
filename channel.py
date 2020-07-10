@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import cached_url
 from telegram_util import cutCaption
-from helper import getButtonText
+from common import getButtonText
 
 def getCompact(text):
 	if not text:

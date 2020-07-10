@@ -4,6 +4,7 @@ from telegram_util import isCN, commitRepo
 import random
 import hanzidentifier
 from channel import Channel
+from common import getButtonText
 
 def addMentionedChannelWithCallback(item, callback):
 	if not item:
@@ -28,10 +29,6 @@ def shouldProcessFullBackfill(channel, score):
 	if score == 1 and random.random() > 0.1:
 		return False
 	return True
-
-def getButtonText(soup):
-	item = soup.find('a', class_='tgme_action_button_new')
-	return (item and item.text) or ''
 
 def isMostCN(text):
 	if not text or not text.strip():
