@@ -53,7 +53,7 @@ def isGoodChannel(channel, db):
 	description = (soup.find('div', class_='tgme_channel_info_description') or
 		soup.find('div', class_='tgme_page_description'))
 	addMentionedChannelWithCallback(description, 
-		lambda name, _: Channel(name).save(db))
+		lambda name, _: Channel(name).save(db, channel))
 	description = (description and description.text) or ''
 	if isMostCN(title):
 		print(title, description, isMostCN(description), 
