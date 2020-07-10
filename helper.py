@@ -19,7 +19,7 @@ def tryAddAllMentionedChannel(item, callback):
 	item = item.find('div', class_='tgme_widget_message_text')
 	if not item:
 		return
-	addMentionedChannelWithCallback(item)
+	addMentionedChannelWithCallback(item, callback)
 
 def shouldProcessFullBackfill(channel, score):
 	if score > 1:
