@@ -355,6 +355,7 @@ def searchBigGroup():
 
 def indexing():
 	sendDebugMessage('indexing')
+	backfill() # testing
 	dedupIndex()
 	indexingImp()
 	findBadChannel()
