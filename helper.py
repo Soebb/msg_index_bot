@@ -3,9 +3,9 @@ import cached_url
 from telegram_util import isCN, commitRepo
 import random
 import hanzidentifier
+from channel import Channel
 
-def tryAddAllMentionedChannel(item, callback):
-	item = item.find('div', class_='tgme_widget_message_text')
+def addMentionedChannelWithCallback(item, callback):
 	if not item:
 		return
 	for link in item.find_all('a'):
@@ -13,6 +13,12 @@ def tryAddAllMentionedChannel(item, callback):
 		if link.find('/t.me/') == -1:
 			continue
 		callback(link.strip('/').split('/')[-1], '')
+
+def tryAddAllMentionedChannel(item, callback):
+	item = item.find('div', class_='tgme_widget_message_text')
+	if not item:
+		return
+	addMentionedChannelWithCallback(item)
 
 def shouldProcessFullBackfill(channel, score):
 	if score > 1:
@@ -49,6 +55,8 @@ def isGoodChannel(channel, db):
 		return False
 	description = (soup.find('div', class_='tgme_channel_info_description') or
 		soup.find('div', class_='tgme_page_description'))
+	addMentionedChannelWithCallback(description, 
+		lambda name, referer: Channel(name, referer).save(db))
 	description = (description and description.text) or ''
 	if isMostCN(title):
 		print(title, description, isMostCN(description), 

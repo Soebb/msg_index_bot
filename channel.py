@@ -52,7 +52,7 @@ class Channel(object):
 			return 0
 		return getCount(member_block[1])
 
-	def save(self, db, referer):
+	def save(self, db, referer=None):
 		if not self.exist():
 			return
 		db.addChannel(self.name, referer)

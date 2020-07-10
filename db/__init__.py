@@ -188,7 +188,7 @@ class DB(object):
 	def getChannels(self):
 		return self.channels.items.keys()
 
-	def addChannel(self, key, referer):
+	def addChannel(self, key, referer=None):
 		if referer == key:
 			referer = None
 		rank = self.channels.items.get(key, 100)
