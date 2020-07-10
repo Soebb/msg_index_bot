@@ -355,6 +355,8 @@ def searchBigGroup():
 
 def indexing():
 	sendDebugMessage('indexing')
+	isGoodChannel('dushufenxiang_chat', db)
+	return
 	backfill() # testing
 	dedupIndex()
 	indexingImp()

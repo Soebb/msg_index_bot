@@ -191,6 +191,7 @@ class DB(object):
 	def addChannel(self, key, referer=None):
 		if referer == key:
 			referer = None
+		print('addChannel', key)
 		rank = self.channels.items.get(key, 100)
 		rank = min(rank, self.channels.items.get(referer, 100) + 1)
 		self.channels.update(key, rank)
