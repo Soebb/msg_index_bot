@@ -268,9 +268,20 @@ def hasLink(item):
 		return False
 	return text.find('a')
 
+def hasFile(item):
+	return item.find('div', class_='tgme_widget_message_document_title')
+
 def processBubbleWithLink(item):
 	if hasLink(item):
 		processBubble(item)
+
+def processBubbleWithFile(item):
+	if hasFile(item):
+		processBubble(item)
+
+@log_on_fail(debug_group)
+def onlyFileBackfill(channel):
+	backfillChannelNew(channel, processBubbleWithFile, db, total = 100000)
 
 @log_on_fail(debug_group)
 def backfill():
@@ -355,6 +366,8 @@ def searchBigGroup():
 
 def indexing():
 	sendDebugMessage('indexing')
+	onlyFileBackfill('weekly_books')
+	onlyFileBackfill('what_youread')
 	dedupIndex()
 	indexingImp()
 	findBadChannel()
