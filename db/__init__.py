@@ -118,7 +118,7 @@ class DB(object):
 		self.channelrefer = DBItem('channelrefer', value_int = True, no_save = True)
 		
 	def finalTouch(self, result):
-		final_result = result[:100]
+		final_result = result[:20]
 		final_result = ['%d. [%s](https://t.me/%s)' % (index + 1, x[0], x[1]) 
 			for index, x in enumerate(final_result)]
 		return final_result
