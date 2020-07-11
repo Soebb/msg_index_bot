@@ -5,6 +5,7 @@ import random
 import hanzidentifier
 from channel import Channel
 from common import getButtonText
+import time
 
 def addMentionedChannelWithCallback(item, callback):
 	if not item:
@@ -96,7 +97,7 @@ def backfillChannelNew(channel, callback, db, total = 500):
 	existing_index = set([None])
 	new_index = set()
 	post = max(1, max_index - total)
-	fetch_count = 0
+	start_time = time.time()
 	while post < max_index:
 		post_link = channel + '/' + str(post)
 		existing_index.add(db.index.items.get(post_link))
@@ -106,14 +107,13 @@ def backfillChannelNew(channel, callback, db, total = 500):
 		if new_item not in existing_index:
 			new_index.add(new_item)
 		if post % 100 == 0:
-			print('jumpinfo', channel, post, fetch_count, len(existing_index), len(new_index))
+			print('jumpinfo', channel, post, len(existing_index), len(new_index))
+			if time.time() - start_time > 20 * 60:
+				break
 		if len(new_index) == 0 and len(existing_index) > 5:
 			print('jump', channel)
 			post += 100
 			existing_index = set()
 		post += 1
-		fetch_count += 1
-		if fetch_count > 500:
-			break
 	db.save()
 	commitRepo(delay_minute=0)
