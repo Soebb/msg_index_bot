@@ -252,9 +252,9 @@ class DB(object):
 	@log_on_fail(debug_group)
 	@log_call()
 	def purgeDeletedChannel():
-	for channel, _ in db.channels.getItems():
-		if not Channel(channel).exist():
-			db._purgeChannel(channel)
+		for channel, _ in db.channels.getItems():
+			if not Channel(channel).exist():
+				db._purgeChannel(channel)
 
 	@log_on_fail(debug_group)
 	@log_call()
