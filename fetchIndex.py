@@ -1,12 +1,14 @@
 from db import db
 from processIndex import processBubble, processChannelInfo
-from debug import sendDebugMessage
+from debug import sendDebugMessage, log_call
 import time
 import random
 import sys
+from bs4 import BeautifulSoup
+import cached_url
 
 if 'test' in sys.argv:
-	time_limit = 15:
+	time_limit = 15
 else:
 	time_limit = 20 * 60
 
