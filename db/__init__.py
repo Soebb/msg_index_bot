@@ -134,9 +134,13 @@ class DB(object):
 
 	@log_on_fail(debug_group)
 	def _purgeChannel(self, channel):
+		count = 0
 		for key, value in self.index.getItems():
 			if channel == key.split('/')[0]:
 				self.remove(key)
+				count += 1
+		if count:
+			debug_group.send_message('purge Channel: ' +  channel)
 		self.channels.remove(channel)
 		self.save()
 
