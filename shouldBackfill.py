@@ -15,6 +15,8 @@ def isMostCN(text):
 	return cn * 2 >= len(text)
 
 def shouldBackfill(channel, score):
+	if channel in ['what_youread']:
+		return True
 	c = Channel(channel)
 	if not c.exist():
 		return False

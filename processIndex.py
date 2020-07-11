@@ -46,8 +46,8 @@ def getTime(item):
 	return datetime.strptime(s, format).timestamp()
 
 def getChannelTitle(soup):
-	item = soup.find('div', class_='tgme_channel_info_header_title') or 
-		soup.find('div', class_='tgme_page_title')
+	item = (soup.find('div', class_='tgme_channel_info_header_title') or 
+		soup.find('div', class_='tgme_page_title'))
 	return getCompact(item.text, 10)
 
 def processChannelInfo(channel, soup):
@@ -55,7 +55,11 @@ def processChannelInfo(channel, soup):
 	description = (soup.find('div', class_='tgme_channel_info_description') or
 		soup.find('div', class_='tgme_page_description'))
 	addMentionedChannel(description, channel)
-	description = title + (description and description.text) or ''
+	try:
+		description = title + ((description and description.text) or '')
+	except Exception as e:
+		print(title, description, channel)
+		raise e
 	post_link = channel + '/0'
 	db.addIndex(post_link, description)
 	db.setMainText(post_link, title)
