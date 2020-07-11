@@ -243,7 +243,7 @@ class DB(object):
 	@log_on_fail(debug_group)
 	@log_call()
 	def purgeChannel(self, channel):
-		for key, value in self.index.items():
+		for key, value in self.index.getItems():
 			if channel == key.split('/')[0]:
 				self.remove(key)
 		self.channels.remove(channel)
@@ -254,12 +254,12 @@ class DB(object):
 	@log_call()
 	def dedupIndex(self):
 		tmp_set = set()
-		for key, value in self.index.items():
+		for key, value in self.index.getItems():
 			if value not in tmp_set:
 				tmp_set.add(value)
 			else:
 				self.remove(key)
-		for key, value in list(self.maintext.items.items()):
+		for key, value in list(self.maintext.getItems()):
 			if not self.index.items.get(key):
 				self.remove(key)
 		self.save()

@@ -77,5 +77,5 @@ class DBItem(object):
 			if r != 0:
 				break
 
-	def items(self):
+	def getItems(self):
 		return list(self.items.items())
