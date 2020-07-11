@@ -61,6 +61,17 @@ def processChannelInfo(channel, soup):
 	db.addIndex(post_link, description)
 	db.setMainText(post_link, title)
 
+def hasLink(item):
+	if item.find('div', class_='tgme_widget_message_document_title'):
+		return True
+	text = item.find('div', class_='tgme_widget_message_text')
+	if not text:
+		return False
+	return text.find('a')
+
+def hasFile(item):
+	return item.find('div', class_='tgme_widget_message_document_title')
+
 def processBubble(item):
 	post_link = getPostLinkBubble(item)
 	channel = post_link.split('/')[0]
@@ -75,5 +86,9 @@ def processBubble(item):
 	if ''.join(text_fields) == '':
 		return
 	[db.addIndex(post_link, text) for text in text_fields]
+	if hasLink(item):
+		db.addIndex(post_link, 'hasLink')
+	if hasFile(item):
+		db.addIndex(post_link, 'hasFile')
 	db.setMainText(post_link, getCompact(getMainText(text_fields)))
 	db.setTime(post_link, getTime(item))
