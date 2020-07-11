@@ -127,7 +127,6 @@ def findBadChannel():
 
 @log_call()
 def indexing():
-	db.purgeChannels()
 	indexingImp()
 	findBadChannel()
 	db.purgeChannels()
