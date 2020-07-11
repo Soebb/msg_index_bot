@@ -4,7 +4,7 @@ import time
 from debug import sendDebugMessage, debug_group, log_call
 from telegram_util import log_on_fail
 from channel import Channel
-from search import searchText, searchChannel
+from .search import searchText, searchChannel
 
 sign = '。，？！.,\n'
 
