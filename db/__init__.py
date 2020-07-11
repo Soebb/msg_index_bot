@@ -183,6 +183,8 @@ class DB(object):
 		return self.finalTouch(result)
 
 	def isBadFromReferRelate(self, channel):
+		if self.badScore(channel + '/') >= 20:
+			return True
 		badness = 0
 		total = 0
 		for refer, count in self.channelrefer.items.items():
@@ -196,25 +198,6 @@ class DB(object):
 		for refer, count in self.channelrefer.items.items():
 			if refer.startswith(channel) and self.badScore(refer) > 9:
 				yield refer
-
-	def shouldPurge(self, key, value, channel_count):
-		channel = key.split('/')[0]
-		if not value:
-			return True
-		if self.channels.items.get(channel, 100) < 5:
-			return False
-		if self.badScore(key) >= 20:
-			return True
-		if self.isBadFromReferRelate(channel):
-			return True
-		if not self.maintext.items.get(key):
-			return True
-		if self.time.items.get(key, 0) > time.time() - 48 * 60 * 60:
-			return False
-		channel_count[channel] = channel_count.get(channel, 0) + 1
-		if channel_count[channel] > 100:
-			return True
-		return False
 
 	def trimIndex(self):
 		for key, value in list(self.index.items.items()):
@@ -234,13 +217,6 @@ class DB(object):
 	def getBadness(self, text):
 		return str(self.blacklist.items.get(text, 0))
 
-	def purgeOldIndex(self):
-		channel_count = {}
-		for key, value in list(self.index.items.items()):
-			if self.shouldPurge(key, value, channel_count):
-				self.remove(key)
-		self.save()
-
 	@log_on_fail(debug_group)
 	def _purgeChannel(self, channel):
 		for key, value in self.index.getItems():
@@ -252,9 +228,10 @@ class DB(object):
 
 	@log_on_fail(debug_group)
 	@log_call()
-	def purgeDeletedChannel(self):
+	def purgeChannels(self):
 		for channel, _ in self.channels.getItems():
-			if not Channel(channel).exist():
+			if (self.isBadFromReferRelate(channel) or
+				not Channel(channel).exist()):
 				db._purgeChannel(channel)
 
 	@log_on_fail(debug_group)

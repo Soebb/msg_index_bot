@@ -316,11 +316,10 @@ def findBadChannel():
 @log_call()
 def indexing():
 	findBadChannel()
-	db.purgeDeletedChannel()
+	db.purgeChannels()
 	db.dedupIndex()
 	# onlyFileBackfill('what_youread')
 	indexingImp()
-	purgeOldIndex()
 	backfill()
 	threading.Timer(60, indexing).start()
 
