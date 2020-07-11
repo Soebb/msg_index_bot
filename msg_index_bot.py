@@ -9,11 +9,11 @@ from bs4 import BeautifulSoup
 import cached_url
 import random
 from debug import debug_group, tele, sendDebugMessage, log_call
-from db import db, searchText, searchChannel
 from processIndex import processBubble, processChannelInfo
 from shouldBackfill import shouldBackfill
 from indexFromTelegramMsg import indexFromTelegramMsg
 from db import db
+from search import searchText, searchChannel
 
 HELP_MESSAGE = '''
 添加频道，群组 - "/add @dushufenxiang", 可批量。

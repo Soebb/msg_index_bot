@@ -1,4 +1,4 @@
-from .db import db
+from db import db
 
 def _finalTouch(result):
 	final_result = result[:20]
@@ -38,7 +38,7 @@ def searchChannel(text):
 			continue
 		result.append((name, posts[channel]))
 	result = ([x for x in result if _hit(targets, x[0])] + 
-		[x for x in result if text.lower() not _hit(targets, x[0])])
+		[x for x in result if not _hit(targets, x[0])])
 	return _finalTouch(result)
 
 def searchText(text):
