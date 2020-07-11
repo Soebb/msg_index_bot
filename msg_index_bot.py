@@ -15,6 +15,7 @@ from indexFromTelegramMsg import indexFromTelegramMsg
 from db import db
 from search import searchText, searchChannel
 import sys
+from fetchIndex import backfillChannel
 
 HELP_MESSAGE = '''
 添加频道，群组 - "/add @dushufenxiang", 可批量。
