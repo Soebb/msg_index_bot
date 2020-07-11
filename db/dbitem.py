@@ -76,3 +76,6 @@ class DBItem(object):
 			r = os.system('rm %s%s > /dev/null 2>&1' % (self.fn, start))
 			if r != 0:
 				break
+
+	def items(self):
+		return list(self.items.items())

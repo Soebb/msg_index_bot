@@ -1,6 +1,8 @@
-from dbitem import DBItem
+from .dbitem import DBItem
 import yaml
 import time
+from debug import sendDebugMessage, debug_group
+from telegram_util import log_on_fail
 
 sign = '。，？！.,\n'
 
@@ -236,23 +238,29 @@ class DB(object):
 		for key, value in list(self.index.items.items()):
 			if self.shouldPurge(key, value, channel_count):
 				self.remove(key)
-		for key, value in list(self.maintext.items.items()):
-			if not self.index.items.get(key):
-				self.remove(key)
 		self.save()
 
 	def purgeChannel(self, channel):
-		for key, value in list(self.index.items.items()):
+		for key, value in self.index.items():
 			if channel == key.split('/')[0]:
 				self.remove(key)
 		self.channels.remove(channel)
 		self.channelname.remove(channel)
+		self.save()
 
+	@log_on_fail(debug_group)
 	def dedupIndex(self):
-		tmp_dic = {}
-		for key, value in list(self.index.items.items()):
-			if value not in tmp_dic:
-				tmp_dic[value] = key
+		sendDebugMessage('dedupIndex start')
+		tmp_set = set()
+		for key, value in self.index.items():
+			if value not in tmp_set:
+				tmp_set.add(value)
 			else:
 				self.remove(key)
+		for key, value in list(self.maintext.items.items()):
+			if not self.index.items.get(key):
+				self.remove(key)
+		self.save()
+		sendDebugMessage('dedupIndex end')
 
+db = DB()

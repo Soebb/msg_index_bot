@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from telegram.ext import Updater, MessageHandler, Filters
-import yaml
-import sys
+from telegram.ext import MessageHandler, Filters
 from db import DB
 from channel import Channel
 from telegram_util import log_on_fail, cutCaption, commitRepo, splitCommand, removeOldFiles
@@ -13,27 +11,14 @@ import cached_url
 from datetime import datetime
 import random
 from helper import isGoodChannel, backfillChannelNew, shouldProcessFullBackfill, tryAddAllMentionedChannel, isMostCN
-
-with open('token') as f:
-	token = f.read().strip()
-tele = Updater(token, use_context=True) # @msg_index_bot
+from debug import debug_group, tele
+from db import db
 
 HELP_MESSAGE = '''
 添加频道，群组 - "/add @dushufenxiang", 可批量。
 搜索频道 - "/search_channel 读书", "/sc 读书"
 搜索消息 - 直接输入"李星星", 或 "/search 李星星", "/s 李星星"
 '''
-
-debug_group = tele.bot.get_chat(420074357)
-db = DB()
-
-last_debug_message = None
-
-def sendDebugMessage(message):
-	global last_debug_message
-	if last_debug_message:
-		last_debug_message.delete()
-	last_debug_message = debug_group.send_message(message)
 
 def findChannels(text):
 	result = []
