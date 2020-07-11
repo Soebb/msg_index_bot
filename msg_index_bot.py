@@ -8,7 +8,6 @@ import threading
 from bs4 import BeautifulSoup
 import cached_url
 import random
-from helper import isGoodChannel, backfillChannelNew, shouldProcessFullBackfill, tryAddAllMentionedChannel, isMostCN
 from debug import debug_group, tele, sendDebugMessage, log_call
 from db import db, searchText, searchChannel
 from processIndex import processBubble, processChannelInfo
