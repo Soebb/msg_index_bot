@@ -11,7 +11,7 @@ import cached_url
 from datetime import datetime
 import random
 from helper import isGoodChannel, backfillChannelNew, shouldProcessFullBackfill, tryAddAllMentionedChannel, isMostCN
-from debug import debug_group, tele
+from debug import debug_group, tele, sendDebugMessage
 from db import db
 
 HELP_MESSAGE = '''
