@@ -13,3 +13,12 @@ def sendDebugMessage(*args):
 	if last_debug_message:
 		last_debug_message.delete()
 	last_debug_message = debug_group.send_message(message)
+
+def log_call():
+	def decorate(f):
+		def applicator(*args, **kwargs):
+			sendDebugMessage(f.__name__, 'start')
+			f(*args,**kwargs)
+			sendDebugMessage(f.__name__, 'end')
+		return applicator
+	return decorate
