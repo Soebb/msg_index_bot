@@ -2,9 +2,6 @@ import os
 import yaml
 import time
 import random
-import sys
-import cached_url
-from bs4 import BeautifulSoup
 
 sign = '。，？！.,\n'
 
