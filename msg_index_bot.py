@@ -367,7 +367,6 @@ def searchBigGroup():
 
 def indexing():
 	sendDebugMessage('indexing')
-	onlyFileBackfill('weekly_books')
 	onlyFileBackfill('what_youread')
 	dedupIndex()
 	indexingImp()

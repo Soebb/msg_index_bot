@@ -76,7 +76,7 @@ def getItem(channel, index, callback):
 
 def findLastMessage(channel, callback):
 	left = 1
-	right = 100000
+	right = 300000
 	while left < right - 100:
 		item = None
 		for _ in range(5):
