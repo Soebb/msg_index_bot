@@ -81,6 +81,9 @@ def _slowBackfillChannel(channel):
 		post -= 1
 	db.save()
 
+def shouldBackfill(channel, score):
+	
+
 def backfillChannel(channel):
 	if _canUseQuickBackfill(channel):
 		_quickBackfillChannel(channel)

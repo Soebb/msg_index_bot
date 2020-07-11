@@ -12,7 +12,7 @@ import random
 from helper import isGoodChannel, backfillChannelNew, shouldProcessFullBackfill, tryAddAllMentionedChannel, isMostCN
 from debug import debug_group, tele, sendDebugMessage, log_call
 from db import db
-from processIndex import processBubble
+from processIndex import processBubble, processChannelInfo
 from common import getCompact
 
 HELP_MESSAGE = '''
@@ -142,14 +142,9 @@ def indexingImp():
 @log_on_fail(debug_group)
 @log_call()
 def backfill():
-	count = 0
 	for channel, score in db.channels.getItems():
-		if shouldProcessFullBackfill(channel, score):
-			sendDebugMessage('process full backfill ' + channel)
-			backfillChannelNew(channel, processBubble, db, total = 100000)
-		if not db.isBadFromReferRelate(channel) and isGoodChannel(channel, db):
-			sendDebugMessage('process partial backfill ' + channel)
-			backfillChannelNew(channel, processBubbleWithLink, db)
+		if shouldBackfill(channel, score):
+			backfillChannel(channel)
 
 bad_channel = set()
 @log_on_fail(debug_group)
