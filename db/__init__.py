@@ -3,6 +3,7 @@ import yaml
 import time
 from debug import sendDebugMessage, debug_group, log_call
 from telegram_util import log_on_fail
+from channel import Channel
 
 sign = '。，？！.,\n'
 
@@ -251,8 +252,8 @@ class DB(object):
 
 	@log_on_fail(debug_group)
 	@log_call()
-	def purgeDeletedChannel():
-		for channel, _ in db.channels.getItems():
+	def purgeDeletedChannel(self):
+		for channel, _ in self.channels.getItems():
 			if not Channel(channel).exist():
 				db._purgeChannel(channel)
 
