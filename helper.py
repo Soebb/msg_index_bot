@@ -53,7 +53,7 @@ def isGoodChannel(channel, db):
 		return False
 	description = (soup.find('div', class_='tgme_channel_info_description') or
 		soup.find('div', class_='tgme_page_description'))
-	print(description)
+	print('description', description)
 	addMentionedChannelWithCallback(description, 
 		lambda name, _: Channel(name).save(db, channel))
 	description = (description and description.text) or ''
