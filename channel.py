@@ -1,19 +1,9 @@
 from bs4 import BeautifulSoup
 import cached_url
-from telegram_util import cutCaption
-from common import getButtonText
 
-def getCompact(text):
-	if not text:
-		return '' 
-	return cutCaption(' '.join(text.split()), '', 50)
-
-def getCount(text):
-	try:
-		return int(''.join(text.split()[:-1]))
-	except:
-		print(text)
-		return 0
+def getButtonText(soup):
+	item = soup.find('a', class_='tgme_action_button_new')
+	return (item and item.text) or ''
 
 class Channel(object):
 	def __init__(self, name):
