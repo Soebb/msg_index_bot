@@ -303,10 +303,9 @@ def trimIndex():
 	sendDebugMessage('end triming index')
 
 bad_channel = set()
-
 @log_on_fail(debug_group)
 def findBadChannel():
-	for channel, score in list(db.channels.items.items()):
+	for channel, score in db.channels.getItems():
 		if (db.badScore(channel + '/') == 0 and
 				db.isBadFromReferRelate(channel) and 
 				channel not in bad_channel):
@@ -316,11 +315,11 @@ def findBadChannel():
 
 @log_call()
 def indexing():
-	db.dedupIndex()
+	findBadChannel()
 	db.purgeDeletedChannel()
+	db.dedupIndex()
 	# onlyFileBackfill('what_youread')
 	indexingImp()
-	findBadChannel()
 	purgeOldIndex()
 	backfill()
 	threading.Timer(60, indexing).start()
