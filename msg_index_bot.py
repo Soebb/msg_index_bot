@@ -126,11 +126,11 @@ def findBadChannel():
 
 @log_call()
 def indexing():
+	db.dedupIndex()
+	backfill()
 	indexingImp()
 	findBadChannel()
 	db.purgeChannels()
-	db.dedupIndex()
-	backfill()
 	threading.Timer(60, indexing).start()
 
 if __name__ == '__main__':

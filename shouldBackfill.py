@@ -5,7 +5,7 @@ from channel import Channel
 from processIndex import processChannelInfo
 from db import db
 
-def isMostCN(text):
+def _isMostCN(text):
 	if not text or not text.strip():
 		return False
 	cn = sum([isCN(c) + hanzidentifier.is_simplified(c) for c in text])
@@ -26,7 +26,6 @@ def shouldBackfill(channel, score):
 	if db.isBadFromReferRelate(channel):
 		return False
 	description = db.index.get(channel + '/0')
-	print('des', description) # testing
 	if db.badScore(description):
 		return False
 	return _isMostCN(description) and random.random() < 0.05
