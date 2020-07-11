@@ -64,9 +64,6 @@ class DB(object):
 			pass
 		return self.badScore(channel_username) >= 20
 
-	def isBadBubble(self, soup):
-		return False
-
 	def save(self):
 		self.channels.save()
 		self.index.save()
@@ -102,9 +99,6 @@ class DB(object):
 		post_link = stripPostLink(post_link)
 		self.time.updateIfLarger(post_link, int(time))
 
-	def getChannels(self):
-		return self.channels.items.keys()
-
 	def addChannel(self, key, referer=None):
 		if referer == key:
 			referer = None
@@ -113,7 +107,7 @@ class DB(object):
 		self.channels.update(key, rank)
 		self.channelrefer.inc(str(referer) + ':' + key)
 
-	def saveChannelTitle(self, key, title):
+	def updateChannelName(self, key, title):
 		if not title:
 			return
 		self.channelname.update(key, title)
