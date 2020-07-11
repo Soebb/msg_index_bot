@@ -10,8 +10,7 @@ def _hit(targets, text):
 	r = [target.lower() in text.lower() for target in targets]
 	return sum(r) == len(r)
 
-def _searchRaw(text):
-	targets = text.split()
+def _searchRaw(targets):
 	for key, value in db.index.getItems():
 		if _hit(targets, value):
 			yield key
@@ -42,7 +41,8 @@ def searchChannel(text):
 	return _finalTouch(result)
 
 def searchText(text):
-	result = list(_searchRaw(text))
+	targets = text.split()
+	result = list(_searchRaw(targets))
 	result = [(db.time.get(x, 0), x) for x in result]
 	result.sort(reverse=True)
 	

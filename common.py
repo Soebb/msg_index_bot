@@ -10,6 +10,6 @@ def getCompact(text, cut = 20):
 	return cutCaption(' '.join(text.split()).strip(), '', cut)
 
 def addChannelRaw(raw, referer):
-	raw = raw[link.find('/t.me/'):].strip('/').split('/')
+	raw = raw[raw.find('/t.me/'):].strip('/').split('/')
 	if len(raw) >= 2: 
 		Channel(raw[1]).save(db, referer)

@@ -16,6 +16,8 @@ def getOrigChannel(item):
 	return orig_link.strip('/').split('/')[-2]
 
 def addMentionedChannel(item, referer):
+	if not item:
+		return
 	for link in item.find_all('a'):
 		link = link.get('href', '')
 		addChannelRaw(link, referer)
