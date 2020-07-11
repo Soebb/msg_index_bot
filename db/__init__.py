@@ -4,6 +4,7 @@ import time
 from debug import sendDebugMessage, debug_group, log_call
 from telegram_util import log_on_fail
 from channel import Channel
+from search import searchText, searchChannel
 
 sign = '。，？！.,\n'
 
@@ -32,15 +33,10 @@ class DB(object):
 		self.index = DBItem('index', random_save = True)
 		self.maintext = DBItem('maintext', random_save = True)
 		self.time = DBItem('time', value_int = True, random_save = True)
-		self.channelname = DBItem('channelname', random_save = True)
 		self.channelrefer = DBItem('channelrefer', value_int = True, random_save = True)
+		# deprecated
+		self.channelname = DBItem('channelname', random_save = True) 
 		
-	def finalTouch(self, result):
-		final_result = result[:20]
-		final_result = ['%d. [%s](https://t.me/%s)' % (index + 1, x[0], x[1]) 
-			for index, x in enumerate(final_result)]
-		return final_result
-
 	def badScore(self, text):
 		score = 0
 		if not text:
@@ -69,7 +65,6 @@ class DB(object):
 		self.index.save()
 		self.maintext.save()
 		self.time.save()
-		self.channelname.save()
 		self.channelrefer.save()
 
 	def addIndex(self, post_link, text):
@@ -106,75 +101,6 @@ class DB(object):
 		rank = min(rank, self.channels.items.get(referer, 100) + 1)
 		self.channels.update(key, rank)
 		self.channelrefer.inc(str(referer) + ':' + key)
-
-	def updateChannelName(self, key, title):
-		if not title:
-			return
-		self.channelname.update(key, title)
-
-	def searchRaw(self, text):
-		for key, value in list(self.index.items.items()):
-			if text.lower() in value.lower():
-				yield key
-
-	def searchChannel(self, text):
-		hit_count = {}
-		total_count = {}
-		posts = {}
-		for key, value in list(self.index.items.items()):
-			channel = key.split('/')[0]
-			if text.lower() in value.lower():
-				hit_count[channel] = hit_count.get(channel, 0) + 1 
-				if text.lower() in self.maintext.items.get(key, '').lower():
-					posts[channel] = key
-				if channel not in posts:
-					posts[channel] = key
-			total_count[channel] = total_count.get(channel, 0) + 1 
-		raw_result = [(hit_count[key] * 1.0 / total_count[key], key) 
-			for key in hit_count]
-		raw_result.sort(reverse=True)
-		result = []
-		for _, channel in raw_result:
-			name = self.channelname.items.get(channel)
-			if not name:
-				continue
-			result.append((name, posts[channel]))
-		result = ([x for x in result if text.lower() in x[0].lower()] + 
-			[x for x in result if text.lower() not in x[0].lower()])
-		return self.finalTouch(result)
-
-	def search(self, text):
-		result = list(self.searchRaw(text))
-		result = [(self.time.items.get(x, 0), x) for x in result]
-		result.sort(reverse=True)
-		
-		exist_maintext = set()
-		exist_channel = set()
-		first = []
-		rest = []
-		resttop = []
-		for _, x in result:
-			main_text = self.maintext.items.get(x)
-			channel = x.split('/')[0]
-			if not main_text or main_text in exist_maintext:
-				continue
-			exist_maintext.add(main_text)
-			item = (main_text, x)
-			if self.badScore(item) >= 20:
-				continue
-			if (self.badScore(item) > 0 and 
-				self.channels.items.get(channel, 100) > 0):
-				rest.append(item)
-			elif channel in exist_channel:
-				resttop.append(item)
-			else:
-				first.append(item)
-			exist_channel.add(channel)
-
-		result = ([x for x in first if text.lower() in x[0].lower()] + 
-			[x for x in first if text.lower() not in x[0].lower()] + 
-			resttop + rest)
-		return self.finalTouch(result)
 
 	def isBadFromReferRelate(self, channel):
 		if self.badScore(channel + '/') >= 20:
@@ -213,7 +139,6 @@ class DB(object):
 			if channel == key.split('/')[0]:
 				self.remove(key)
 		self.channels.remove(channel)
-		self.channelname.remove(channel)
 		self.save()
 
 	@log_on_fail(debug_group)

@@ -1,7 +1,7 @@
 from db import db
 from channel import Channel
 from datetime import datetime
-from common import getCompact
+from common import getCompact, addChannelRaw
 
 def getPostLinkBubble(item):
 	try:
@@ -18,9 +18,7 @@ def getOrigChannel(item):
 def addMentionedChannel(item, referer):
 	for link in item.find_all('a'):
 		link = link.get('href', '')
-		if link.find('/t.me/') == -1:
-			continue
-		Channel(link.strip('/').split('/')[-1]).save(db, referer)
+		addChannelRaw(link, referer)
 
 def getText(item, class_name):
 	try:
@@ -46,13 +44,11 @@ def getTime(item):
 	return datetime.strptime(s, format).timestamp()
 
 def getChannelTitle(soup):
-	# see when we can't get channel title?
 	return getCompact(soup.find(
 		'div', class_='tgme_channel_info_header_title').text, 10)
 
 def processChannelInfo(channel, soup):
 	title = getChannelTitle(soup)
-	db.updateChannelName(channel, title)
 	description = (soup.find('div', class_='tgme_channel_info_description') or
 		soup.find('div', class_='tgme_page_description'))
 	addMentionedChannel(description, channel)
@@ -74,7 +70,7 @@ def hasFile(item):
 
 def processBubble(item):
 	post_link = getPostLinkBubble(item)
-	channel = post_link.split('/')[0]
+	channel = post_link.strip('/').split('/')[-2]
 	Channel(channel).save(db, getOrigChannel(item))
 	addMentionedChannel(item, channel)
 	text_fields_name = [
