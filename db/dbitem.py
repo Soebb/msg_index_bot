@@ -61,7 +61,8 @@ class DBItem(object):
 		return self.items.get(key, default)
 
 	def save(self):
-		lines = [key + ' ' + str(self.items[key]) for key in self.items]
+		lines = list(self.items)
+		lines = [key + ' ' + str(lines[key]) for key in lines]
 		lines.sort()
 		limit = 10000
 		start = 0
