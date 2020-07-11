@@ -4,7 +4,7 @@
 from telegram.ext import MessageHandler, Filters
 from db import DB
 from channel import Channel
-from telegram_util import log_on_fail, cutCaption, commitRepo, splitCommand, removeOldFiles
+from telegram_util import log_on_fail, cutCaption, splitCommand
 import threading
 from bs4 import BeautifulSoup
 import cached_url
@@ -111,26 +111,6 @@ def indexFromTelegramMsg(msg):
 	db.setTime(post_link, int(msg.date.timestamp()))
 
 @log_on_fail(debug_group)
-def backfillBotChannel(channel):
-	main_msg = tele.bot.send_message(channel, 'test')
-	main_msg.delete()
-	for mid in range(2200, 2500): # main_msg.message_id
-		try:
-			msg = tele.bot.forward_message(debug_group.id,
-				main_msg.chat_id, mid)
-			msg.delete()
-		except:
-			continue
-		if mid % 100 == 0:
-			sendDebugMessage('backfillBotChannel1 ' + str(mid))
-			db.save()
-			commitRepo(delay_minute=0)
-			sendDebugMessage('backfillBotChannel2 ' + str(mid))
-		indexFromTelegramMsg(msg)
-	db.save()
-	commitRepo(delay_minute=0)
-
-@log_on_fail(debug_group)
 def handleGroup(update, context):
 	msg = update.effective_message
 	if db.isBadMsg(msg):
@@ -164,23 +144,6 @@ def indexingImp():
 			processBubble(item)
 	db.save()
 
-def backfillChannel(channel):
-	start = 1
-	prefix = 'https://t.me/s/%s/' % channel
-	while True:
-		original_start = start
-		link = prefix + str(start)
-		soup = BeautifulSoup(cached_url.get(link, force_cache=True), 'html.parser')
-		for item in soup.find_all('div', class_='tgme_widget_message_bubble'):
-			processBubble(item)
-			post_link = item.find('a', class_='tgme_widget_message_date')['href']
-			post_id = int(post_link.split('/')[-1])
-			start = max(start, post_id + 1)
-		if start == original_start:
-			return
-	db.save()
-	commitRepo(delay_minute=0)
-
 def hasLink(item):
 	if item.find('div', class_='tgme_widget_message_document_title'):
 		return True
@@ -206,27 +169,16 @@ def onlyFileBackfill(channel):
 	backfillChannelNew(channel, processBubbleWithFile, db, total = 1000000)
 
 @log_on_fail(debug_group)
+@log_call()
 def backfill():
-	removeOldFiles('tmp', day = 20)
 	count = 0
-	sendDebugMessage('backfill')
-	for channel, score in list(db.channels.items.items()):
-		count += 1
-		if count % 1000 == 0:
-			sendDebugMessage('backfill ' + str(count))
+	for channel, score in db.channels.getItems():
 		if shouldProcessFullBackfill(channel, score):
 			sendDebugMessage('process full backfill ' + channel)
 			backfillChannelNew(channel, processBubble, db, total = 100000)
 		if not db.isBadFromReferRelate(channel) and isGoodChannel(channel, db):
 			sendDebugMessage('process partial backfill ' + channel)
 			backfillChannelNew(channel, processBubbleWithLink, db)
-	sendDebugMessage('backfill finish')
-
-@log_on_fail(debug_group)
-def purgeOldIndex():
-	db.purgeOldIndex()
-	db.save()
-	commitRepo(delay_minute=0)
 
 bad_channel = set()
 @log_on_fail(debug_group)

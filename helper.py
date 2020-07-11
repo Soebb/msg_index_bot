@@ -117,4 +117,3 @@ def backfillChannelNew(channel, callback, db, total = 500):
 			existing_index = set()
 		post += 1
 	db.save()
-	commitRepo(delay_minute=0)
