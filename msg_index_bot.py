@@ -87,7 +87,7 @@ def handleGroup(update, context):
 def handleSearch(update, context):
 	msg = update.message
 	text = msg.text.strip()
-	search(msg, text, db.search)
+	search(msg, text, searchText)
 
 @log_on_fail(debug_group)
 @log_call()
