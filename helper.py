@@ -41,8 +41,8 @@ def isMostCN(text):
 	return cn * 2 >= len(text)
 
 def isGoodChannel(channel, db):
-	if random.random() > 0.06:
-		return False
+	# if random.random() > 0.06:
+	# 	return False
 	link = 'https://t.me/%s' % channel
 	soup = BeautifulSoup(cached_url.get(link, force_cache=True), 'html.parser')
 	title = soup.find('div', class_='tgme_page_title')

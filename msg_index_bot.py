@@ -367,6 +367,8 @@ def searchBigGroup():
 
 def indexing():
 	sendDebugMessage('indexing')
+	isGoodChannel('muddy_cat')
+	db.save()
 	onlyFileBackfill('what_youread')
 	dedupIndex()
 	indexingImp()
