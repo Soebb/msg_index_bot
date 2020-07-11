@@ -282,7 +282,7 @@ def processBubbleWithFile(item):
 @log_on_fail(debug_group)
 def onlyFileBackfill(channel):
 	print('onlyFileBackfill', channel)
-	backfillChannelNew(channel, processBubbleWithFile, db, total = 5000)
+	backfillChannelNew(channel, processBubbleWithFile, db, total = 1000000)
 
 @log_on_fail(debug_group)
 def backfill():
