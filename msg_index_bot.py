@@ -329,7 +329,7 @@ def purgeDeletedChannel():
 def indexing():
 	sendDebugMessage('indexing')
 	# onlyFileBackfill('what_youread')
-	db.dudupIndex()
+	db.dedupIndex()
 	indexingImp()
 	findBadChannel()
 	purgeOldIndex()
