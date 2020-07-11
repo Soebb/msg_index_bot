@@ -241,14 +241,20 @@ class DB(object):
 		self.save()
 
 	@log_on_fail(debug_group)
-	@log_call()
-	def purgeChannel(self, channel):
+	def _purgeChannel(self, channel):
 		for key, value in self.index.getItems():
 			if channel == key.split('/')[0]:
 				self.remove(key)
 		self.channels.remove(channel)
 		self.channelname.remove(channel)
 		self.save()
+
+	@log_on_fail(debug_group)
+	@log_call()
+	def purgeDeletedChannel():
+	for channel, _ in db.channels.getItems():
+		if not Channel(channel).exist():
+			db._purgeChannel(channel)
 
 	@log_on_fail(debug_group)
 	@log_call()

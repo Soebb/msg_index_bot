@@ -11,7 +11,7 @@ import cached_url
 from datetime import datetime
 import random
 from helper import isGoodChannel, backfillChannelNew, shouldProcessFullBackfill, tryAddAllMentionedChannel, isMostCN
-from debug import debug_group, tele, sendDebugMessage
+from debug import debug_group, tele, sendDebugMessage, log_call
 from db import db
 
 HELP_MESSAGE = '''
@@ -314,28 +314,15 @@ def findBadChannel():
 				channel + str(list(db.getBadReferer(channel))))
 		bad_channel.add(channel)
 
-@log_on_fail(debug_group)
-def purgeDeletedChannel():
-	sendDebugMessage('start purgeDeletedChannel')
-	for channel, _ in list(db.channels.items.items()):
-		if random.random() > 0.02:
-			continue
-		if not Channel(channel).exist():
-			db.purgeChannel(channel)
-			db.save()
-			commitRepo(delay_minute=0)
-	sendDebugMessage('finish purgeDeletedChannel')
-
+@log_call()
 def indexing():
-	sendDebugMessage('indexing')
-	# onlyFileBackfill('what_youread')
 	db.dedupIndex()
+	db.purgeDeletedChannel()
+	# onlyFileBackfill('what_youread')
 	indexingImp()
 	findBadChannel()
 	purgeOldIndex()
 	backfill()
-	purgeDeletedChannel()
-	sendDebugMessage('indexing end')
 	threading.Timer(60, indexing).start()
 
 if __name__ == '__main__':
