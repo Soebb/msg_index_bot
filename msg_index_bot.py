@@ -127,7 +127,6 @@ def indexing():
 	findBadChannel()
 	db.purgeChannels()
 	db.dedupIndex()
-	# onlyFileBackfill('what_youread')
 	backfill()
 	threading.Timer(60, indexing).start()
 

@@ -46,8 +46,9 @@ def getTime(item):
 	return datetime.strptime(s, format).timestamp()
 
 def getChannelTitle(soup):
-	return getCompact(soup.find(
-		'div', class_='tgme_channel_info_header_title').text, 10)
+	item = soup.find('div', class_='tgme_channel_info_header_title') or 
+		soup.find('div', class_='tgme_page_title')
+	return getCompact(item.text, 10)
 
 def processChannelInfo(channel, soup):
 	title = getChannelTitle(soup)
