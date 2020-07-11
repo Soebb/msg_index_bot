@@ -33,29 +33,7 @@ class Channel(object):
 		content = cached_url.get(self.link, force_cache=True)
 		return BeautifulSoup(content, 'html.parser')
 
-	def getRep(self):
-		soup = self.getSoup()
-		title = getCompact(soup.find('div', class_='tgme_page_title').text)
-		return '[%s](%s)' % (title, self.link)
-
-	def getTitle(self):
-		soup = self.getSoup()
-		return soup.find('div', class_='tgme_page_title').text
-
-	def getActiveCount(self):
-		soup = self.getSoup()
-		member = soup.find('div', class_='tgme_page_extra')
-		if not member:
-			return 0
-		member_block = member.text.split(',')
-		if len(member_block) <= 1:
-			return 0
-		return getCount(member_block[1])
-
 	def save(self, db, referer=None):
 		if not self.exist():
 			return
 		db.addChannel(self.name, referer)
-
-	def getLink(self):
-		return self.link

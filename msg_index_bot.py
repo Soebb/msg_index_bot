@@ -14,6 +14,7 @@ from debug import debug_group, tele, sendDebugMessage, log_call
 from db import db
 from processIndex import processBubble, processChannelInfo
 from common import getCompact
+from shouldBackfill import shouldBackfill
 
 HELP_MESSAGE = '''
 添加频道，群组 - "/add @dushufenxiang", 可批量。
@@ -116,7 +117,6 @@ def handleGroup(update, context):
 	if db.isBadMsg(msg):
 		return
 	indexFromTelegramMsg(msg)
-
 
 @log_on_fail(debug_group)
 def handleSearch(update, context):

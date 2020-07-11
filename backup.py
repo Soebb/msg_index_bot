@@ -1,3 +1,13 @@
+def getActiveCount(self):
+	soup = self.getSoup()
+	member = soup.find('div', class_='tgme_page_extra')
+	if not member:
+		return 0
+	member_block = member.text.split(',')
+	if len(member_block) <= 1:
+		return 0
+	return getCount(member_block[1])
+		
 @log_on_fail(debug_group)
 def searchBigGroup():
 	sendDebugMessage('start searchBigGroup')

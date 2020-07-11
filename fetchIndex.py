@@ -2,6 +2,7 @@ from db import db
 from processIndex import processBubble, processChannelInfo
 from debug import sendDebugMessage
 import time
+import random
 
 def _canUseQuickBackfill(channel):
 	link = 'https://t.me/s/%s/1' % channel
@@ -80,9 +81,6 @@ def _slowBackfillChannel(channel):
 			existing_index = set()
 		post -= 1
 	db.save()
-
-def shouldBackfill(channel, score):
-	
 
 def backfillChannel(channel):
 	if _canUseQuickBackfill(channel):

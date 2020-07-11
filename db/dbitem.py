@@ -57,6 +57,9 @@ class DBItem(object):
 		if key in self.items:
 			del self.items[key]
 
+	def get(self, key, default = None):
+		return self.items.get(key, default)
+
 	def save(self):
 		lines = [key + ' ' + str(self.items[key]) for key in self.items]
 		lines.sort()

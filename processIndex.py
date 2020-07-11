@@ -59,7 +59,7 @@ def processChannelInfo(channel, soup):
 	description = title + (description and description.text) or ''
 	post_link = channel + '/0'
 	db.addIndex(post_link, description)
-	db.setMainText(post_link, getCompact(description))
+	db.setMainText(post_link, title)
 
 def processBubble(item):
 	post_link = getPostLinkBubble(item)
