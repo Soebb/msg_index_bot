@@ -1,8 +1,89 @@
-from dbitem import DBItem
+import os
 import yaml
 import time
+import random
 
 sign = '。，？！.,\n'
+
+def getFile(name, value_int=False):
+	start = 1
+	result = {}
+	while True:
+		fn = 'mydb/' + name + str(start)
+		if not os.path.exists(fn):
+			break
+		with open(fn) as f:
+			for line in f.readlines():
+				line = line.strip()
+				if not line:
+					continue
+				key = line.split()[0]
+				value = line[len(key) + 1:]
+				if value_int:
+					value = int(value)
+				result[key] = value
+		start += 1
+	return result
+
+class DBItem(object):
+	def __init__(self, name, value_int = False, random_save = False, no_save = False):
+		self.no_save = no_save
+		self.random_save = random_save
+		self.items = getFile(name, value_int)
+		self.fn = 'mydb/' + name
+
+	def add(self, key, value):
+		if key in self.items:
+			return
+		self.items[key] = value
+		with open(self.fn + '1', 'a') as f:
+			f.write('\n' + key + ' ' + str(value))
+
+	def update(self, key, value):
+		if key not in self.items:
+			self.add(key, value)
+		self.items[key] = value
+		if self.no_save:
+			return
+		if self.random_save:
+			if random.random() > 0.01:
+				return
+		self.save()
+
+	def updateIfLarger(self, key, value):
+		oldValue = self.items.get(key, 0)
+		value = max(value, oldValue)
+		self.update(key, value)
+
+	def inc(self, key):
+		if key not in self.items:
+			self.add(key, 1)
+			return
+		self.update(key, self.items[key] + 1)
+
+	def remove(self, key):
+		if key in self.items:
+			del self.items[key]
+
+	def save(self):
+		lines = [key + ' ' + str(self.items[key]) for key in self.items]
+		lines.sort()
+		limit = 10000
+		start = 0
+		while True:
+			towrite = '\n'.join(lines[limit * start:limit * (start + 1)])
+			if not towrite:
+				break
+			start += 1
+			fn = self.fn + str(start)
+			with open(fn + 'tmp', 'w') as f:
+				f.write(towrite)
+			os.system('mv %stmp %s' % (fn, fn))
+		while True:
+			start += 1
+			r = os.system('rm %s%s > /dev/null 2>&1' % (self.fn, start))
+			if r != 0:
+				break
 
 def addToResult(result, buff):
 	buff = ''.join(buff).strip().split()
@@ -30,7 +111,8 @@ class DB(object):
 		self.maintext = DBItem('maintext', random_save = True)
 		self.time = DBItem('time', value_int = True, random_save = True)
 		self.channelname = DBItem('channelname', random_save = True)
-		self.channelrefer = DBItem('channelrefer', value_int = True, random_save = True)
+		self.hit = DBItem('hit', value_int = True, no_save = True)
+		self.channelrefer = DBItem('channelrefer', value_int = True, no_save = True)
 		
 	def finalTouch(self, result):
 		final_result = result[:20]
@@ -70,6 +152,7 @@ class DB(object):
 		self.maintext.save()
 		self.time.save()
 		self.channelname.save()
+		self.hit.save()
 		self.channelrefer.save()
 
 	def addIndex(self, post_link, text):
@@ -119,6 +202,9 @@ class DB(object):
 		for key, value in list(self.index.items.items()):
 			if text.lower() in value.lower():
 				yield key
+
+	def logHit(self, key):
+		self.hit.update(key, self.hit.items.get(key, 0) + 1)
 
 	def searchChannel(self, text):
 		hit_count = {}
@@ -206,6 +292,8 @@ class DB(object):
 			return True
 		if not self.maintext.items.get(key):
 			return True
+		if self.hit.items.get(key):
+			return False
 		if self.time.items.get(key, 0) > time.time() - 48 * 60 * 60:
 			return False
 		channel_count[channel] = channel_count.get(channel, 0) + 1
