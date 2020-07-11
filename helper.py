@@ -10,10 +10,12 @@ import time
 def addMentionedChannelWithCallback(item, callback):
 	if not item:
 		return
+	print('addMentionedChannelWithCallback', 1)
 	for link in item.find_all('a'):
 		link = link.get('href', '')
 		if link.find('/t.me/') == -1:
 			continue
+		print('addMentionedChannelWithCallback', 2, link.strip('/').split('/')[-1])
 		callback(link.strip('/').split('/')[-1], '')
 
 def tryAddAllMentionedChannel(item, callback):
