@@ -17,8 +17,8 @@ def sendDebugMessage(*args):
 def log_call():
 	def decorate(f):
 		def applicator(*args, **kwargs):
-			sendDebugMessage(f.__name__, 'start')
+			sendDebugMessage(f.__name__, str(args), 'start')
 			f(*args,**kwargs)
-			sendDebugMessage(f.__name__, 'end')
+			sendDebugMessage(f.__name__, str(args), 'end')
 		return applicator
 	return decorate
