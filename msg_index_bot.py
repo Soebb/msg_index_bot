@@ -14,6 +14,7 @@ from shouldBackfill import shouldBackfill
 from indexFromTelegramMsg import indexFromTelegramMsg
 from db import db
 from search import searchText, searchChannel
+import sys
 
 HELP_MESSAGE = '''
 添加频道，群组 - "/add @dushufenxiang", 可批量。
@@ -93,6 +94,8 @@ def handleSearch(update, context):
 def indexingImp():
 	for channel, score in db.channels.getItems():
 		if random.random() > 1.0 / (score * score + 1):
+			continue
+		if 'test' in sys.argv and random.random() > 0.1:
 			continue
 		link = 'https://t.me/s/%s' % channel
 		soup = BeautifulSoup(cached_url.get(link), 'html.parser')

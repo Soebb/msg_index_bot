@@ -3,6 +3,12 @@ from processIndex import processBubble, processChannelInfo
 from debug import sendDebugMessage
 import time
 import random
+import sys
+
+if 'test' in sys.argv:
+	time_limit = 15:
+else:
+	time_limit = 20 * 60
 
 def _canUseQuickBackfill(channel):
 	link = 'https://t.me/s/%s/1' % channel
@@ -24,7 +30,7 @@ def _quickBackfillChannel(channel):
 			post_link = item.find('a', class_='tgme_widget_message_date')['href']
 			post_id = int(post_link.split('/')[-1])
 			start = max(start, post_id + 1)
-		if start % 100 == 0 and time.time() - start_time > 20 * 60:
+		if start % 100 == 0 and time.time() - start_time > time_limit:
 			break
 		if start == original_start:
 			break
@@ -74,7 +80,7 @@ def _slowBackfillChannel(channel):
 		if new_item not in existing_index:
 			new_index.add(new_item)
 		if post % 100 == 0:
-			if time.time() - start_time > 20 * 60:
+			if time.time() - start_time > time_limit:
 				break
 		if len(new_index) == 0 and len(existing_index) > 5:
 			post -= 100
