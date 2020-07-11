@@ -105,7 +105,7 @@ def backfillChannelNew(channel, callback, db, total = 500):
 		if new_item not in existing_index:
 			new_index.add(new_item)
 		if post % 100 == 0:
-			print('jumpinfo', channel, len(existing_index), len(new_index))
+			print('jumpinfo', channel, post, len(existing_index), len(new_index))
 		if len(new_index) == 0 and len(existing_index) > 5:
 			print('jump', channel)
 			post += 100
