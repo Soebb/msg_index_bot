@@ -367,9 +367,7 @@ def searchBigGroup():
 
 def indexing():
 	sendDebugMessage('indexing')
-	isGoodChannel('muddycat', db)
-	db.save()
-	onlyFileBackfill('what_youread')
+	# onlyFileBackfill('what_youread')
 	dedupIndex()
 	indexingImp()
 	findBadChannel()
