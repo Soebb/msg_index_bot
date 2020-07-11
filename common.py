@@ -1,6 +1,6 @@
 from db import db
 from telegram_util import cutCaption
-from Channel import channel
+from channel import Channel
 
 def getCompact(text, cut = 20):
 	if not text:
