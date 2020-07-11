@@ -124,11 +124,6 @@ def handleSearch(update, context):
 	text = msg.text.strip()
 	search(msg, text, db.search)
 
-def getChannelTitle(soup):
-	# see when we can't get channel title?
-	return getCompact(soup.find(
-		'div', class_='tgme_channel_info_header_title').text, 10)
-
 @log_on_fail(debug_group)
 @log_call()
 def indexingImp():
@@ -139,34 +134,10 @@ def indexingImp():
 		soup = BeautifulSoup(cached_url.get(link), 'html.parser')
 		if db.isBadChannel(soup):
 			continue
-		db.updateChannelName(channel, getChannelTitle(soup))
+		processChannelInfo(channel, soup)
 		for item in soup.find_all('div', class_='tgme_widget_message_bubble'):
 			processBubble(item)
 	db.save()
-
-def hasLink(item):
-	if item.find('div', class_='tgme_widget_message_document_title'):
-		return True
-	text = item.find('div', class_='tgme_widget_message_text')
-	if not text:
-		return False
-	return text.find('a')
-
-def hasFile(item):
-	return item.find('div', class_='tgme_widget_message_document_title')
-
-def processBubbleWithLink(item):
-	if hasLink(item):
-		processBubble(item)
-
-def processBubbleWithFile(item):
-	if hasFile(item):
-		processBubble(item)
-
-@log_on_fail(debug_group)
-def onlyFileBackfill(channel):
-	print('onlyFileBackfill', channel)
-	backfillChannelNew(channel, processBubbleWithFile, db, total = 1000000)
 
 @log_on_fail(debug_group)
 @log_call()

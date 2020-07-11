@@ -45,11 +45,27 @@ def getTime(item):
 	format = '%Y-%m-%dT%H:%M:%S'
 	return datetime.strptime(s, format).timestamp()
 
+def getChannelTitle(soup):
+	# see when we can't get channel title?
+	return getCompact(soup.find(
+		'div', class_='tgme_channel_info_header_title').text, 10)
+
+def processChannelInfo(channel, soup):
+	title = getChannelTitle(soup)
+	db.updateChannelName(channel, title)
+	description = (soup.find('div', class_='tgme_channel_info_description') or
+		soup.find('div', class_='tgme_page_description'))
+	addMentionedChannel(description, channel)
+	description = title + (description and description.text) or ''
+	post_link = channel + '/0'
+	db.addIndex(post_link, description)
+	db.setMainText(post_link, getCompact(description))
+
 def processBubble(item):
 	post_link = getPostLinkBubble(item)
 	channel = post_link.split('/')[0]
 	Channel(channel).save(db, getOrigChannel(item))
-	addMentionedChannel(item)
+	addMentionedChannel(item, channel)
 	text_fields_name = [
 		'link_preview_title',
 		'tgme_widget_message_text', 
