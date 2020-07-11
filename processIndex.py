@@ -76,6 +76,7 @@ def hasFile(item):
 	return item.find('div', class_='tgme_widget_message_document_title')
 
 def processBubble(item):
+	print('processBubble')
 	post_link = getPostLinkBubble(item)
 	channel = post_link.strip('/').split('/')[-2]
 	Channel(channel).save(db, getOrigChannel(item))
