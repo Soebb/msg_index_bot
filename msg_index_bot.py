@@ -8,12 +8,12 @@ from telegram_util import log_on_fail, cutCaption, commitRepo, splitCommand, rem
 import threading
 from bs4 import BeautifulSoup
 import cached_url
-from datetime import datetime
 import random
 from helper import isGoodChannel, backfillChannelNew, shouldProcessFullBackfill, tryAddAllMentionedChannel, isMostCN
 from debug import debug_group, tele, sendDebugMessage, log_call
 from db import db
 from processIndex import processBubble
+from common import getCompact
 
 HELP_MESSAGE = '''
 添加频道，群组 - "/add @dushufenxiang", 可批量。
@@ -144,42 +144,10 @@ def handleSearch(update, context):
 	text = msg.text.strip()
 	search(msg, text, db.search)
 
-def getText(item, class_name):
-	try:
-		return item.find('div', class_=class_name).text
-	except:
-		return ''
-
-def getCompact(text, cut = 20):
-	if not text:
-		return ''
-	for char in '[]()':
-		text = text.replace(char, '') 
-	return cutCaption(' '.join(text.split()).strip(), '', cut)
-
-def getMainText(text_fields):
-	if text_fields[0] and len(text_fields[0]) > 5:
-		return text_fields[0]
-	for x in text_fields[1:] + [text_fields[0]]:
-		if x:
-			return x
-
-def getTime(item):
-	try:
-		s = (item.find('a', class_='tgme_widget_message_date').
-				find('time')['datetime'][:-6])
-	except:
-		print(item.find('a', class_='tgme_widget_message_date'))
-		return 0
-	format = '%Y-%m-%dT%H:%M:%S'
-	return datetime.strptime(s, format).timestamp()
-
 def getChannelTitle(soup):
-	try:
-		return getCompact(soup.find(
-			'div', class_='tgme_channel_info_header_title').text, 10)
-	except:
-		...
+	# see when we can't get channel title?
+	return getCompact(soup.find(
+		'div', class_='tgme_channel_info_header_title').text, 10)
 
 @log_on_fail(debug_group)
 @log_call()
@@ -260,16 +228,6 @@ def purgeOldIndex():
 	db.save()
 	commitRepo(delay_minute=0)
 
-@log_on_fail(debug_group)
-def trimIndex():
-	sendDebugMessage('start triming index')
-	db.trimIndex()
-	sendDebugMessage('triming index 1')
-	db.save()
-	sendDebugMessage('triming index 2')
-	commitRepo(delay_minute=0)
-	sendDebugMessage('end triming index')
-
 bad_channel = set()
 @log_on_fail(debug_group)
 def findBadChannel():
@@ -283,11 +241,11 @@ def findBadChannel():
 
 @log_call()
 def indexing():
+	indexingImp()
 	findBadChannel()
 	db.purgeChannels()
 	db.dedupIndex()
 	# onlyFileBackfill('what_youread')
-	indexingImp()
 	backfill()
 	threading.Timer(60, indexing).start()
 

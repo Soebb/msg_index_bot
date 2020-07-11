@@ -193,10 +193,6 @@ class DB(object):
 			if refer.startswith(channel) and self.badScore(refer) > 9:
 				yield refer
 
-	def trimIndex(self):
-		for key, value in list(self.index.items.items()):
-			self.index.update(key, trimIndexItem(value))
-
 	def remove(self, key):
 		self.index.remove(key)
 		self.maintext.remove(key)
