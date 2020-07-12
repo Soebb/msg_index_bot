@@ -129,6 +129,11 @@ class DB(object):
 		self.blacklist.update(key, value)
 		return 'success'
 
+	def setGoodChannel(self, text):
+		text = text.strip('/').split('/')[-1]
+		self.channels.update(text, 1)
+		return 'success'
+
 	def getBadness(self, text):
 		return str(self.blacklist.items.get(text, 0))
 

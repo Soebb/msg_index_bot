@@ -73,6 +73,9 @@ def handleCommand(update, context):
 		if command in ['/vb']:
 			msg.reply_text(db.getBadness(text))
 			return
+		if command in ['/g']:
+			msg.reply_text(db.setGoodChannel(text))
+			return
 	if msg.chat_id > 0:
 		msg.reply_text(HELP_MESSAGE, disable_web_page_preview=True)
 		return
