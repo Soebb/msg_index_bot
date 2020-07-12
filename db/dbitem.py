@@ -61,10 +61,10 @@ class DBItem(object):
 		return self.items.get(key, default)
 
 	def save(self):
-		lines = self.items.copy()
+		lines = self.items # .copy()
 		lines = [key + ' ' + str(lines[key]) for key in lines]
 		lines.sort()
-		limit = 5000
+		limit = 10000
 		start = 0
 		while True:
 			towrite = '\n'.join(lines[limit * start:limit * (start + 1)])
