@@ -74,7 +74,7 @@ class DBItem(object):
 			fn = self.fn + str(start)
 			with open(fn + 'tmp', 'w') as f:
 				f.write(towrite)
-			print(fn)
+			print(fn, 'mv %stmp %s' % (fn, fn))
 			os.system('mv %stmp %s' % (fn, fn))
 		while True:
 			start += 1
