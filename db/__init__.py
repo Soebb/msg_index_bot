@@ -145,7 +145,7 @@ class DB(object):
 				self.remove(key)
 				count += 1
 		if count:
-			debug_group.send_message('purge Channel: ' +  channel)
+			print('purge Channel: ' +  channel)
 		self.channels.remove(channel)
 		self.save()
 
