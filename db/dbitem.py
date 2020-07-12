@@ -74,10 +74,11 @@ class DBItem(object):
 			fn = self.fn + str(start)
 			with open(fn + 'tmp', 'w') as f:
 				f.write(towrite)
+			print(fn)
 			os.system('mv %stmp %s' % (fn, fn))
 		while True:
 			start += 1
-			r = os.system('rm %s%s > /dev/null 2>&1' % (self.fn, start))
+			r = os.system('rm %s%d > /dev/null 2>&1' % (self.fn, start))
 			if r != 0:
 				break
 
