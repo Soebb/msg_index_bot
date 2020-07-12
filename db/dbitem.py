@@ -64,7 +64,7 @@ class DBItem(object):
 		lines = self.items # .copy()
 		lines = [key + ' ' + str(lines[key]) for key in lines]
 		lines.sort()
-		limit = 10000
+		limit = 5000
 		start = 0
 		while True:
 			towrite = '\n'.join(lines[limit * start:limit * (start + 1)])
@@ -72,9 +72,11 @@ class DBItem(object):
 				break
 			start += 1
 			fn = self.fn + str(start)
-			with open(fn + 'tmp', 'w') as f:
+			with open(fn, 'w') as f:
 				f.write(towrite)
-			print(os.popen('mv %stmp %s' % (fn, fn)).read())
+			# with open(fn + 'tmp', 'w') as f:
+			# 	f.write(towrite)
+			# print(os.popen('mv %stmp %s' % (fn, fn)).read())
 		while True:
 			start += 1
 			r = os.system('rm %s%d > /dev/null 2>&1' % (self.fn, start))
