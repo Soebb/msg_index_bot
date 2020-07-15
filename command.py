@@ -62,9 +62,9 @@ def handleGroup(update, context):
 	text = msg.text or msg.caption or (
 		msg.document and msg.document.file_name)
 	prefix = 'hasFile ' if msg.document else ''
-	db.updateIndex(post_link, prefix + text, msg.chat.username)
-	db.updateMaintext(post_link, text[:20])
-	db.updateTime(post_link, int(time.time()))
+	dbase.updateIndex(post_link, prefix + text, msg.chat.username)
+	dbase.updateMaintext(post_link, text[:20])
+	dbase.updateTime(post_link, int(time.time()))
 
 def setupCommand(dp):
 	dp.add_handler(MessageHandler(Filters.command, handleCommand))

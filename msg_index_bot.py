@@ -3,6 +3,7 @@
 
 from telegram_util import log_on_fail
 from common import debug_group, tele, log_call
+from command import setupCommand
 import threading
 import random
 import backfill

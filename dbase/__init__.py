@@ -67,7 +67,7 @@ def suspectBadChannel(post):
 	total_count = 0
 	bad_count = 0
 	for item in channelrefer.items():
-		from_channel, to_channel = item.split(:)
+		from_channel, to_channel = item.split(':')
 		if from_channel == channel:
 			total_count += 1
 			if channels.get(to_channel) == -2:
