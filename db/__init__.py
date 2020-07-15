@@ -5,7 +5,7 @@ from debug import sendDebugMessage, debug_group, log_call
 from telegram_util import log_on_fail
 from channel import Channel
 
-sign = '。，？！.,\n'
+sign = '。，？！\n'
 
 def addToResult(result, buff):
 	buff = ''.join(buff).strip().split()

@@ -16,6 +16,7 @@ from db import db
 from search import searchText, searchChannel
 import sys
 from fetchIndex import backfillChannel
+from newdb import Index
 
 HELP_MESSAGE = '''
 添加频道，群组 - "/add @dushufenxiang", 可批量。
@@ -138,21 +139,18 @@ def indexing():
 	backfill()
 	threading.Timer(60, indexing).start()
 
-@log_call()
-def indexingNew():
-	indexingImp()
-	findBadChannel()
-	db.purgeChannels()
-	db.dedupIndex()
-	backfill()
-	threading.Timer(60, indexingNew).start()
+def migrating():
+	for key, value in db.index.getItems():
+		index.update(key, value)
 
 if __name__ == '__main__':
-	sendDebugMessage('restart')
-	dp = tele.dispatcher
-	threading.Timer(1, indexingNew).start() 
-	dp.add_handler(MessageHandler(Filters.command, handleCommand))
-	dp.add_handler(MessageHandler(~Filters.command & Filters.private, handleSearch))
-	dp.add_handler(MessageHandler(~Filters.command & ~Filters.private, handleGroup))
-	tele.start_polling()
-	tele.idle()
+	print('start')
+	migrating()
+	print('end')
+	# dp = tele.dispatcher
+	# threading.Timer(1, indexingNew).start() 
+	# dp.add_handler(MessageHandler(Filters.command, handleCommand))
+	# dp.add_handler(MessageHandler(~Filters.command & Filters.private, handleSearch))
+	# dp.add_handler(MessageHandler(~Filters.command & ~Filters.private, handleGroup))
+	# tele.start_polling()
+	# tele.idle()
