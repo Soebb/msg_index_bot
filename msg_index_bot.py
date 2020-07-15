@@ -2,22 +2,15 @@
 # -*- coding: utf-8 -*-
 
 # move to html parsemode
-
 # do I need a CN related util?
 
-from telegram.ext import MessageHandler, Filters
-from channel import Channel
-from telegram_util import log_on_fail, cutCaption, splitCommand
+from telegram_util import log_on_fail
 import threading
-from bs4 import BeautifulSoup
-import cached_url
 import random
-# from debug import debug_group, tele, sendDebugMessage, log_call
-from processIndex import processBubble, processChannelInfo
 from shouldBackfill import shouldBackfill
 import sys
 from fetchIndex import backfillChannel
-from dbase import index, maintext, channelrefer, timestamp, channels, blocklist
+import dbase
 import webgram
 
 @log_on_fail(debug_group)
