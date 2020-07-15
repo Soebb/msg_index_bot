@@ -87,8 +87,6 @@ def shouldBackfill(channel):
 	if channels.get(channel) in [0, 1] and random.random() < 0.05:
 		return True
 	if dbase.suspectBadChannel(post):
-		if channels.get(channel) >= 0:
-			print('suspectBadChannel', channel)
 		return False
 	return isSimplified(post.getIndex()) and random.random() < 0.05
 
