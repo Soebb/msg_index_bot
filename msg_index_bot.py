@@ -16,7 +16,7 @@ from db import db
 from search import searchText, searchChannel
 import sys
 from fetchIndex import backfillChannel
-from newdb import Index
+from newdb import index
 
 HELP_MESSAGE = '''
 添加频道，群组 - "/add @dushufenxiang", 可批量。
