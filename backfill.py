@@ -1,4 +1,4 @@
-from debug import sendDebugMessage, log_call
+from common import sendDebugMessage, log_call
 import time
 import random
 import sys
@@ -31,14 +31,14 @@ def _findLastMessage(channel):
 	while left < right - 30:
 		item = None
 		for _ in range(5):
-			index = int(left + (random.random() * 0.75 + 0.25) * (right - left))
-			post = webgram.getPost(channel, index)
+			post_id = int(left + (random.random() * 0.75 + 0.25) * (right - left))
+			post = webgram.getPost(channel, post_id)
 			if post.getIndex():
 				dbase.update(post)
 				break
 		right_bound = int((left + 3 * right) / 4)
 		if item:
-			left = index
+			left = post_id
 			if left > right_bound:
 				right = int(right * 4 / 3)
 		else:

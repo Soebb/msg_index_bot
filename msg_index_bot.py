@@ -5,6 +5,7 @@
 # do I need a CN related util?
 
 from telegram_util import log_on_fail
+from common import debug_group, tele, log_call
 import threading
 import random
 import backfill
@@ -19,6 +20,8 @@ def indexingImp():
 	for channel, score in channels.items():
 		if score < 0 or random.random() > 1.0 / (score * score + 1):
 			continue
+		if 'test' in sys.argv and random.random() > 0.1:
+			continue # better testing
 		for post in webgram.getPosts(channel):
 			dbase.update(post)
 
