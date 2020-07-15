@@ -140,20 +140,8 @@ def indexing():
 	threading.Timer(60, indexing).start()
 
 def migrating():
-	# for key, value in db.index.getItems():
-	# 	index.update(key, value)
-	for key, value in db.blacklist.getItems():
-		blocklist.update(key, value)
-	for key, value in db.channels.getItems():
-		channels.update(key, value)
-	for key, value in db.maintext.getItems():
-		maintext.update(key, value)
-	for key, value in db.time.getItems():
-		timestamp.update(key, value)
-	for key, value in db.channelrefer.getItems():
-		channelrefer.update(key, value)
-	for key, value in db.channelname.getItems():
-		channelname.update(key, value)
+	for key, value in channelname.items():
+		maintext.update(key + '/0', value)
 
 if __name__ == '__main__':
 	print('start')
