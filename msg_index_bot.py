@@ -31,7 +31,6 @@ def indexBackfill():
 
 @log_call()
 def indexing():
-	dbase.populateCoreIndex()
 	indexingImp()
 	indexBackfill()
 	threading.Timer(1, indexing).start()

@@ -23,17 +23,9 @@ def searchHit(targets, text):
 	return sum(r) == len(r)
 
 def searchRaw(targets):
-	count = 0
-	for key, value in list(core_index.items()):
+	for key, value in index.items():
 		if searchHit(targets, value):
-			count += 1
 			yield key
-	print('searchRaw', count)
-	if count < 20:
-		for key, value in index.items():
-			if searchHit(targets, value):
-				count += 1
-				yield key
 
 def flipFirst(result, func, sendAfter=True):
 	rest = []
@@ -66,8 +58,11 @@ def shouldFlipFirst(key):
 	channel = key.split('/')[0]
 	if channels.get(channel) == -1:
 		return False
-	if channels.get(channel) < 5:
+	if 0 <= channels.get(channel) <= 2:
 		return True
+	if len(index.get(key)) < 20 and not matchKey(
+		index.get(key), ['hasFile', 'hasLink']):
+		return False
 	return not matchKey(index.get(key), blocklist.items())
 
 def populateMaintext(result):

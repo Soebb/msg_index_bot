@@ -9,7 +9,6 @@ index = plain_db.loadLargeDB('index')
 maintext = plain_db.loadLargeDB('maintext')
 timestamp = plain_db.loadLargeDB('timestamp', isIntValue = True)
 channelrefer = plain_db.loadKeyOnlyDB('channelrefer')
-core_index = {}
 
 def setBadWord(text):
 	blocklist.add(text)
@@ -79,31 +78,3 @@ def suspectBadChannel(post):
 	if bad_count * 5 > total_count:
 		return True
 	return matchKey(post.getIndex(), blocklist.items())
-
-def isCore(key, value):
-	channel = key.split('/')[0]
-	if channels.get(channel) < 0:
-		return False
-	if matchKey(value, ['hasFile', 'hasLink']):
-		return True
-	if len(value) < 10:
-		return False
-	if 0 <= channels.get(channel) <= 5:
-		return True
-	if matchKey(value, blocklist.items()):
-		return False
-	return isSimplified(value)
-
-@log_on_fail(debug_group)
-@log_call()
-def populateCoreIndex():
-	global core_index
-	core_index = {}
-	count = 0
-	for key, value in index.items():
-		if isCore(key, value):
-			core_index[key] = value
-		count += 1
-		if count % 10000 == 0:
-			print(populateCoreIndex, count)
-	print(len(index.items()), len(core_index))
