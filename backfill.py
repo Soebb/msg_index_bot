@@ -22,10 +22,11 @@ def quickBackfill(channel):
 		for post in posts[1:]:
 			dbase.update(post)
 		if post_id == posts[-1].post_id + 1:
-			return
+			break
 		post_id = posts[-1].post_id + 1
 		if post_id % 100 == 0 and time.time() - start_time > time_limit:
-			return
+			break
+	print('quickBackfill end', channel, post_id)
 
 def _findLastMessage(channel):
 	left = 1
@@ -64,8 +65,9 @@ def slowBackfill(channel):
 			dbase.update(post)
 		if post_id % 100 == 0:
 			if time.time() - start_time > time_limit:
-				return
+				break
 		post -= 1
+	print('slowBackfill end', channel, post_id)
 
 def isSimplified(text):
 	cn = sum([isCN(c) + hanzidentifier.is_simplified(c) for c in text])
