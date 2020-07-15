@@ -7,6 +7,7 @@
 from common import debug_group
 import dbase
 from dbase import maintext, blocklist, index, channels
+from telegram_util import matchKey
 import itertools
 
 def finalTouch(result):

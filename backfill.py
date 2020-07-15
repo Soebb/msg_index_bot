@@ -4,7 +4,7 @@ import random
 import sys
 import webgram
 import dbase
-from dbase import index
+from dbase import index, channels
 
 if 'test' in sys.argv:
 	time_limit = 15

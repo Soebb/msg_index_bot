@@ -1,5 +1,6 @@
 import plain_db
 import webgram
+from telegram_util import matchKey
 
 blocklist = plain_db.loadKeyOnlyDB('blocklist')
 channels = plain_db.loadLargeDB('channels', isIntValue = True, default = 100)
