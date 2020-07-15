@@ -30,17 +30,18 @@ def quickBackfill(channel):
 
 def _findLastMessage(channel):
 	left = 1
-	right = 1000
-	while left < right - 30:
-		item = None
+	right = 10000
+	while left < right - 100:
+		hit = False
 		for _ in range(5):
 			post_id = int(left + (random.random() * 0.75 + 0.25) * (right - left))
 			post = webgram.getPost(channel, post_id)
 			if post.getIndex():
 				dbase.update(post)
+				hit = True
 				break
 		right_bound = int((left + 3 * right) / 4)
-		if item:
+		if hit:
 			left = post_id
 			if left > right_bound:
 				right = int(right * 4 / 3)
@@ -66,7 +67,7 @@ def slowBackfill(channel):
 		if post_id % 100 == 0:
 			if time.time() - start_time > time_limit:
 				break
-		post -= 1
+		post_id -= 1
 	print('slowBackfill end', channel, post_id)
 
 def isSimplified(text):
@@ -81,7 +82,7 @@ def shouldBackfill(channel):
 	if not post.exist:
 		return False
 	dbase.update(post)
-	if channel in ['what_youread']:
+	if channel in ['what_youread', 'dushufenxiang_chat']:
 		return True
 	if channels.get(channel) in [0, 1] and random.random() < 0.05:
 		return True
