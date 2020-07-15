@@ -8,11 +8,10 @@ import threading
 from bs4 import BeautifulSoup
 import cached_url
 import random
-from debug import debug_group, tele, sendDebugMessage, log_call
+# from debug import debug_group, tele, sendDebugMessage, log_call
 from processIndex import processBubble, processChannelInfo
 from shouldBackfill import shouldBackfill
 from indexFromTelegramMsg import indexFromTelegramMsg
-from db import db
 from search import searchText, searchChannel
 import sys
 from fetchIndex import backfillChannel
