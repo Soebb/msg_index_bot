@@ -3,7 +3,6 @@ import random
 import hanzidentifier
 from channel import Channel
 from processIndex import processChannelInfo
-from db import db
 
 def _isMostCN(text):
 	if not text or not text.strip():

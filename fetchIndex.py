@@ -1,4 +1,3 @@
-from db import db
 from processIndex import processBubble, processChannelInfo
 from debug import sendDebugMessage, log_call
 import time
@@ -29,8 +28,8 @@ def _quickBackfillChannel(channel):
 		soup = BeautifulSoup(cached_url.get(link, force_cache=True), 'html.parser')
 		for item in soup.find_all('div', class_='tgme_widget_message_bubble'):
 			processBubble(item)
-			post_link = item.find('a', class_='tgme_widget_message_date')['href']
-			post_id = int(post_link.split('/')[-1])
+			# post_link = item.find('a', class_='tgme_widget_message_date')['href']
+			# post_id = int(post_link.split('/')[-1])
 			start = max(start, post_id + 1)
 		if start % 100 == 0 and time.time() - start_time > time_limit:
 			break

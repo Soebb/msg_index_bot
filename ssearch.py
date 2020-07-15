@@ -1,4 +1,3 @@
-from db import db
 
 def _finalTouch(result):
 	final_result = result[:20]

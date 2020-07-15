@@ -1,5 +1,4 @@
 from channel import Channel
-from db import db
 from telegram_util import log_on_fail
 from debug import debug_group
 from common import addChannelRaw, getCompact
