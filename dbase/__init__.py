@@ -61,3 +61,17 @@ def update(post):
 	updateIndex(post.getKey(), post.getIndex(), post.getChannel())
 	updateMaintext(post.getKey(), post.getMaintext())
 	updateTime(post.getKey(), post.getTime())
+
+def suspectBadChannel(post):
+	channel = post.channel
+	total_count = 0
+	bad_count = 0
+	for item in channelrefer.items():
+		from_channel, to_channel = item.split(:)
+		if from_channel == channel:
+			total_count += 1
+			if channels.get(to_channel) == -2:
+				bad_count += 1
+	if bad_count * 5 > total_count:
+		return True
+	return matchKey(post.getIndex(), blocklist.items())

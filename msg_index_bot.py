@@ -7,16 +7,16 @@
 from telegram_util import log_on_fail
 import threading
 import random
-from shouldBackfill import shouldBackfill
+import backfill
 import sys
-from fetchIndex import backfillChannel
 import dbase
+from dbase import channels
 import webgram
 
 @log_on_fail(debug_group)
 @log_call()
 def indexingImp():
-	for channel, score in channels.getItems():
+	for channel, score in channels.items():
 		if score < 0 or random.random() > 1.0 / (score * score + 1):
 			continue
 		for post in webgram.getPosts(channel):
@@ -25,9 +25,10 @@ def indexingImp():
 @log_on_fail(debug_group)
 @log_call()
 def backfill():
-	for channel, score in db.channels.getItems():
-		if shouldBackfill(channel, score):
-			backfillChannel(channel)
+	for channel, score in channels.items():
+		if dbase.suspectBadChannel(channel):
+			continue
+		backfill.backfill(channel)
 
 @log_call()
 def indexing():
