@@ -59,7 +59,7 @@ def updateTime(key, time):
 def update(post):
 	for channel in webgram.yieldReferers(post):
 		updateChannel(channel, post.channel)
-	updateIndex(post.getKey(), post.getIndex(), post.getChannel())
+	updateIndex(post.getKey(), post.getIndex(), post.channel)
 	updateMaintext(post.getKey(), post.getMaintext())
 	updateTime(post.getKey(), post.getTime())
 
