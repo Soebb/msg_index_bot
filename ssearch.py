@@ -6,7 +6,7 @@
 
 from common import debug_group
 import dbase
-from dbase import maintext, blocklist, index, channels
+from dbase import maintext, blocklist, index, channels, timestamp
 from telegram_util import matchKey
 import itertools
 
@@ -75,6 +75,9 @@ def populateChannelTitle(result):
 
 def searchTextRaw(targets):
 	result = searchRaw(targets)
+	result = [(timestamp.get(key, 0), key) for key in result]
+	result.sort(reverse=True)
+	result = [item[1] for item in result]
 	result = flipFirst(result, lambda key: channels.get(
 		key.split('/')[0]) != -2, sendAfter=False)
 	result = dedupResult(result, lambda key: maintext.get(
