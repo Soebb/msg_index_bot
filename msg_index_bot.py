@@ -23,7 +23,7 @@ def indexingImp():
 		posts = webgram.getPosts(channel, 1) # force cache
 		for post in posts:
 			dbase.update(post)
-		if len(post) > 1: # save http call
+		if len(posts) > 1: # save http call
 			for post in webgram.getPosts(channel):
 				dbase.update(post)
 
