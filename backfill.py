@@ -5,6 +5,8 @@ import sys
 import webgram
 import dbase
 from dbase import index, channels
+from telegram_util import isCN
+import hanzidentifier
 
 if 'test' in sys.argv:
 	time_limit = 15
