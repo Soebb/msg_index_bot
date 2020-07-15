@@ -63,7 +63,7 @@ def slowBackfill(channel):
 				print('slowBackfill jump', channel, post_id)
 				post_id -= 100
 			dbase.update(post)
-		if post % 100 == 0:
+		if post_id % 100 == 0:
 			if time.time() - start_time > time_limit:
 				return
 		post -= 1

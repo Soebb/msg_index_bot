@@ -8,7 +8,7 @@ debug_group = tele.bot.get_chat(420074357)
 last_debug_message = None
 
 def sendDebugMessage(*args):
-	print(args)
+	print(*args)
 	message = ' '.join([str(x) for x in args])
 	global last_debug_message
 	if last_debug_message:
