@@ -1,3 +1,7 @@
+# move to html parsemode
+# timed search
+from common import debug_group
+import dbase
 
 def _finalTouch(result):
 	final_result = result[:20]

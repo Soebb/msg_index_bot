@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# move to html parsemode
-# do I need a CN related util?
-
 from telegram_util import log_on_fail
 from common import debug_group, tele, log_call
 import threading

@@ -7,13 +7,16 @@ import time
 
 def search(msg, text, method):
 	tmp = msg.reply_text('searching')
+	start = time.time()
 	result = method(text)
+	time_elapse = time.time() - start()
 	msg.forward(debug_group.id)
 	if result:
 		r = msg.reply_text('\n'.join(result), disable_web_page_preview = True, parse_mode = 'Markdown')
 	else:
 		r = msg.reply_text('no result')	
 	r.forward(debug_group.id)
+	debug_group.send_message('time elapse: ' + str(time_elapse))
 	tmp.delete()
 
 with open('help.md') as f:
