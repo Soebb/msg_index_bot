@@ -25,16 +25,14 @@ def indexingImp():
 
 @log_on_fail(debug_group)
 @log_call()
-def backfill():
+def indexBackfill():
 	for channel, score in channels.items():
-		if dbase.suspectBadChannel(channel):
-			continue
 		backfill.backfill(channel)
 
 @log_call()
 def indexing():
 	indexingImp()
-	backfill()
+	indexBackfill()
 	threading.Timer(60, indexing).start()
 
 if __name__ == '__main__':
