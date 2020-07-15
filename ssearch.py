@@ -28,7 +28,8 @@ def searchRaw(targets):
 		if searchHit(targets, value):
 			count += 1
 			yield key
-	if len(count) < 20:
+	print('searchRaw', count)
+	if count < 20:
 		for key, value in index.items():
 			if searchHit(targets, value):
 				count += 1

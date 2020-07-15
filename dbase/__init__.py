@@ -99,7 +99,11 @@ def isCore(key, value):
 def populateCoreIndex():
 	global core_index
 	core_index = {}
+	count = 0
 	for key, value in index.items():
 		if isCore(key, value):
 			core_index[key] = value
+		count += 1
+		if count % 10000 == 0:
+			print(populateCoreIndex, count)
 	print(len(index.items()), len(core_index))
