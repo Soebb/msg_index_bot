@@ -67,7 +67,7 @@ def populateMaintext(result):
 
 def getChannelTitle(key):
 	channel = key.split('/')[0]
-	yield maintext.get(channel + '/0')
+	return maintext.get(channel + '/0')
 
 def populateChannelTitle(result):
 	for key in result:
