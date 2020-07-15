@@ -5,6 +5,8 @@ with open('token') as f:
 tele = Updater(token, use_context=True)  # @weibo_subscription_bot
 debug_group = tele.bot.get_chat(420074357)
 
+last_debug_message = None
+
 def sendDebugMessage(*args):
 	message = ' '.join([str(x) for x in args])
 	global last_debug_message
