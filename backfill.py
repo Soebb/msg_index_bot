@@ -9,7 +9,7 @@ from telegram_util import isCN
 import hanzidentifier
 
 if 'test' in sys.argv:
-	time_limit = 15
+	time_limit = 1
 else:
 	time_limit = 20 * 60
 
@@ -18,7 +18,6 @@ def quickBackfill(channel):
 	start_time = time.time()
 	post_id = 1
 	while True:
-		print('quickBackfill', channel, post_id)
 		posts = webgram.getPosts(channel, post_id)
 		for post in posts[1:]:
 			dbase.update(post)
