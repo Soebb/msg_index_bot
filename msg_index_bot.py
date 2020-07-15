@@ -16,7 +16,7 @@ from db import db
 from search import searchText, searchChannel
 import sys
 from fetchIndex import backfillChannel
-from newdb import index
+from newdb import index, maintext, channelname, channelrefer, timestamp, channels, blocklist
 
 HELP_MESSAGE = '''
 添加频道，群组 - "/add @dushufenxiang", 可批量。
@@ -140,8 +140,20 @@ def indexing():
 	threading.Timer(60, indexing).start()
 
 def migrating():
-	for key, value in db.index.getItems():
-		index.update(key, value)
+	# for key, value in db.index.getItems():
+	# 	index.update(key, value)
+	for key, value in db.blacklist.getItems():
+		blocklist.update(key, value)
+	for key, value in db.channels.getItems():
+		channels.update(key, value)
+	for key, value in db.maintext.getItems():
+		maintext.update(key, value)
+	for key, value in db.time.getItems():
+		timestamp.update(key, value)
+	for key, value in db.channelrefer.getItems():
+		channelrefer.update(key, value)
+	for key, value in db.channelname.getItems():
+		channelname.update(key, value)
 
 if __name__ == '__main__':
 	print('start')
