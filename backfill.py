@@ -1,10 +1,10 @@
-from processIndex import processBubble, processChannelInfo
 from debug import sendDebugMessage, log_call
 import time
 import random
 import sys
-from bs4 import BeautifulSoup
-import cached_url
+import webgram
+import dbase
+from dbase import index
 
 if 'test' in sys.argv:
 	time_limit = 15
@@ -33,7 +33,7 @@ def _findLastMessage(channel):
 		for _ in range(5):
 			index = int(left + (random.random() * 0.75 + 0.25) * (right - left))
 			post = webgram.getPost(channel, index)
-			if post.exist:
+			if post.getIndex():
 				dbase.update(post)
 				break
 		right_bound = int((left + 3 * right) / 4)
@@ -53,11 +53,12 @@ def slowBackfill(channel):
 	start_time = time.time()
 	while post_id > 0:
 		post = webgram.get(channel, post_id)
-		if dbase.isNewPost(post):
-			found_new_key = True
-		dbase.update(post)
-		if post.getIndex() and not found_new_key:
-			post -= 100
+		if post.getIndex():
+			if not index.get(post.getKey()):
+				found_new_key = True
+			if not found_new_key:
+				post_id -= 100
+			dbase.update(post)
 		if post % 100 == 0:
 			if time.time() - start_time > time_limit:
 				return
