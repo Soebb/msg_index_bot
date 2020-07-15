@@ -1,9 +1,18 @@
 from telegram.ext import Updater
+from telegram_util import isCN
+import hanzidentifier
 
 with open('token') as f:
 	token = f.read().strip()
 tele = Updater(token, use_context=True)  # @weibo_subscription_bot
 debug_group = tele.bot.get_chat(420074357)
+
+def isSimplified(text):
+	cn = sum([isCN(c) + hanzidentifier.is_simplified(c) for c in text])
+	for c in text:
+		if isCN(c) and not hanzidentifier.is_simplified(c):
+			return False
+	return cn * 2 >= len(text)
 
 last_debug_message = None
 

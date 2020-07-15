@@ -31,12 +31,13 @@ def indexBackfill():
 
 @log_call()
 def indexing():
+	dbase.populateCoreIndex()
 	indexingImp()
 	indexBackfill()
 	threading.Timer(1, indexing).start()
 
 if __name__ == '__main__':
 	setupCommand(tele.dispatcher)
-	# threading.Timer(1, indexing).start() 
+	threading.Timer(1, indexing).start() 
 	tele.start_polling()
 	tele.idle()

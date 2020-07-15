@@ -1,12 +1,10 @@
-from common import sendDebugMessage, log_call
+from common import sendDebugMessage, log_call, isSimplified
 import time
 import random
 import sys
 import webgram
 import dbase
 from dbase import index, channels
-from telegram_util import isCN
-import hanzidentifier
 
 if 'test' in sys.argv:
 	time_limit = 1
@@ -78,13 +76,6 @@ def slowBackfill(channel):
 				break
 		post_id -= 1
 	print('slowBackfill end', channel, post_id)
-
-def isSimplified(text):
-	cn = sum([isCN(c) + hanzidentifier.is_simplified(c) for c in text])
-	for c in text:
-		if isCN(c) and not hanzidentifier.is_simplified(c):
-			return False
-	return cn * 2 >= len(text)
 
 def shouldBackfill(channel):
 	post = webgram.get(channel)

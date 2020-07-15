@@ -6,9 +6,10 @@
 
 from common import debug_group
 import dbase
-from dbase import maintext, blocklist, index, channels, timestamp
+from dbase import maintext, blocklist, index, channels, timestamp, core_index
 from telegram_util import matchKey
 import itertools
+import time
 
 def finalTouch(result):
 	final_result = ['%d. <a href="https://t.me/%s">%s</a>' % (
@@ -22,9 +23,16 @@ def searchHit(targets, text):
 	return sum(r) == len(r)
 
 def searchRaw(targets):
-	for key, value in index.items():
+	count = 0
+	for key, value in list(core_index.items()):
 		if searchHit(targets, value):
+			count += 1
 			yield key
+	if len(count) < 20:
+		for key, value in index.items():
+			if searchHit(targets, value):
+				count += 1
+				yield key
 
 def flipFirst(result, func, sendAfter=True):
 	rest = []
