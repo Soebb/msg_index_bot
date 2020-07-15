@@ -1,4 +1,5 @@
 import plain_db
+import webgram
 
 blocklist = plain_db.loadKeyOnlyDB('blocklist')
 channels = plain_db.loadLargeDB('channels', isIntValue = True, default = 100)

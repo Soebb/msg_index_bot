@@ -33,7 +33,7 @@ def indexBackfill():
 def indexing():
 	indexingImp()
 	indexBackfill()
-	threading.Timer(60, indexing).start()
+	threading.Timer(1, indexing).start()
 
 if __name__ == '__main__':
 	setupCommand(tele.dispatcher)
