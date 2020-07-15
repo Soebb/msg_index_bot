@@ -31,7 +31,7 @@ def getIndexMaxLen(channel):
 		return 0
 	if score == -1:
 		score = 100
-	return int(2000 / (score + 1))
+	return int(2000 / (score + 1) ** 0.5)
 
 def updateIndex(key, text, channel):
 	text = text[:getIndexMaxLen(channel)]
