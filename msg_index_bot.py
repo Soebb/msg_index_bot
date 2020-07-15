@@ -140,8 +140,13 @@ def indexing():
 	threading.Timer(60, indexing).start()
 
 def migrating():
-	for key, value in channelname.items():
-		maintext.update(key + '/0', value)
+	for key, value in blocklist.items():
+		if channels.get(key) != None:
+			if value >= 10:
+				channels.update(key, -2)
+				continue
+			if 0 < value < 10:
+				channels.update(key, -1)
 
 if __name__ == '__main__':
 	print('start')
