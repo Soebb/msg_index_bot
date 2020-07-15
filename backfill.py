@@ -82,7 +82,7 @@ def shouldBackfill(channel):
 	if not post.exist:
 		return False
 	dbase.update(post)
-	if channel in ['what_youread', 'dushufenxiang_chat']:
+	if channel in ['what_youread']:
 		return True
 	if channels.get(channel) in [0, 1] and random.random() < 0.05:
 		return True
