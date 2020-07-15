@@ -1,78 +1,99 @@
 # move to html parsemode
-# timed search
+#
+# potential improvements
+# limit raw result
+# skip sort by time
+
 from common import debug_group
 import dbase
+from dbase import maintext, blocklist, index, channels
+import itertools
 
-def _finalTouch(result):
-	final_result = result[:20]
-	final_result = ['%d. [%s](https://t.me/%s)' % (index + 1, x[0], x[1]) 
-		for index, x in enumerate(final_result)]
+def finalTouch(result):
+	final_result = ['%d. <a href="https://t.me/%s">%s</a>' % (
+		result_index + 1, r[0], r[1]) 
+		for result_index, r in enumerate(
+			itertools.islice(result, 20))]
 	return final_result
 
-def _hit(targets, text):
+def searchHit(targets, text):
 	r = [target.lower() in text.lower() for target in targets]
 	return sum(r) == len(r)
 
-def _searchRaw(targets):
-	for key, value in db.index.getItems():
-		if _hit(targets, value):
+def searchRaw(targets):
+	for key, value in index.items():
+		if searchHit(targets, value):
 			yield key
 
-def searchChannel(text):
-	targets = text.split()
-	hit_count = {}
-	total_count = {}
-	posts = {}
-	for key, value in db.index.getItems():
-		channel = key.split('/')[0]
-		if _hit(targets, value):
-			hit_count[channel] = hit_count.get(channel, 0) + 1 
-			if _hit(targets, db.maintext.get(key, '')) or channel not in posts:
-				posts[channel] = key
-		total_count[channel] = total_count.get(channel, 0) + 1 
-	raw_result = [(hit_count[key] * 1.0 / total_count[key], key) 
-		for key in hit_count]
-	raw_result.sort(reverse=True)
-	result = []
-	for _, channel in raw_result:
-		name = db.maintext.get(channel + '/0') or db.channelname.get(channel)
-		if not name:
+def flipFirst(result, func, sendAfter=True):
+	rest = []
+	for key in result:
+		if func(key):
+			yield key
+		else:
+			rest.append(key)
+	if sendAfter:
+		for key in rest:
+			yield key
+
+def dedupResult(result, func, sendAfter=True):
+	cache = set()
+	rest = []
+	for key in result:
+		text = func(key)
+		if not text:
 			continue
-		result.append((name, posts[channel]))
-	result = ([x for x in result if _hit(targets, x[0])] + 
-		[x for x in result if not _hit(targets, x[0])])
-	return _finalTouch(result)
+		if text in cache:
+			rest.append(key)
+			continue
+		cache.add(text)
+		yield key
+	if sendAfter:
+		for key in rest:
+			yield key
+
+def shouldFlipFirst(key):
+	channel = x.split('/')[0]
+	if channels.get(channel) == -1:
+		return False
+	if channels.get(channel) < 5:
+		return True
+	return not matchKey(index.get(key), blocklist.items())
+
+def populateMaintext(result):
+	for key in result:
+		yield key, maintext.get(key)
+
+def getChannelTitle(key):
+	channel = key.split('/')[0]
+	yield maintext.get(channel + '/0')
+
+def populateChannelTitle(result):
+	for key in result:
+		yield key, getChannelTitle(key)	
+
+def searchTextRaw(targets):
+	result = searchRaw(targets)
+	result = flipFirst(result, lambda key: channels.get(
+		key.split('/')[0]) != -2, sendAfter=False)
+	result = dedupResult(result, lambda key: maintext.get(
+		key), sendAfter=False)
+	result = flipFirst(result, lambda key: searchHit(
+		targets, maintext.get(key)))
+	result = dedupResult(result, lambda key: key.split('/')[0])
+	result = flipFirst(result, lambda key: shouldFlipFirst(key))
+	return result
 
 def searchText(text):
 	targets = text.split()
-	result = list(_searchRaw(targets))
-	result = [(db.time.get(x, 0), x) for x in result]
-	result.sort(reverse=True)
-	
-	exist_maintext = set()
-	exist_channel = set()
-	first = []
-	rest = []
-	resttop = []
-	for _, x in result:
-		main_text = db.maintext.get(x)
-		channel = x.split('/')[0]
-		if not main_text or main_text in exist_maintext:
-			continue
-		exist_maintext.add(main_text)
-		item = (main_text, x)
-		if db.badScore(item) >= 20:
-			continue
-		if (db.badScore(item) > 0 and 
-			db.channels.get(channel, 100) > 0):
-			rest.append(item)
-		elif channel in exist_channel:
-			resttop.append(item)
-		else:
-			first.append(item)
-		exist_channel.add(channel)
+	result = searchTextRaw(targets)
+	result = populateMaintext(result)
+	return finalTouch(result)
 
-	result = ([x for x in first if _hit(targets, x[0])] + 
-		[x for x in first if not _hit(targets, x[0])] + 
-		resttop + rest)
-	return _finalTouch(result)
+def searchChannel(text):
+	targets = text.split()
+	result = searchTextRaw(targets)
+	result = dedupResult(result, lambda key: getChannelTitle(
+		key), sendAfter=False)
+	result = populateChannelTitle(result)
+	return finalTouch(result)

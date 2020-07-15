@@ -12,7 +12,8 @@ def search(msg, text, method):
 	time_elapse = time.time() - start()
 	msg.forward(debug_group.id)
 	if result:
-		r = msg.reply_text('\n'.join(result), disable_web_page_preview = True, parse_mode = 'Markdown')
+		r = msg.reply_text('\n'.join(result), 
+			disable_web_page_preview = True, parse_mode = 'html')
 	else:
 		r = msg.reply_text('no result')	
 	r.forward(debug_group.id)
