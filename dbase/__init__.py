@@ -51,7 +51,7 @@ def updateMaintext(key, text):
 	maintext.update(key, text)
 
 def updateTime(key, time):
-	if timstamp.get(key) and time - timstamp.get(
+	if timestamp.get(key) and time - timestamp.get(
 		key) < 60 * 60 * 24 * 7:
 		return
 	timestamp.update(key, time)
@@ -61,7 +61,7 @@ def update(post):
 		updateChannel(channel, post.channel)
 	updateIndex(post.getKey(), post.getIndex(), post.channel)
 	updateMaintext(post.getKey(), post.getMaintext())
-	updateTime(post.getKey(), post.getTime())
+	updateTime(post.getKey(), post.time)
 
 def suspectBadChannel(post):
 	channel = post.channel
