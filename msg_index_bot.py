@@ -26,7 +26,6 @@ def indexingImp():
 @log_on_fail(debug_group)
 @log_call()
 def indexBackfill():
-	channels.items(123)
 	for channel, score in channels.items():
 		backfill.backfill(channel)
 
