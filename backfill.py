@@ -28,10 +28,17 @@ def quickBackfill(channel):
 			break
 	print('quickBackfill end', channel, post_id)
 
+def getMaxInIndex(channel):
+	result = 1
+	for post, _ in index.items():
+		if post.split('/')[0] == channel:
+			result = max(result, int(post.split('/')[1]))
+	return result
+
 def _findLastMessage(channel):
-	left = 1
-	right = 10000
-	while left < right - 100:
+	left = getMaxInIndex(channel)
+	right = 10000 + left
+	while left < right - 50:
 		hit = False
 		for _ in range(5):
 			post_id = int(left + (random.random() * 0.75 + 0.25) * (right - left))
@@ -39,14 +46,16 @@ def _findLastMessage(channel):
 			if post.getIndex():
 				dbase.update(post)
 				hit = True
+				print(left, right, post_id, hit)
 				break
-		right_bound = int((left + 3 * right) / 4)
+			print(left, right, post_id, hit)
+		mid = int((left + right) / 2)
 		if hit:
+			if post_id > mid:
+				right = post_id * 2 - left
 			left = post_id
-			if left > right_bound:
-				right = int(right * 4 / 3)
 		else:
-			right = right_bound
+			right = mid
 	return left
 
 @log_call()
