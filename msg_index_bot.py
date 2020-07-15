@@ -138,10 +138,19 @@ def indexing():
 	backfill()
 	threading.Timer(60, indexing).start()
 
+@log_call()
+def indexingNew():
+	indexingImp()
+	findBadChannel()
+	db.purgeChannels()
+	db.dedupIndex()
+	backfill()
+	threading.Timer(60, indexingNew).start()
+
 if __name__ == '__main__':
 	sendDebugMessage('restart')
 	dp = tele.dispatcher
-	threading.Timer(1, indexing).start() 
+	threading.Timer(1, indexingNew).start() 
 	dp.add_handler(MessageHandler(Filters.command, handleCommand))
 	dp.add_handler(MessageHandler(~Filters.command & Filters.private, handleSearch))
 	dp.add_handler(MessageHandler(~Filters.command & ~Filters.private, handleGroup))
