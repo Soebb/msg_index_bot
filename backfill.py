@@ -18,6 +18,7 @@ def quickBackfill(channel):
 	start_time = time.time()
 	post_id = 1
 	while True:
+		print('quickBackfill', channel, post_id)
 		posts = webgram.getPosts(channel, post_id)
 		for post in posts[1:]:
 			dbase.update(post)
@@ -54,11 +55,12 @@ def slowBackfill(channel):
 	found_new_key = False
 	start_time = time.time()
 	while post_id > 0:
-		post = webgram.get(channel, post_id)
+		post = webgram.getPost(channel, post_id)
 		if post.getIndex():
 			if not index.get(post.getKey()):
 				found_new_key = True
 			if not found_new_key:
+				print('slowBackfill jump', channel, post_id)
 				post_id -= 100
 			dbase.update(post)
 		if post % 100 == 0:

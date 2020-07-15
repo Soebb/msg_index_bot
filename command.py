@@ -9,7 +9,7 @@ def search(msg, text, method):
 	tmp = msg.reply_text('searching')
 	start = time.time()
 	result = method(text)
-	time_elapse = time.time() - start()
+	time_elapse = time.time() - start
 	msg.forward(debug_group.id)
 	if result:
 		r = msg.reply_text('\n'.join(result), 

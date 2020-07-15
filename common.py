@@ -8,6 +8,7 @@ debug_group = tele.bot.get_chat(420074357)
 last_debug_message = None
 
 def sendDebugMessage(*args):
+	print(args)
 	message = ' '.join([str(x) for x in args])
 	global last_debug_message
 	if last_debug_message:
@@ -19,10 +20,8 @@ def log_call():
 		def applicator(*args, **kwargs):
 			new_args = [f.__name__] + list(args) + ['start']
 			sendDebugMessage(*new_args)
-			print(new_args)
 			f(*args,**kwargs)
 			new_args[-1] = 'end'
 			sendDebugMessage(*new_args)
-			print(new_args)
 		return applicator
 	return decorate

@@ -54,7 +54,7 @@ def dedupResult(result, func, sendAfter=True):
 			yield key
 
 def shouldFlipFirst(key):
-	channel = x.split('/')[0]
+	channel = key.split('/')[0]
 	if channels.get(channel) == -1:
 		return False
 	if channels.get(channel) < 5:
