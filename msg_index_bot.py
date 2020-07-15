@@ -101,6 +101,7 @@ def indexingImp():
 			continue
 		if 'test' in sys.argv and random.random() > 0.1:
 			continue
+		print('indexingImp', channel)
 		link = 'https://t.me/s/%s' % channel
 		soup = BeautifulSoup(cached_url.get(link), 'html.parser')
 		if db.isBadChannel(soup):
