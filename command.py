@@ -3,7 +3,7 @@ from telegram_util import log_on_fail, splitCommand
 from common import debug_group
 import dbase
 from ssearch import searchText, searchChannel
-from indexFromTelegramMsg import indexFromTelegramMsg
+import time
 
 def search(msg, text, method):
 	tmp = msg.reply_text('searching')
@@ -54,21 +54,13 @@ def handleSearch(update, context):
 @log_on_fail(debug_group)
 def handleGroup(update, context):
 	msg = update.effective_message
-	msg.forward_from_chat.username
 	post_link = '%s/%s' % (msg.chat.username, msg.message_id)
-	dbase.updateIndex(post_link, index)
 	text = msg.text or msg.caption or (
 		msg.document and msg.document.file_name)
-	db.addIndex(post_link, text)
-	if msg.document:
-		db.addIndex(post_link, 'hasFile')
-	for entity in msg.entities or msg.caption_entities or []:
-		if entity["type"] in ["url", "text_link"]:
-			db.addIndex(post_link, 'hasLink')
-		url = text[entity["offset"]:][:entity["length"]]
-		addChannel(url, post_link.split('/')[-2])
-	db.setMainText(post_link, getCompact(text))
-	db.setTime(post_link, int(msg.date.timestamp()))
+	prefix = 'hasFile ' if msg.document else ''
+	db.updateIndex(post_link, prefix + text, msg.chat.username)
+	db.updateMaintext(post_link, text[:20])
+	db.updateTime(post_link, int(time.time()))
 
 def setupCommand(dp):
 	dp.add_handler(MessageHandler(Filters.command, handleCommand))
