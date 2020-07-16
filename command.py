@@ -2,7 +2,7 @@ from telegram.ext import MessageHandler, Filters
 from telegram_util import log_on_fail, splitCommand
 from common import debug_group
 import dbase
-from ssearch import searchText, searchChannel, getHtmlReply, getMarkdonReply
+from ssearch import searchText, searchChannel, getHtmlReply, getMarkdownReply
 import time
 
 def search(msg, text, method):
@@ -17,7 +17,7 @@ def search(msg, text, method):
 				disable_web_page_preview = True, parse_mode = 'html')
 		except:
 			print(result)
-			r = msg.reply_text('\n'.join(getMarkdonReply(result)), 
+			r = msg.reply_text('\n'.join(getMarkdownReply(result)), 
 				disable_web_page_preview = True, parse_mode = 'markdown')
 	else:
 		r = msg.reply_text('no result')	
