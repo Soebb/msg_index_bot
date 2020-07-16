@@ -26,6 +26,8 @@ with open('help.md') as f:
 @log_on_fail(debug_group)
 def handleCommand(update, context):
 	msg = update.message # Do not support command in channel
+	if not msg or not msg.text:
+		return
 	command, text = splitCommand(msg.text)
 	if 'channel' in command or command == '/sc':
 		search(msg, text, searchChannel)
