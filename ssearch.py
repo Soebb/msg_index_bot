@@ -11,12 +11,16 @@ from telegram_util import matchKey
 import itertools
 import time
 
+def getHtmlReply(result):
+	return ['%d. <a href="https://t.me/%s">%s</a>' % r for r in result]
+
+def getMarkdownReply(result):
+	return ['%d. [%s](https://t.me/%s)' % (r[0], r[2], r[1]) for r in result]
+
+
 def finalTouch(result):
-	final_result = ['%d. <a href="https://t.me/%s">%s</a>' % (
-		result_index + 1, r[0], r[1]) 
-		for result_index, r in enumerate(
-			itertools.islice(result, 20))]
-	return final_result
+	return [(result_index + 1, r[0], r[1]) for 
+		result_index, r in enumerate(itertools.islice(result, 20))]
 
 def searchHit(targets, text):
 	r = [target.lower() in text.lower() for target in targets]

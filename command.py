@@ -2,7 +2,7 @@ from telegram.ext import MessageHandler, Filters
 from telegram_util import log_on_fail, splitCommand
 from common import debug_group
 import dbase
-from ssearch import searchText, searchChannel
+from ssearch import searchText, searchChannel, getHtmlReply, getMarkdonReply
 import time
 
 def search(msg, text, method):
@@ -12,8 +12,13 @@ def search(msg, text, method):
 	time_elapse = time.time() - start
 	msg.forward(debug_group.id)
 	if result:
-		r = msg.reply_text('\n'.join(result), 
-			disable_web_page_preview = True, parse_mode = 'html')
+		try:
+			r = msg.reply_text('\n'.join(getHtmlReply(result)), 
+				disable_web_page_preview = True, parse_mode = 'html')
+		except:
+			print(result)
+			r = msg.reply_text('\n'.join(getMarkdonReply(result)), 
+				disable_web_page_preview = True, parse_mode = 'markdown')
 	else:
 		r = msg.reply_text('no result')	
 	r.forward(debug_group.id)
@@ -29,6 +34,11 @@ def handleCommand(update, context):
 	if not msg or not msg.text:
 		return
 	command, text = splitCommand(msg.text)
+	if not text:
+		if command.startswith('/sc'):
+			command, text = '/sc', command[3:]
+		elif command.startswith('/s'):
+			command, text = '/s', command[2:]
 	if 'channel' in command or command == '/sc':
 		search(msg, text, searchChannel)
 		return
