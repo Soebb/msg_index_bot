@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from telegram_util import log_on_fail
-from common import debug_group, tele, log_call
+from common import debug_group, tele, log_call, sendDebugMessage
 from command import setupCommand
 import threading
 import random

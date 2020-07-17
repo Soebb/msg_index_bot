@@ -73,6 +73,8 @@ def handleGroup(update, context):
 	post_link = '%s/%s' % (msg.chat.username, msg.message_id)
 	text = msg.text or msg.caption or (
 		msg.document and msg.document.file_name)
+	if not text:
+		return
 	prefix = 'hasFile ' if msg.document else ''
 	dbase.updateIndex(post_link, prefix + text, msg.chat.username)
 	dbase.updateMaintext(post_link, text[:20])
