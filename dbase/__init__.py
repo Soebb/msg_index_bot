@@ -2,6 +2,7 @@ import plain_db
 import webgram
 from telegram_util import matchKey, log_on_fail
 from common import isSimplified, log_call, debug_group
+import time
 
 blocklist = plain_db.loadKeyOnlyDB('blocklist')
 channels = plain_db.loadLargeDB('channels', isIntValue = True, default = 100)
@@ -9,6 +10,8 @@ index = plain_db.loadLargeDB('index')
 maintext = plain_db.loadLargeDB('maintext')
 timestamp = plain_db.loadLargeDB('timestamp', isIntValue = True)
 channelrefer = plain_db.loadKeyOnlyDB('channelrefer')
+
+status = {}
 
 def setBadWord(text):
 	blocklist.add(text)
@@ -34,18 +37,18 @@ def getIndexMaxLen(channel):
 		score = 100
 	return int(2000 / (score + 1) ** 0.5)
 
-def updateIndex(key, text, channel):
-	text = text[:getIndexMaxLen(channel)]
-	if not text:
-		index.update(key, text) # post deleted
-		return
-	if not index.get(key):
-		index.update(key, text)
-		return
+def shouldUpdateIndex(key, text):
+	if not text or not index.get(key):
+		return True
 	for keyword in ['hasFile', 'hasLink']:
 		if keyword in text and keyword not in index.get(key):
-			index.update(key, text)
-			return
+			return True
+
+def updateIndex(key, text, channel):
+	text = text[:getIndexMaxLen(channel)]
+	if shouldUpdateIndex(key, text):
+		if index.update(key, text):
+			status['added'] += 1
 
 def updateMaintext(key, text):
 	if maintext.get(key):
@@ -78,3 +81,11 @@ def suspectBadChannel(post):
 	if bad_count * 5 > total_count:
 		return True
 	return matchKey(post.getIndex(), blocklist.items())
+
+def resetStatus():
+	result = time.time() - status.get('time', 0), status.get('added', 0)
+	status['time'] = time.time()
+	status['added'] = 0
+	return result
+
+resetStatus()
