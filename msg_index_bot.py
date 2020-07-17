@@ -37,6 +37,7 @@ def indexBackfill():
 
 @log_call()
 def indexing():
+	sendDebugMessage(*(['start'] + dbase.resetStatus()))
 	indexingImp()
 	indexBackfill()
 	threading.Timer(1, indexing).start()
