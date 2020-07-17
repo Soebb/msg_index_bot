@@ -26,18 +26,18 @@ def indexingImp():
 		if len(posts) > 1: # save http call
 			for post in webgram.getPosts(channel):
 				dbase.update(post)
-	sendDebugMessage(*(['indexingImp'] + dbase.resetStatus()))
+	sendDebugMessage(*(['indexingImpDuration'] + dbase.resetStatus()), persistent=True)
 
 @log_on_fail(debug_group)
 @log_call()
 def indexBackfill():
 	for channel, score in channels.items():
 		backfill.backfill(channel)
-	sendDebugMessage(*(['indexBackfill'] + dbase.resetStatus()))
+	sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 
 @log_call()
 def indexing():
-	sendDebugMessage(*(['start'] + dbase.resetStatus()))
+	sendDebugMessage(*(['start'] + dbase.resetStatus()), persistent=True)
 	indexingImp()
 	indexBackfill()
 	threading.Timer(1, indexing).start()

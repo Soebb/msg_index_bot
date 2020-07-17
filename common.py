@@ -16,9 +16,12 @@ def isSimplified(text):
 
 last_debug_message = None
 
-def sendDebugMessage(*args):
+def sendDebugMessage(*args, persistent=False):
 	print(*args)
 	message = ' '.join([str(x) for x in args])
+	if persistent:
+		debug_group.send_message(message)
+		return
 	global last_debug_message
 	if last_debug_message:
 		last_debug_message.delete()

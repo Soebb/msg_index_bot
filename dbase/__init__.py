@@ -83,8 +83,8 @@ def suspectBadChannel(post):
 	return matchKey(post.getIndex(), blocklist.items())
 
 def resetStatus():
-	result = [str(int((time.time() - status.get('time', 0)) / 60)) + 
-		' minutes', status.get('added', 0)]
+	result = [int((time.time() - status.get('time', 0)) / 60),
+		'minutes', status.get('added', 0), 'new item']
 	status['time'] = time.time()
 	status['added'] = 0
 	return result
