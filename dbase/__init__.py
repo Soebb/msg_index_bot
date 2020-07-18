@@ -103,7 +103,7 @@ def isCore(key):
 
 def fillCoreIndex():
 	start = time.time()
-	for key, index in index.items():
+	for key, _ in index.items():
 		if isCore(key):
 			coreIndex.add(key)
 	sendDebugMessage('fillCoreIndex finish', len(coreIndex), 
