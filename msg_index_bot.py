@@ -43,6 +43,8 @@ def indexBackfill():
 @log_call()
 def indexing():
 	if len(coreIndex) == 0:
+		sendDebugMessage(*(['load index', len(index.items())] + 
+			dbase.resetStatus()), persistent=True)
 		dbase.fillCoreIndex()
 		sendDebugMessage(*(['remove old files', removeOldFiles(day = 7)] + 
 			dbase.resetStatus()), persistent=True)
@@ -51,7 +53,6 @@ def indexing():
 	threading.Timer(1, indexing).start()
 
 if __name__ == '__main__':
-	print(len(index.items()))
 	setupCommand(tele.dispatcher)
 	threading.Timer(1, indexing).start() 
 	tele.start_polling()
