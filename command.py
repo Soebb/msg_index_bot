@@ -27,7 +27,6 @@ def search(msg, text, method):
 	reply1 = msg.reply_text('searching')
 	start = time.time()
 	result = method(text, searchCore=True)
-	time_elapse = time.time() - start
 	reply2 = sendResult(msg, result)
 	if reply2:
 		forwardDebug(reply2)
@@ -40,7 +39,7 @@ def search(msg, text, method):
 		reply3 = msg.reply_text('no result')
 	reply1.delete()
 	forwardDebug(reply3)
-	debug_group.send_message('time elapse: ' + str(time_elapse))
+	debug_group.send_message('time elapse: ' + str(time.time() - start))
 	
 
 with open('help.md') as f:
@@ -52,7 +51,7 @@ def handleCommand(update, context):
 	if not msg or not msg.text:
 		return
 	command, text = splitCommand(msg.text)
-	if not text:
+	if not text and not command == '/start':
 		if command.startswith('/sc'):
 			command, text = '/sc', command[3:]
 		elif command.startswith('/s'):
