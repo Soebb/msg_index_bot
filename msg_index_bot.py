@@ -9,7 +9,7 @@ import random
 import backfill
 import sys
 import dbase
-from dbase import channels, coreIndex, index
+from dbase import channels, coreIndex
 import webgram
 import time
 
@@ -43,7 +43,7 @@ def indexBackfill():
 @log_call()
 def indexing():
 	if len(coreIndex) == 0:
-		sendDebugMessage(*(['load index', len(index.items())] + 
+		sendDebugMessage(*(['load index', len(dbase.index.items())] + 
 			dbase.resetStatus()), persistent=True)
 		dbase.fillCoreIndex()
 		sendDebugMessage(*(['remove old files', removeOldFiles(day = 7)] + 
