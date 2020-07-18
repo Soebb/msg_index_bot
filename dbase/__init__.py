@@ -99,7 +99,7 @@ def isCore(key):
 		return False
 	if 0 <= channels.get(channel) <=1:
 		return True
-	return timestamp.get(key) > time.time() - 7 * 60 * 60 * 24
+	return timestamp.get(key, 0) > time.time() - 7 * 60 * 60 * 24
 
 def fillCoreIndex():
 	start = time.time()
