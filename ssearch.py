@@ -31,7 +31,7 @@ def searchRaw(targets, searchCore=False):
 			if searchHit(targets, value):
 				yield key
 	else:
-		for key in coreIndex:
+		for key in list(coreIndex):
 			if searchHit(targets, index.get(key)):
 				yield key
 

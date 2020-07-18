@@ -106,7 +106,5 @@ def fillCoreIndex():
 	for key, _ in index.items():
 		if isCore(key):
 			coreIndex.add(key)
-	sendDebugMessage('fillCoreIndex finish', len(coreIndex), 
-		int(start - time.time()), persistent=True)
-
-fillCoreIndex()
+	sendDebugMessage(*['fillCoreIndex finish', len(coreIndex)], 
+		resetStatus(), persistent=True)

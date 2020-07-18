@@ -9,7 +9,7 @@ import random
 import backfill
 import sys
 import dbase
-from dbase import channels
+from dbase import channels, coreIndex
 import webgram
 
 @log_on_fail(debug_group)
@@ -41,6 +41,8 @@ def indexBackfill():
 
 @log_call()
 def indexing():
+	if len(coreIndex) == 0:
+		dbase.fillCoreIndex()
 	indexingImp()
 	indexBackfill()
 	threading.Timer(1, indexing).start()
