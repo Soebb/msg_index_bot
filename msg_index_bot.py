@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from telegram_util import log_on_fail
+from telegram_util import log_on_fail, removeOldFiles
 from common import debug_group, tele, log_call, sendDebugMessage
 from command import setupCommand
 import threading
@@ -44,6 +44,8 @@ def indexBackfill():
 def indexing():
 	if len(coreIndex) == 0:
 		dbase.fillCoreIndex()
+		sendDebugMessage(*(['remove old files', removeOldFiles(day = 7)] + 
+			dbase.resetStatus()), persistent=True)
 	indexingImp()
 	indexBackfill()
 	threading.Timer(1, indexing).start()
