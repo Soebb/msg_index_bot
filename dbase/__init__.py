@@ -101,8 +101,8 @@ def isCore(key):
 		return True
 	return timestamp.get(key, 0) > time.time() - 7 * 60 * 60 * 24
 
-@log_call()
 @log_on_fail(debug_group)
+@log_call()
 def fillCoreIndex():
 	start = time.time()
 	for key, _ in index.items():
