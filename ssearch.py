@@ -6,7 +6,7 @@
 
 from common import debug_group
 import dbase
-from dbase import maintext, blocklist, index, channels, timestamp
+from dbase import maintext, blocklist, index, channels, timestamp, coreIndex
 from telegram_util import matchKey
 import itertools
 import time

@@ -1,7 +1,7 @@
 import plain_db
 import webgram
 from telegram_util import matchKey, log_on_fail
-from common import isSimplified, log_call, debug_group
+from common import isSimplified, log_call, debug_group, sendDebugMessage
 import time
 
 blocklist = plain_db.loadKeyOnlyDB('blocklist')
@@ -90,3 +90,23 @@ def resetStatus():
 	return result
 
 resetStatus()
+
+coreIndex = set()
+
+def isCore(key):
+	channel = key.split('/')[0]
+	if not (0 <= channels.get(channel) <=5):
+		return False
+	if 0 <= channels.get(channel) <=1:
+		return True
+	return timestamp.get(key) > time.time() - 7 * 60 * 60 * 24
+
+def fillCoreIndex():
+	start = time.time()
+	for key, index in index.items():
+		if isCore(key):
+			coreIndex.add(key)
+	sendDebugMessage('fillCoreIndex finish', len(coreIndex), 
+		int(start - time.time()), persistent=True)
+
+fillCoreIndex()
