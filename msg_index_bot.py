@@ -9,7 +9,7 @@ import random
 import backfill
 import sys
 import dbase
-from dbase import channels, coreIndex
+from dbase import channels, coreIndex, index
 import webgram
 import time
 
@@ -49,6 +49,7 @@ def indexing():
 	threading.Timer(1, indexing).start()
 
 if __name__ == '__main__':
+	print(len(index.items()))
 	setupCommand(tele.dispatcher)
 	threading.Timer(1, indexing).start() 
 	tele.start_polling()
