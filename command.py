@@ -5,25 +5,43 @@ import dbase
 from ssearch import searchText, searchChannel, getHtmlReply, getMarkdownReply
 import time
 
-def search(msg, text, method):
-	tmp = msg.reply_text('searching')
-	start = time.time()
-	result = method(text)
-	time_elapse = time.time() - start
-	msg.forward(debug_group.id)
-	if result:
-		try:
-			r = msg.reply_text('\n'.join(getHtmlReply(result)), 
+def sendResult(msg, result):
+	if not result:
+		return
+	try:
+		return msg.reply_text('\n'.join(getHtmlReply(result)), 
 				disable_web_page_preview = True, parse_mode = 'html')
-		except:
-			print(result)
-			r = msg.reply_text('\n'.join(getMarkdownReply(result)), 
-				disable_web_page_preview = True, parse_mode = 'markdown')
-	else:
-		r = msg.reply_text('no result')	
-	r.forward(debug_group.id)
+	except:
+		print(result)
+		return msg.reply_text('\n'.join(getMarkdownReply(result)), 
+			disable_web_page_preview = True, parse_mode = 'markdown')
+
+def forwardDebug(msg):
+	if msg.from_user and msg.from_user.id == debug_group.id:
+		return
+	if msg.chat.id == debug_group.id:
+		return
+	msg.forward(debug_group.id)
+
+def search(msg, text, method):
+	reply1 = msg.reply_text('searching')
+	start = time.time()
+	result = method(text, searchCore=True)
+	time_elapse = time.time() - start
+	reply2 = sendResult(msg, result)
+	if reply2:
+		forwardDebug(reply2)
+	forwardDebug(msg)
+	result = method(text)
+	reply3 = sendResult(msg, result)
+	if reply2:
+		reply2.delete()
+	if not reply3: 
+		reply3 = msg.reply_text('no result')
+	reply1.delete()
+	forwardDebug(reply3)
 	debug_group.send_message('time elapse: ' + str(time_elapse))
-	tmp.delete()
+	
 
 with open('help.md') as f:
 	HELP_MESSAGE = f.read()

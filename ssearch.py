@@ -17,7 +17,6 @@ def getHtmlReply(result):
 def getMarkdownReply(result):
 	return ['%d. [%s](https://t.me/%s)' % (r[0], r[2], r[1]) for r in result]
 
-
 def finalTouch(result):
 	return [(result_index + 1, r[0], r[1]) for 
 		result_index, r in enumerate(itertools.islice(result, 20))]
@@ -26,10 +25,15 @@ def searchHit(targets, text):
 	r = [target.lower() in text.lower() for target in targets]
 	return sum(r) == len(r)
 
-def searchRaw(targets):
-	for key, value in index.items():
-		if searchHit(targets, value):
-			yield key
+def searchRaw(targets, searchCore=False):
+	if not searchCore:
+		for key, value in index.items():
+			if searchHit(targets, value):
+				yield key
+	else:
+		for key in coreIndex:
+			if searchHit(targets, index.get(key)):
+				yield key
 
 def flipFirst(result, func, sendAfter=True):
 	rest = []
@@ -81,8 +85,8 @@ def populateChannelTitle(result):
 	for key in result:
 		yield key, getChannelTitle(key)	
 
-def searchTextRaw(targets):
-	result = searchRaw(targets)
+def searchTextRaw(targets, searchCore=False):
+	result = searchRaw(targets, searchCore=searchCore)
 	result = [(timestamp.get(key, 0), key) for key in result]
 	result.sort(reverse=True)
 	result = [item[1] for item in result]
@@ -96,15 +100,15 @@ def searchTextRaw(targets):
 	result = flipFirst(result, lambda key: shouldFlipFirst(key))
 	return result
 
-def searchText(text):
+def searchText(text, searchCore=False):
 	targets = text.split()
-	result = searchTextRaw(targets)
+	result = searchTextRaw(targets, searchCore=searchCore)
 	result = populateMaintext(result)
 	return finalTouch(result)
 
-def searchChannel(text):
+def searchChannel(text, searchCore=False):
 	targets = text.split()
-	result = searchTextRaw(targets)
+	result = searchTextRaw(targets, searchCore=searchCore)
 	result = dedupResult(result, lambda key: getChannelTitle(
 		key), sendAfter=False)
 	result = populateChannelTitle(result)
