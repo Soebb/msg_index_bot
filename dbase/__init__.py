@@ -49,7 +49,7 @@ def updateIndex(key, text, channel):
 	if shouldUpdateIndex(key, text):
 		if not index.get(key):
 			status['added'] += 1
-		index.update(key, text):
+		index.update(key, text)
 
 def updateMaintext(key, text):
 	if maintext.get(key):
