@@ -5,9 +5,9 @@ from common import isSimplified, log_call, debug_group, sendDebugMessage
 import time
 
 blocklist = plain_db.loadKeyOnlyDB('blocklist')
-channels = plain_db.loadLargeDB('channels', isIntValue = True, default = 100)
-index = plain_db.loadLargeDB('index')
-maintext = plain_db.loadLargeDB('maintext')
+channels = plain_db.loadLargeDB('channels', isIntValue = True, default = 100, delayLoad=True)
+index = plain_db.loadLargeDB('index', delayLoad=True)
+maintext = plain_db.loadLargeDB('maintext', delayLoad=True)
 timestamp = plain_db.loadLargeDB('timestamp', isIntValue = True)
 channelrefer = plain_db.loadKeyOnlyDB('channelrefer')
 
@@ -105,6 +105,10 @@ def isCore(key):
 @log_call()
 def fillCoreIndex():
 	start = time.time()
+	maintext.load()
+	channels.load()
+	index.load()
+	timestamp.load()
 	for key, _ in index.items():
 		if isCore(key):
 			coreIndex.add(key)
