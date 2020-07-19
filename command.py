@@ -51,7 +51,7 @@ def handleCommand(update, context):
 	if not msg or not msg.text:
 		return
 	command, text = splitCommand(msg.text)
-	if not text and not command == '/start':
+	if not text and command != '/start':
 		if command.startswith('/sc'):
 			command, text = '/sc', command[3:]
 		elif command.startswith('/s'):
