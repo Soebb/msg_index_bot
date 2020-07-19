@@ -46,7 +46,7 @@ def indexing():
 		sendDebugMessage(*(['load index', len(dbase.index.items())] + 
 			dbase.resetStatus()), persistent=True)
 		dbase.fillCoreIndex()
-		sendDebugMessage(*(['remove old files', removeOldFiles(day = 7)] + 
+		sendDebugMessage(*(['remove old files', removeOldFiles('tmp', day = 7)] + 
 			dbase.resetStatus()), persistent=True)
 	indexingImp()
 	indexBackfill()
