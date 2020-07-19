@@ -43,7 +43,7 @@ def indexBackfill():
 @log_call()
 def indexing():
 	if len(coreIndex) == 0:
-		sendDebugMessage(*(['load index', len(dbase.index.items())] + 
+		sendDebugMessage(*(['load index start'] + 
 			dbase.resetStatus()), persistent=True)
 		dbase.fillCoreIndex()
 		sendDebugMessage(*(['remove old files', removeOldFiles('tmp', day = 7)] + 

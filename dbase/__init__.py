@@ -47,8 +47,9 @@ def shouldUpdateIndex(key, text):
 def updateIndex(key, text, channel):
 	text = text[:getIndexMaxLen(channel)]
 	if shouldUpdateIndex(key, text):
-		if index.update(key, text):
+		if not index.get(key):
 			status['added'] += 1
+		index.update(key, text):
 
 def updateMaintext(key, text):
 	if maintext.get(key):
@@ -94,6 +95,8 @@ resetStatus()
 coreIndex = set()
 
 def isCore(key):
+	if not index.get(key) or not maintext.get(key):
+		return False
 	channel = key.split('/')[0]
 	if not (0 <= channels.get(channel) <=5):
 		return False
@@ -109,8 +112,13 @@ def fillCoreIndex():
 	channels.load()
 	index.load()
 	timestamp.load()
+	sendDebugMessage(*['fillCoreIndex start', len(index.items())] + 
+		resetStatus(), persistent=True)
 	for key, _ in index.items():
 		if isCore(key):
 			coreIndex.add(key)
-	sendDebugMessage(*['fillCoreIndex finish', len(coreIndex)], 
+	sendDebugMessage(*['fillCoreIndex finish', len(coreIndex)] + 
 		resetStatus(), persistent=True)
+	plain_db.cleanupLargeDB('index')
+	plain_db.cleanupLargeDB('maintext')
+	sendDebugMessage(*['cleanup db finish'] + resetStatus(), persistent=True)
