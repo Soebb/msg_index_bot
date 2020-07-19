@@ -1,5 +1,5 @@
 from telegram.ext import MessageHandler, Filters
-from telegram_util import log_on_fail, splitCommand
+from telegram_util import log_on_fail, splitCommand, tryDelete
 from common import debug_group
 import dbase
 from ssearch import searchText, searchChannel, getHtmlReply, getMarkdownReply
@@ -34,10 +34,10 @@ def search(msg, text, method):
 	result = method(text)
 	reply3 = sendResult(msg, result)
 	if reply2:
-		reply2.delete()
+		tryDelete(reply2)
 	if not reply3: 
 		reply3 = msg.reply_text('no result')
-	reply1.delete()
+	tryDelete(reply1)
 	forwardDebug(reply3)
 	debug_group.send_message('time elapse: ' + str(time.time() - start))
 	
