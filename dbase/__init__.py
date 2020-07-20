@@ -82,6 +82,17 @@ def suspectBadChannel(channel):
 		return True
 	return matchKey(post.getIndex(), blocklist.items())
 
+def isCNGoodChannel(channel):
+	post = webgram.get(channel)
+	if not post.exist:
+		return False
+	update(post)
+	if channels.get(channel) in [0, 1]:
+		return True
+	if suspectBadChannel(post):
+		return False
+	return isSimplified(post.getIndex())
+
 def resetStatus():
 	result = [int((time.time() - status.get('time', 0)) / 60),
 		'minutes', status.get('added', 0), 'new item']
@@ -92,7 +103,7 @@ def resetStatus():
 resetStatus()
 
 coreIndex = set()
-bad_channel = set()
+cn_channel = set()
 
 def isCore(key):
 	if not index.get(key) or not maintext.get(key):
@@ -113,7 +124,8 @@ def fillCoreIndex():
 		if isCore(key):
 			coreIndex.add(key)
 	for channel, _ in channels.items():
-		if suspectBadChannel(channel):
-			bad_channel.add(channel)
+		post = webgram.get(channel)
+		if isCNGoodChannel(post):
+			cn_channel.add(channel)
 	sendDebugMessage(*['fillCoreIndex finish', len(coreIndex)] + 
 		resetStatus(), persistent=True)

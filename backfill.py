@@ -79,17 +79,7 @@ def slowBackfill(channel):
 	print('slowBackfill end', channel, post_id)
 
 def shouldBackfill(channel):
-	post = webgram.get(channel)
-	if not post.exist:
-		return False
-	dbase.update(post)
-	if channel in ['what_youread']:
-		return True
-	if channels.get(channel) in [0, 1] and random.random() < 0.05:
-		return True
-	if dbase.suspectBadChannel(post.channel):
-		return False
-	return isSimplified(post.getIndex()) and random.random() < 0.05
+	return dbase.isCNGoodChannel(channel) and random.random() < 0.05
 
 def backfill(channel):
 	if not shouldBackfill(channel):

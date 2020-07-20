@@ -6,7 +6,7 @@
 
 from common import debug_group
 import dbase
-from dbase import maintext, blocklist, index, channels, timestamp, coreIndex, bad_channel
+from dbase import maintext, blocklist, index, channels, timestamp, coreIndex, cn_channel
 from telegram_util import matchKey
 import itertools
 import time
@@ -64,7 +64,7 @@ def dedupResult(result, func, sendAfter=True):
 
 def shouldFlipFirst(key):
 	channel = key.split('/')[0]
-	if channels.get(channel) == -1 or channel in bad_channel:
+	if channels.get(channel) == -1:
 		return False
 	if 0 <= channels.get(channel) <= 2:
 		return True
@@ -94,6 +94,8 @@ def searchTextRaw(targets, searchCore=False):
 		key.split('/')[0]) != -2, sendAfter=False)
 	result = dedupResult(result, lambda key: maintext.get(
 		key), sendAfter=False)
+	result = flipFirst(result, lambda key: 
+		key.split('/')[0] in cn_channel)
 	result = flipFirst(result, lambda key: searchHit(
 		targets, maintext.get(key)))
 	result = dedupResult(result, lambda key: key.split('/')[0])
