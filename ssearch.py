@@ -6,7 +6,7 @@
 
 from common import debug_group
 import dbase
-from dbase import maintext, blocklist, index, channels, timestamp, coreIndex, cn_channel
+from dbase import maintext, blocklist, index, channels, timestamp, coreIndex
 from telegram_util import matchKey
 import itertools
 import time
@@ -94,8 +94,8 @@ def searchTextRaw(targets, searchCore=False):
 		key.split('/')[0]) != -2, sendAfter=False)
 	result = dedupResult(result, lambda key: maintext.get(
 		key), sendAfter=False)
-	result = flipFirst(result, lambda key: 
-		key.split('/')[0] in cn_channel)
+	suspects = dbase.suspect.items()
+	result = flipFirst(result, lambda key: key.split('/')[0] in suspects)
 	result = flipFirst(result, lambda key: searchHit(
 		targets, maintext.get(key)))
 	result = dedupResult(result, lambda key: key.split('/')[0])

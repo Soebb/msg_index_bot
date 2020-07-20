@@ -10,6 +10,7 @@ index = plain_db.loadLargeDB('index')
 maintext = plain_db.loadLargeDB('maintext')
 timestamp = plain_db.loadLargeDB('timestamp', isIntValue = True)
 channelrefer = plain_db.loadKeyOnlyDB('channelrefer')
+suspect = plain_db.loadKeyOnlyDB('blocklist')
 
 status = {}
 
@@ -103,7 +104,6 @@ def resetStatus():
 resetStatus()
 
 coreIndex = set()
-cn_channel = set()
 
 def isCore(key):
 	if not index.get(key) or not maintext.get(key):
@@ -123,8 +123,5 @@ def fillCoreIndex():
 	for key, _ in index.items():
 		if isCore(key):
 			coreIndex.add(key)
-	for channel, _ in channels.items():
-		if isCNGoodChannel(channel):
-			cn_channel.add(channel)
 	sendDebugMessage(*['fillCoreIndex finish', len(coreIndex)] + 
 		resetStatus(), persistent=True)
