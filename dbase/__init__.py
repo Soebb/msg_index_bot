@@ -69,12 +69,12 @@ def update(post):
 	updateMaintext(post.getKey(), post.getMaintext())
 	updateTime(post.getKey(), post.time)
 
-def suspectBadChannel(channel):
+def suspectBadChannel(post):
 	total_count = 0
 	bad_count = 0
 	for item in channelrefer.items():
 		from_channel, to_channel = item.split(':')
-		if from_channel == channel:
+		if from_channel == post.channel:
 			total_count += 1
 			if channels.get(to_channel) == -2:
 				bad_count += 1
@@ -124,8 +124,7 @@ def fillCoreIndex():
 		if isCore(key):
 			coreIndex.add(key)
 	for channel, _ in channels.items():
-		post = webgram.get(channel)
-		if isCNGoodChannel(post):
+		if isCNGoodChannel(channel):
 			cn_channel.add(channel)
 	sendDebugMessage(*['fillCoreIndex finish', len(coreIndex)] + 
 		resetStatus(), persistent=True)
