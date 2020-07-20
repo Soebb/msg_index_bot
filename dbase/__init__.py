@@ -69,8 +69,7 @@ def update(post):
 	updateMaintext(post.getKey(), post.getMaintext())
 	updateTime(post.getKey(), post.time)
 
-def suspectBadChannel(post):
-	channel = post.channel
+def suspectBadChannel(channel):
 	total_count = 0
 	bad_count = 0
 	for item in channelrefer.items():
@@ -93,6 +92,7 @@ def resetStatus():
 resetStatus()
 
 coreIndex = set()
+bad_channel = set()
 
 def isCore(key):
 	if not index.get(key) or not maintext.get(key):
@@ -112,5 +112,8 @@ def fillCoreIndex():
 	for key, _ in index.items():
 		if isCore(key):
 			coreIndex.add(key)
+	for channel, _ in channels.items():
+		if suspectBadChannel(channel):
+			bad_channel.add(channel)
 	sendDebugMessage(*['fillCoreIndex finish', len(coreIndex)] + 
 		resetStatus(), persistent=True)
