@@ -13,6 +13,7 @@ else:
 
 @log_call()
 def quickBackfill(channel):
+	sendDebugMessage('quickBackfill start', '@' + channel)
 	start_time = time.time()
 	post_id = 1
 	while True:
@@ -24,7 +25,7 @@ def quickBackfill(channel):
 		post_id = posts[-1].post_id + 1
 		if post_id % 100 == 0 and time.time() - start_time > time_limit:
 			break
-	print('quickBackfill end', channel, post_id)
+	sendDebugMessage('quickBackfill end', '@' + channel, post_id)
 
 def getMaxInIndex(channel):
 	result = 1
@@ -59,7 +60,7 @@ def _findLastMessage(channel):
 @log_call()
 def slowBackfill(channel):
 	post_id = _findLastMessage(channel)
-	sendDebugMessage('slowBackfill', channel, post_id)
+	sendDebugMessage('slowBackfill', '@' + channel, post_id)
 	found_new_key = False
 	start_time = time.time()
 	while post_id > 0:
