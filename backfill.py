@@ -82,7 +82,7 @@ def shouldBackfill(channel):
 	if not dbase.isCNGoodChannel(channel):
 		dbase.suspect.add(channel)
 		return False
-	return random.random() < 0.05
+	return random.random() < 0.01
 
 def backfill(channel):
 	if not shouldBackfill(channel):
