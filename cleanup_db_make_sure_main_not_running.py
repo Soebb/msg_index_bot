@@ -27,6 +27,8 @@ def cleanup1():
 		key_score = [(getScore(key), key) for key in keys]
 		key_score.sort()
 		for score, key in key_score[1:]:
+			if key == 'today_bean/16':
+				print('here')
 			dbase.removeKey(key)
 		if key_score[0][0] == 102:
 			dbase.removeKey(key_score[0][1])
@@ -56,6 +58,7 @@ def cleanup3():
 @log_call()
 def cleanup2():
 	index.save_dont_call_in_prod()
+	maintext.save_dont_call_in_prod()
 	timestamp.save_dont_call_in_prod()
 	channels.save_dont_call_in_prod()
 	removeOldFiles('tmp', day = 1)
