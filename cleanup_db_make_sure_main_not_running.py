@@ -6,7 +6,7 @@ from common import log_call
 import time
 
 def getScore(key):
-	raw = channls.get(key.split('/'))[0]
+	raw = channels.get(key.split('/'))[0]
 	if raw == -2:
 		return 102
 	if raw == -1:
