@@ -13,7 +13,7 @@ def getScore(key):
 		return 101
 	return raw
 
-log_call()
+@log_call()
 def cleanup1():
 	bucket = {}
 	for key, text in maintext.items():
@@ -36,11 +36,11 @@ def cleanup1():
 		else:
 			print('keep key', key_score[0][1])
 		count += 1
-		if count % 100 == 0 and time.time() - start > 5 * 60:
+		if count % 100 == 0 and time.time() - start > 60 * 60:
 			print('cleanup2 return', count)
 			return
 
-log_call()
+@log_call()
 def cleanup2():
 	plain_db.cleanupLargeDB('index')
 	plain_db.cleanupLargeDB('maintext')
