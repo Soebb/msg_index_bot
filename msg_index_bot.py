@@ -49,7 +49,7 @@ def indexing():
 	threading.Timer(1, indexing).start()
 
 if __name__ == '__main__':
-	setupCommand(tele.dispatcher)
+	# setupCommand(tele.dispatcher)
 	threading.Timer(1, indexing).start() 
 	tele.start_polling()
 	tele.idle()
