@@ -22,7 +22,7 @@ def cleanup1():
 			bucket[text].append(key)
 		else:
 			bucket[text] = [key]
-	print('cleanup1 1')
+	print('cleanup1 1', len(bucket.items()))
 	for text, keys in bucket.items():
 		key_score = [(getScore(key), key) for key in keys]
 		key_score.sort()
