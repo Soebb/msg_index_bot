@@ -1,5 +1,5 @@
 import plain_db
-from telegram_util import removeOldFiles
+from telegram_util import removeOldFiles, matchKey
 import dbase
 from dbase import index, maintext, timestamp, channels, suspect
 from common import log_call
@@ -23,13 +23,16 @@ def cleanupRedundant():
 		else:
 			bucket[text] = [key]
 	print('cleanup1 1', len(bucket.items()))
+	count = 0
 	for text, keys in bucket.items():
 		key_score = [(getScore(key), key) for key in keys]
 		key_score.sort()
 		for score, key in key_score[1:]:
 			dbase.removeKey(key)
+			count += 1
 		if key_score[0][0] == 102:
 			dbase.removeKey(key_score[0][1])
+	print('cleanupRedundant', count)
 
 @log_call()
 def cleanupNoMain():
@@ -40,12 +43,17 @@ def cleanupNoMain():
 			dbase.removeKey(key)
 	print('cleanupNoMain', count)
 
+def getKeyScore(key):
+	if matchKey(index.get(key), ['hasFile', 'hasLink']):
+		return 1
+	return 0
+
 def cleanupChannel(keys):
 	sort_keys = [(getKeyScore(key), key) for key in keys]
-	sort_keys.sorted(reverse=True)
+	sort_keys.sort(reverse=True)
 	count = 0
 	for key in sort_keys[100:]:
-		dbase.removeKey(key)
+		dbase.removeKey(key[1])
 		count += 1
 	return count
 
@@ -64,17 +72,18 @@ def cleanupSuspect():
 	for channel in bucket:
 		if channels.get(channel) <= -1:
 			count += cleanupChannel(bucket[channel])
-	for channel in suspect:
+	for channel in suspect.items():
 		if channels.get(channel) > 5:
 			count += cleanupChannel(bucket[channel])
 	print('cleanupSuspect', count)
 
 @log_call()
 def save():
-	index.save_dont_call_in_prod()
-	maintext.save_dont_call_in_prod()
-	timestamp.save_dont_call_in_prod()
-	channels.save_dont_call_in_prod()
+	start = time.time()
+	index._db.save()
+	maintext._db.save()
+	timestamp._db.save()
+	channels._db.save()
 	removeOldFiles('tmp', day = 1)
 
 if __name__ == '__main__':
