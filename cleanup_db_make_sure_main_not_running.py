@@ -2,7 +2,7 @@ import plain_db
 from telegram_util import removeOldFiles, matchKey
 import dbase
 from dbase import index, maintext, timestamp, channels, suspect
-from common import log_call
+from common import log_call, isSimplified
 import time
 
 def getScore(key):
@@ -48,11 +48,21 @@ def getKeyScore(key):
 		return 1
 	return 0
 
-def cleanupChannel(keys):
+def cleanupChannel(keys, keepChinese=True):
+	if len(keys) <= 10: # testing, change to 100
+		return
+	if keepChinese:
+		result_keys = []
+		for key in keys:
+			if not isSimplified(index.get(key)):
+				result_keys.append(key)
+		keys = result_keys
+	if len(keys) <= 50:
+		return
 	sort_keys = [(getKeyScore(key), key) for key in keys]
 	sort_keys.sort(reverse=True)
 	count = 0
-	for key in sort_keys[100:]:
+	for key in sort_keys[50:]:
 		dbase.removeKey(key[1])
 		count += 1
 	return count
@@ -71,7 +81,7 @@ def cleanupSuspect():
 	count = 0
 	for channel in bucket:
 		if channels.get(channel) <= -1:
-			count += cleanupChannel(bucket[channel])
+			count += cleanupChannel(bucket[channel], keepChinese=False)
 	for channel in suspect.items():
 		if channels.get(channel) > 5:
 			count += cleanupChannel(bucket[channel])
