@@ -41,9 +41,7 @@ def getIndexMaxLen(channel):
 def shouldUpdateIndex(key, text):
 	if not text or not index.get(key):
 		return True
-	for keyword in ['hasFile', 'hasLink']:
-		if keyword in text and keyword not in index.get(key):
-			return True
+	return index.get(key)[:100] != text[:100]
 
 def updateIndex(key, text, channel):
 	text = text[:getIndexMaxLen(channel)]
@@ -53,8 +51,6 @@ def updateIndex(key, text, channel):
 		index.update(key, text)
 
 def updateMaintext(key, text):
-	if maintext.get(key):
-		return
 	maintext.update(key, text)
 
 def updateTime(key, time):

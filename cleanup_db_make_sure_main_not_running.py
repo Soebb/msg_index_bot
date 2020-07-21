@@ -36,24 +36,26 @@ def cleanup1():
 @log_call()
 def cleanup3():
 	return
-	# bucket = {}
-	# for key, text in maintext.items():
-	# 	text = text[:10]
-	# 	if text in bucket:
-	# 		bucket[text].append(key)
-	# 	else:
-	# 		bucket[text] = [key]
-	# print('cleanup1 1')
-	# for text, keys in bucket.items():
-	# 	key_score = [(getScore(key), key) for key in keys]
-	# 	key_score.sort()
-	# 	for score, key in key_score[1:]:
-	# 		dbase.removeKey(key)
-	# 		print('remove key', key)
-	# 	if key_score[0][0] == 102:
-	# 		dbase.removeKey(key_score[0][1])
-	# 	else:
-	# 		print('keep key', key_score[0][1])
+	bucket = {}
+	for key, text in maintext.items():
+		if key.endswith('/0'):
+			continue
+		text = text[:10]
+		if text in bucket:
+			bucket[text].append(key)
+		else:
+			bucket[text] = [key]
+	print('cleanup1 1')
+	for text, keys in bucket.items():
+		key_score = [(getScore(key), key) for key in keys]
+		key_score.sort()
+		for score, key in key_score[1:]:
+			dbase.removeKey(key)
+			print('remove key', key)
+		if key_score[0][0] == 102:
+			dbase.removeKey(key_score[0][1])
+		else:
+			print('keep key', key_score[0][1])
 
 @log_call()
 def cleanup2():
