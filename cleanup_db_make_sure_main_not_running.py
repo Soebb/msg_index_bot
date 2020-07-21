@@ -49,8 +49,8 @@ def getKeyScore(key):
 	return 0
 
 def cleanupChannel(keys, keepChinese=True):
-	if len(keys) <= 10: # testing, change to 100
-		return
+	if not keys or len(keys) <= 100:
+		return 0 
 	if keepChinese:
 		result_keys = []
 		for key in keys:
@@ -58,7 +58,7 @@ def cleanupChannel(keys, keepChinese=True):
 				result_keys.append(key)
 		keys = result_keys
 	if len(keys) <= 50:
-		return
+		return 0
 	sort_keys = [(getKeyScore(key), key) for key in keys]
 	sort_keys.sort(reverse=True)
 	count = 0
@@ -84,7 +84,7 @@ def cleanupSuspect():
 			count += cleanupChannel(bucket[channel], keepChinese=False)
 	for channel in suspect.items():
 		if channels.get(channel) > 5:
-			count += cleanupChannel(bucket[channel])
+			count += cleanupChannel(bucket.get(channel))
 	print('cleanupSuspect', count)
 
 @log_call()
