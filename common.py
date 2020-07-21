@@ -4,7 +4,7 @@ import hanzidentifier
 
 with open('token') as f:
 	token = f.read().strip()
-tele = Updater(token, use_context=True)  # @weibo_subscription_bot
+tele = Updater(token, use_context=True)  # @msg_index_bot
 debug_group = tele.bot.get_chat(420074357)
 
 def isSimplified(text):
