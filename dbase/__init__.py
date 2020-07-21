@@ -70,6 +70,11 @@ def update(post):
 	updateMaintext(post.getKey(), post.getMaintext())
 	updateTime(post.getKey(), post.time)
 
+def removeKey(key):
+	index._db.items.pop(key, None)
+	maintext._db.items.pop(key, None)
+	timestamp._db.items.pop(key, None)
+
 def suspectBadChannel(post):
 	total_count = 0
 	bad_count = 0
