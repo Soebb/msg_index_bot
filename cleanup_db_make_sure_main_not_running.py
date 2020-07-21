@@ -25,7 +25,7 @@ def cleanup1():
 	count = 0
 	print('cleanup1 1')
 	start = time.time()
-	for text, keys in bucket:
+	for text, keys in bucket.items():
 		key_score = [(getScore(key), key) for key in keys]
 		key_score.sort()
 		for score, key in key_score[1:]:
