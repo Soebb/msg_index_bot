@@ -22,9 +22,7 @@ def cleanup1():
 			bucket[text].append(key)
 		else:
 			bucket[text] = [key]
-	count = 0
 	print('cleanup1 1')
-	start = time.time()
 	for text, keys in bucket.items():
 		key_score = [(getScore(key), key) for key in keys]
 		key_score.sort()
@@ -35,10 +33,6 @@ def cleanup1():
 			dbase.removeKey(key_score[0][1])
 		else:
 			print('keep key', key_score[0][1])
-		count += 1
-		if count % 100 == 0 and time.time() - start > 60 * 60:
-			print('cleanup2 return', count)
-			return
 
 @log_call()
 def cleanup2():
