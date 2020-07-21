@@ -43,8 +43,11 @@ def cleanupNoMain():
 def cleanupChannel(keys):
 	sort_keys = [(getKeyScore(key), key) for key in keys]
 	sort_keys.sorted(reverse=True)
+	count = 0
 	for key in sort_keys[100:]:
 		dbase.removeKey(key)
+		count += 1
+	return count
 
 @log_call()
 def cleanupSuspect():
@@ -57,12 +60,14 @@ def cleanupSuspect():
 			bucket[text].append(key)
 		else:
 			bucket[text] = [key]
+	count = 0
 	for channel in bucket:
 		if channels.get(channel) <= -1:
-			cleanupChannel(bucket[channel])
+			count += cleanupChannel(bucket[channel])
 	for channel in suspect:
 		if channels.get(channel) > 5:
-			cleanupChannel(bucket[channel])
+			count += cleanupChannel(bucket[channel])
+	print('cleanupSuspect', count)
 
 @log_call()
 def save():
