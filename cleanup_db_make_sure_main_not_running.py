@@ -10,7 +10,7 @@ def getScore(key):
 	if raw == -2:
 		return 102
 	if raw == -1:
-		retrun 101
+		return 101
 	return raw
 
 log_call()
