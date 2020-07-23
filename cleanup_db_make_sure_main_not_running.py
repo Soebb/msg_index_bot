@@ -94,7 +94,7 @@ def save():
 	maintext.save_dont_call_in_prod()
 	timestamp.save_dont_call_in_prod()
 	channels.save_dont_call_in_prod()
-	removeOldFiles('tmp', day = 1)
+	removeOldFiles('tmp', day = 2)
 
 if __name__ == '__main__':
 	cleanupRedundant()

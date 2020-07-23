@@ -9,7 +9,7 @@ from dbase import index, channels
 if 'test' in sys.argv:
 	time_limit = 1
 else:
-	time_limit = 20 * 60
+	time_limit = 10 * 60
 
 @log_call()
 def quickBackfill(channel):
@@ -23,7 +23,7 @@ def quickBackfill(channel):
 		if post_id == posts[-1].post_id + 1:
 			break
 		post_id = posts[-1].post_id + 1
-		if post_id % 100 == 0 and time.time() - start_time > time_limit:
+		if time.time() - start_time > time_limit:
 			break
 	sendDebugMessage('quickBackfill end', '@' + channel, post_id)
 
@@ -61,25 +61,20 @@ def _findLastMessage(channel):
 def slowBackfill(channel):
 	post_id = _findLastMessage(channel)
 	sendDebugMessage('slowBackfill', '@' + channel, post_id)
-	found_new_key = False
 	start_time = time.time()
 	while post_id > 0:
 		post = webgram.getPost(channel, post_id)
 		if post.getIndex():
-			if not index.get(post.getKey()):
-				found_new_key = True
-			if not found_new_key:
-				print('slowBackfill jump', channel, post_id)
-				post_id -= 100
+			if index.get(post.getKey()):
+				post_id -= int(random.random() * 100)
 			dbase.update(post)
-		if post_id % 100 == 0:
-			if time.time() - start_time > time_limit:
-				break
+		if time.time() - start_time > time_limit:
+			break
 		post_id -= 1
-	print('slowBackfill end', channel, post_id)
+	print('slowBackfill end', '@' + channel, post_id)
 
 def shouldBackfill(channel):
-	if random.random() > 0.01:
+	if random.random() > 0.001:
 		return False
 	if not dbase.isCNGoodChannel(channel):
 		dbase.suspect.add(channel)
