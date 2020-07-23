@@ -49,8 +49,8 @@ def indexing():
 	threading.Timer(1, indexing).start()
 
 if __name__ == '__main__':
-	if 'nocommand' not in sys.argv:
-		setupCommand(tele.dispatcher)
+	setupCommand(tele.dispatcher)
 	threading.Timer(1, indexing).start() 
-	tele.start_polling()
-	tele.idle()
+	if 'nocommand' not in sys.argv:
+		tele.start_polling()
+		tele.idle()
