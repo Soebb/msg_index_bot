@@ -88,6 +88,8 @@ def handleSearch(update, context):
 @log_on_fail(debug_group)
 def handleGroup(update, context):
 	msg = update.effective_message
+	if not msg.chat.username:
+		return
 	post_link = '%s/%s' % (msg.chat.username, msg.message_id)
 	text = msg.text or msg.caption or (
 		msg.document and msg.document.file_name)
