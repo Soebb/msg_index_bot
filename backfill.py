@@ -4,7 +4,7 @@ import random
 import sys
 import webgram
 import dbase
-from dbase import index, channels
+from dbase import index, channels, timestamp
 
 if 'test' in sys.argv:
 	time_limit = 1
@@ -62,15 +62,17 @@ def slowBackfill(channel):
 	post_id = _findLastMessage(channel)
 	sendDebugMessage('slowBackfill', '@' + channel, post_id)
 	start_time = time.time()
-	while post_id > 0:
+	while post_id > 1:
+		post_id -= 1
+		key = channel + '/' + str(post_id)
+		if index.get(key):
+			post_id -= int(random.random() * 100)
+			continue
 		post = webgram.getPost(channel, post_id)
 		if post.getIndex():
-			if index.get(post.getKey()):
-				post_id -= int(random.random() * 100)
 			dbase.update(post)
 		if time.time() - start_time > time_limit:
 			break
-		post_id -= 1
 	print('slowBackfill end', '@' + channel, post_id)
 
 def shouldBackfill(channel):
