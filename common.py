@@ -1,6 +1,7 @@
 from telegram.ext import Updater
 from telegram_util import isCN
 import hanzidentifier
+import os
 
 with open('token') as f:
 	token = f.read().strip()
