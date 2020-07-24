@@ -22,7 +22,6 @@ def finalTouch(result):
 		result_index, r in enumerate(itertools.islice(result, 20))]
 
 def searchHit(target, item):
-	print(item)
 	return target in (item[0] + item[1])
 
 def searchRaw(targets, searchCore=False):
@@ -96,8 +95,9 @@ def searchTextRaw(targets, searchCore=False):
 		key), sendAfter=False)
 	suspects = dbase.suspect.items()
 	result = flipFirst(result, lambda key: key.split('/')[0] in suspects)
-	result = flipFirst(result, lambda key: searchHit(
-		targets, maintext.get(key)))
+	for target in targets:
+		result = flipFirst(result, lambda key: searchHit(
+			target, (key, maintext.get(key))))
 	result = dedupResult(result, lambda key: key.split('/')[0])
 	result = flipFirst(result, lambda key: shouldFlipFirst(key))
 	return result
