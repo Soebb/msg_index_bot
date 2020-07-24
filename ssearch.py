@@ -22,7 +22,7 @@ def finalTouch(result):
 		result_index, r in enumerate(itertools.islice(result, 20))]
 
 def searchHit(target, item):
-	return target in item[0] + item[1]
+	return target in (item[0] + item[1])
 
 def searchRaw(targets, searchCore=False):
 	if searchCore:
