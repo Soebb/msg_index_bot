@@ -21,19 +21,18 @@ def finalTouch(result):
 	return [(result_index + 1, r[0], r[1]) for 
 		result_index, r in enumerate(itertools.islice(result, 20))]
 
-def searchHit(targets, text):
-	r = [target.lower() in text.lower() for target in targets]
-	return sum(r) == len(r)
+def searchHit(target, item):
+	return target in item[0] + item[1]
 
 def searchRaw(targets, searchCore=False):
-	if not searchCore:
-		for key, value in index.items():
-			if searchHit(targets, value):
-				yield key
+	if searchCore:
+		space = [(x, index.get(x)) for x in list(coreIndex)]
 	else:
-		for key in list(coreIndex):
-			if searchHit(targets, index.get(key)):
-				yield key
+		space = index.items()
+	for target in targets:
+		space = [item for item in space if searchHit(target, item)]
+	for item in space:
+		yield item[0]
 
 def flipFirst(result, func, sendAfter=True):
 	rest = []
