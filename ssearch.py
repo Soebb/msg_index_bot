@@ -86,10 +86,10 @@ def populateChannelTitle(result):
 
 def searchTextRaw(targets, searchCore=False):
 	result = searchRaw(targets, searchCore=searchCore)
-	result = [(timestamp.get(key, 0) - 
-		100 * channels.get(key.split('/')[0]), key) for key in result]
+	result = [(- channels.get(key.split('/')[0]), 
+		timestamp.get(key, 0), key) for key in result]
 	result.sort(reverse=True)
-	result = [item[1] for item in result]
+	result = [item[2] for item in result]
 	result = flipFirst(result, lambda key: channels.get(
 		key.split('/')[0]) != -2, sendAfter=False)
 	result = dedupResult(result, lambda key: maintext.get(
