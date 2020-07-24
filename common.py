@@ -18,7 +18,8 @@ last_debug_message = None
 
 def sendDebugMessage(*args, persistent=False):
 	print(*args)
-	message = ' '.join([str(x) for x in args])
+	message = ' '.join([os.uname()[1].split('-')[0]] + 
+		[str(x) for x in args])
 	if persistent:
 		debug_group.send_message(message)
 		return
