@@ -95,7 +95,8 @@ def searchTextRaw(targets, searchCore=False):
 	result = dedupResult(result, lambda key: maintext.get(
 		key), sendAfter=False)
 	suspects = dbase.suspect.items()
-	result = flipFirst(result, lambda key: key.split('/')[0] in suspects)
+	result = flipFirst(result, lambda key: (key.split('/')[0] 
+		not in suspects))
 	for target in targets:
 		result = flipFirst(result, lambda key: searchHit(
 			target, (key, maintext.get(key))))
