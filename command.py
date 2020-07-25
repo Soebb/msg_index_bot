@@ -95,6 +95,7 @@ def handleGroup(update, context):
 		msg.document and msg.document.file_name)
 	if not text:
 		return
+	text = ' '.join(text.split())
 	prefix = 'hasFile ' if msg.document else ''
 	dbase.updateIndex(post_link, prefix + text, msg.chat.username)
 	dbase.updateMaintext(post_link, text[:20])
