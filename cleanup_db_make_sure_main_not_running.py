@@ -19,6 +19,8 @@ def getScore(key):
 def cleanupRedundant():
 	bucket = {}
 	for key, text in maintext.items():
+		if key.endswith('/0'):
+			continue
 		text = text[:10]
 		if text in bucket:
 			bucket[text].append(key)
@@ -32,7 +34,7 @@ def cleanupRedundant():
 		for score, key in key_score[1:]:
 			dbase.removeKey(key)
 			count += 1
-		if key_score[0][0] == 102:
+		if key_score[0][0] == 1:
 			dbase.removeKey(key_score[0][1])
 	print('cleanupRedundant', count)
 
