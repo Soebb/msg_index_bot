@@ -94,10 +94,10 @@ def cleanupSuspect():
 @log_call()
 def save():
 	start = time.time()
-	index._db.save()
-	maintext._db.save()
-	timestamp._db.save()
-	channels._db.save()
+	index.save_dont_call_in_prod()
+	maintext.save_dont_call_in_prod()
+	timestamp.save_dont_call_in_prod()
+	channels.save_dont_call_in_prod()
 	# removeOldFiles('tmp', day = 2)
 
 if __name__ == '__main__':
