@@ -6,12 +6,13 @@ from common import log_call, isSimplified
 import time
 
 def getScore(key):
-	raw = channels.get(key.split('/')[0])
+	score = (timestamp.get(key, 0) - 
+		channels.get(key.split('/')[0]) * 1000)
 	if raw == -2:
-		return 102
+		return 1
 	if raw == -1:
-		return 101
-	return raw
+		return 0
+	return -score
 
 @log_call()
 def cleanupRedundant():
@@ -90,10 +91,10 @@ def cleanupSuspect():
 @log_call()
 def save():
 	start = time.time()
-	index.save_dont_call_in_prod()
-	maintext.save_dont_call_in_prod()
-	timestamp.save_dont_call_in_prod()
-	channels.save_dont_call_in_prod()
+	index.index._db.save()
+	maintext.index._db.save()
+	timestamp.index._db.save()
+	channels.index._db.save()
 	# removeOldFiles('tmp', day = 2)
 
 if __name__ == '__main__':
