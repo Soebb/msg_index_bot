@@ -6,11 +6,12 @@ from common import log_call, isSimplified
 import time
 
 def getScore(key):
+	c_score = channels.get(key.split('/')[0])
 	score = (timestamp.get(key, 0) - 
-		channels.get(key.split('/')[0]) * 1000)
-	if raw == -2:
+		c_score * 1000)
+	if c_score == -2:
 		return 1
-	if raw == -1:
+	if c_score == -1:
 		return 0
 	return -score
 
