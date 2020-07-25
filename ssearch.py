@@ -24,6 +24,12 @@ def finalTouch(result):
 def searchHit(target, item):
 	return target in (item[0] + item[1])
 
+def searchHitAll(targets, item):
+	for target in targets:
+		if not searchHit(target, item):
+			return False
+	return True
+
 def searchRaw(targets, searchCore=False):
 	if searchCore:
 		space = [(x, index.get(x)) for x in list(coreIndex)]
@@ -97,9 +103,8 @@ def searchTextRaw(targets, searchCore=False):
 	suspects = dbase.suspect.items()
 	result = flipFirst(result, lambda key: (key.split('/')[0] 
 		not in suspects))
-	for target in targets:
-		result = flipFirst(result, lambda key: searchHit(
-			target, (key, maintext.get(key))))
+	result = flipFirst(result, lambda key: searchHitAll(
+		targets, (key, maintext.get(key))))
 	result = dedupResult(result, lambda key: key.split('/')[0])
 	result = flipFirst(result, lambda key: shouldFlipFirst(key))
 	return result
