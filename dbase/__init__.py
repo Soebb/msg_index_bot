@@ -91,9 +91,11 @@ def isCNGoodChannel(channel):
 	update(post)
 	if channels.get(channel) in [0, 1]:
 		return True
-	if suspectBadChannel(post):
+	if channels.get(channel) in [-1, -2]:
 		return False
-	return isSimplified(post.getIndex())
+	if not isSimplified(post.getIndex()):
+		return False
+	return not suspectBadChannel(post)
 
 def resetStatus():
 	result = [int((time.time() - status.get('time', 0)) / 60),
