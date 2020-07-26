@@ -72,6 +72,8 @@ def removeKey(key):
 	timestamp._db.items.pop(key, None)
 
 def suspectBadChannel(post):
+	if matchKey(post.getIndex() + post.getKey(), blocklist.items()):
+		return True
 	total_count = 0
 	bad_count = 0
 	for item in channelrefer.items():
@@ -82,7 +84,7 @@ def suspectBadChannel(post):
 				bad_count += 1
 	if bad_count * 5 > total_count:
 		return True
-	return matchKey(post.getIndex(), blocklist.items())
+	return False
 
 def isCNGoodChannel(channel):
 	post = webgram.get(channel)
