@@ -26,6 +26,8 @@ def indexingImp():
 			dbase.update(post)
 		if len(posts) > 1: # save http call
 			for post in webgram.getPosts(channel):
+				if channel == 'equality_and_rights':
+					print(post.getKey())
 				dbase.update(post)
 	sendDebugMessage(*(['indexingImpDuration'] + dbase.resetStatus()), persistent=True)
 
