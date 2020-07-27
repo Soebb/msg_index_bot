@@ -1,3 +1,10 @@
+# may need to remove all posts with 
+
+# 1) no chinese in description (any form of chinese)
+# 2) no chinese in post (any form of chinese)
+# 3) channel discription is also not english
+# 4) may be leave 10 post for each of those channel
+
 import plain_db
 from telegram_util import removeOldFiles, matchKey
 import dbase
