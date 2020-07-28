@@ -28,7 +28,7 @@ def updateChannel(name, referer):
 		channels.get(name) < referer_score + 1):
 		return
 	channels.update(name, referer_score + 1)
-	channelrefer.add(name + ':' + referer)
+	channelrefer.add(referer + ':' + name)
 
 def getIndexMaxLen(channel):
 	score = channels.get(channel)
