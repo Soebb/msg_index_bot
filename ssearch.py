@@ -78,6 +78,12 @@ def shouldFlipFirst(key):
 		return False
 	return not matchKey(index.get(key), blocklist.items())
 
+def shouldFlipFirstForChannel(key):
+	channel = key.split('/')[0]
+	if channels.get(channel) == -1:
+		return False
+	return key.endswith('/0')
+
 def populateMaintext(result):
 	for key in result:
 		yield key, maintext.get(key)
@@ -120,5 +126,7 @@ def searchChannel(text, searchCore=False):
 	result = searchTextRaw(targets, searchCore=searchCore)
 	result = dedupResult(result, lambda key: getChannelTitle(
 		key), sendAfter=False)
+	result = flipFirst(result, lambda key: 
+		shouldFlipFirstForChannel(key))
 	result = populateChannelTitle(result)
 	return finalTouch(result)
