@@ -124,9 +124,9 @@ def searchText(text, searchCore=False):
 def searchChannel(text, searchCore=False):
 	targets = text.split()
 	result = searchTextRaw(targets, searchCore=searchCore)
-	result = dedupResult(result, lambda key: getChannelTitle(
-		key), sendAfter=False)
 	result = flipFirst(result, lambda key: 
 		shouldFlipFirstForChannel(key))
+	result = dedupResult(result, lambda key: getChannelTitle(
+		key), sendAfter=False)
 	result = populateChannelTitle(result)
 	return finalTouch(result)
