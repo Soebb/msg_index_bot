@@ -11,6 +11,7 @@ import dbase
 from dbase import index, maintext, timestamp, channels, suspect
 from common import log_call, isSimplified
 import time
+from telegram_util import isCN
 
 def getScore(key):
 	c_score = channels.get(key.split('/')[0])
@@ -78,6 +79,26 @@ def cleanupChannel(keys, keepChinese=True):
 		count += 1
 	return count
 
+def notCNEN(text):
+	for c in text:
+		if isCN(c):
+			return False
+	# TODO: keep en channel as well, for now, delete them
+	return True
+
+def cleanupChannelNonCNEN(keys):
+	result_keys = []
+	for key in keys:
+		if notCNEN(index.get(key)):
+			result_keys.append(key)
+	sort_keys = [(getKeyScore(key), key) for key in result_keys]
+	sort_keys.sort(reverse=True)
+	count = 0
+	for key in sort_keys[10:]:
+		dbase.removeKey(key[1])
+		count += 1
+	return count
+
 @log_call()
 def cleanupSuspect():
 	bucket = {}
@@ -99,6 +120,26 @@ def cleanupSuspect():
 	print('cleanupSuspect', count)
 
 @log_call()
+def cleanupNonCNEN():
+	bucket = {}
+	for key, text in maintext.items():
+		if key.endswith('/0'):
+			continue
+		text = key.split('/')[0]
+		if text in bucket:
+			bucket[text].append(key)
+		else:
+			bucket[text] = [key]
+	count = 0
+	for channel in bucket:
+		if channels.get(channel) < 5:
+			continue
+		desc = index.get(channel + '/0')
+		if notCNEN(desc):
+			count += cleanupChannelNonCNEN(bucket.get(channel))
+	print('cleanupNonCNEN', count)
+
+@log_call()
 def save():
 	start = time.time()
 	index.save_dont_call_in_prod()
@@ -108,6 +149,8 @@ def save():
 	# removeOldFiles('tmp', day = 2)
 
 if __name__ == '__main__':
+	save()
+	cleanupNonCNEN()
 	save()
 	cleanupRedundant()
 	save()
