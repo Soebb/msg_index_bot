@@ -7,7 +7,7 @@
 from common import debug_group
 import dbase
 from dbase import maintext, blocklist, index, channels, timestamp, coreIndex
-from telegram_util import matchKey
+from telegram_util import matchKey, isCN
 import itertools
 import time
 
@@ -76,7 +76,12 @@ def shouldFlipFirst(key):
 	if len(index.get(key)) < 20 and not matchKey(
 		index.get(key), ['hasFile', 'hasLink']):
 		return False
-	return not matchKey(index.get(key), blocklist.items())
+	if matchKey(index.get(key), blocklist.items()):
+		return False
+	for c in index.get(key):
+		if isCN(c):
+			return True
+	return False
 
 def shouldFlipFirstForChannel(key):
 	channel = key.split('/')[0]
