@@ -124,8 +124,10 @@ def searchText(text, searchCore=False):
 def searchChannel(text, searchCore=False):
 	targets = text.split()
 	result = searchTextRaw(targets, searchCore=searchCore)
+	suspects = dbase.suspect.items()
 	result = flipFirst(result, lambda key: 
-		shouldFlipFirstForChannel(key))
+		shouldFlipFirstForChannel(key) and (key.split('/')[0] 
+		not in suspects))
 	result = dedupResult(result, lambda key: getChannelTitle(
 		key), sendAfter=False)
 	result = populateChannelTitle(result)
