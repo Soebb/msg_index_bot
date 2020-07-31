@@ -108,6 +108,7 @@ def save():
 	# removeOldFiles('tmp', day = 2)
 
 if __name__ == '__main__':
+	save()
 	cleanupRedundant()
 	save()
 	cleanupNoMain()
