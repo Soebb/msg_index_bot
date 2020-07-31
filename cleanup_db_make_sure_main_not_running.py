@@ -80,6 +80,8 @@ def cleanupChannel(keys, keepChinese=True):
 	return count
 
 def notCNEN(text):
+	if not text:
+		return True
 	for c in text:
 		if isCN(c):
 			return False
