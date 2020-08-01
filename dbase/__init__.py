@@ -13,6 +13,7 @@ channelrefer = plain_db.loadKeyOnlyDB('channelrefer')
 suspect = plain_db.loadKeyOnlyDB('suspect')
 
 status = {}
+badByRefer = set()
 
 def setBadWord(text):
 	blocklist.add(text)
@@ -75,20 +76,23 @@ def removeKey(key):
 	maintext._db.items.pop(key, None)
 	timestamp._db.items.pop(key, None)
 
-def suspectBadChannel(post):
-	if matchKey(post.getIndex() + post.getKey(), blocklist.items()):
-		return True
-	total_count = 0
-	bad_count = 0
+def computeBadByRefer():
+	total_count = {}
+	bad_count = {}
 	for item in channelrefer.items():
-		from_channel, to_channel = item.split(':')
-		if from_channel == post.channel:
-			total_count += 1
-			if channels.get(to_channel) == -2:
-				bad_count += 1
-	if bad_count * 5 > total_count:
-		return True
-	return False
+		is_bad = False
+		channel_list = item.split(':')
+		for channel in channel_list:
+			total_count[channel] = total_count.get(channel, 0) + 1
+			if channels.get(channel) == -2:
+				is_bad = True
+		if is_bad:
+			for channel in channel_list:
+				bad_count[channel] = bad_count.get(channel, 0) + 1
+	for channel in bad_count:
+		if bad_count[channel] * 5 > total_count[channel]:
+			badByRefer.add(channel)
+	print(badByRefer)
 
 def isCNGoodChannel(channel):
 	post = webgram.get(channel)
@@ -101,7 +105,9 @@ def isCNGoodChannel(channel):
 		return False
 	if not isSimplified(post.getIndex()):
 		return False
-	return not suspectBadChannel(post)
+	if matchKey(post.getIndex() + post.getKey(), blocklist._db.items.keys()):
+		return False
+	return channel not in badByRefer
 
 def resetStatus():
 	result = [int((time.time() - status.get('time', 0)) / 60),
@@ -136,3 +142,4 @@ def fillCoreIndex():
 			coreIndex.add(key)
 	sendDebugMessage(*['fillCoreIndex finish', len(coreIndex)] + 
 		resetStatus(), persistent=True)
+	computeBadByRefer()
