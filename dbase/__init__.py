@@ -44,11 +44,15 @@ def shouldUpdateIndex(key, text):
 	return index.get(key)[:100] != text[:100]
 
 def updateIndex(key, text, channel):
+	if (key.endswith('/0') and not isSimplified(text) and 
+		channels.get(channel) not in [0, 1]):
+		suspect.add(channel)
 	text = text[:getIndexMaxLen(channel)]
-	if shouldUpdateIndex(key, text):
-		if not index.get(key):
-			status['added'] += 1
-		index.update(key, text)
+	if not shouldUpdateIndex(key, text):
+		return
+	if not index.get(key):
+		status['added'] += 1
+	index.update(key, text)
 
 def updateMaintext(key, text):
 	maintext.update(key, text)
