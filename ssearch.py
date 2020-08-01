@@ -103,6 +103,7 @@ def populateChannelTitle(result):
 
 def searchTextRaw(targets, searchCore=False):
 	result = searchRaw(targets, searchCore=searchCore)
+	result = itertools.islice(result, 10000)
 	result = [(timestamp.get(key, 0) - 
 		channels.get(key.split('/')[0]) * 1000, key) for key in result]
 	result.sort(reverse=True)
