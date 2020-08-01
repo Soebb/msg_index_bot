@@ -118,6 +118,8 @@ def isCore(key):
 		return False
 	if 0 <= channels.get(channel) <=1:
 		return True
+	if channel in suspect._db.items:
+		return False
 	return timestamp.get(key, 0) > time.time() - 7 * 60 * 60 * 24
 
 @log_on_fail(debug_group)
