@@ -85,9 +85,11 @@ def shouldFlipFirst(key):
 
 def shouldFlipFirstForChannel(key):
 	channel = key.split('/')[0]
-	if channels.get(channel) == -1:
+	if not key.endswith('/0'):
 		return False
-	return key.endswith('/0')
+	if channel in suspect._db.items or channels.get(channel) == -1:
+		return False
+	return timestamp.get(key) > time.time() - 24 * 7 * 60 * 60
 
 def populateMaintext(result):
 	for key in result:
@@ -112,9 +114,8 @@ def searchTextRaw(targets, searchCore=False):
 		key.split('/')[0]) != -2, sendAfter=False)
 	result = dedupResult(result, lambda key: maintext.get(
 		key), sendAfter=False)
-	suspects = dbase.suspect.items()
 	result = flipFirst(result, lambda key: (key.split('/')[0] 
-		not in suspects))
+		not in suspect._db.items))
 	result = flipFirst(result, lambda key: searchHitAll(
 		targets, (key, maintext.get(key))))
 	result = dedupResult(result, lambda key: key.split('/')[0])
@@ -130,10 +131,8 @@ def searchText(text, searchCore=False):
 def searchChannel(text, searchCore=False):
 	targets = text.split()
 	result = searchTextRaw(targets, searchCore=searchCore)
-	suspects = dbase.suspect.items()
 	result = flipFirst(result, lambda key: 
-		shouldFlipFirstForChannel(key) and (key.split('/')[0] 
-		not in suspects))
+		shouldFlipFirstForChannel(key))
 	result = dedupResult(result, lambda key: getChannelTitle(
 		key), sendAfter=False)
 	result = populateChannelTitle(result)
