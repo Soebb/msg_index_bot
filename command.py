@@ -2,7 +2,7 @@ from telegram.ext import MessageHandler, Filters
 from telegram_util import log_on_fail, splitCommand, tryDelete
 from common import debug_group
 import dbase
-from ssearch import searchText, searchChannel, getHtmlReply, getMarkdownReply
+from ssearch import searchText, searchChannel, getHtmlReply, getMarkdownReply, searchHitAll
 import time
 
 def sendResult(msg, result):
@@ -23,6 +23,11 @@ def forwardDebug(msg):
 		return
 	msg.forward(debug_group.id)
 
+def goodEnough(result, text):
+	if not len(result) == 40:
+		return False
+	return searchHitAll(text.split(), result[19][2])
+
 def search(msg, text, method):
 	reply1 = msg.reply_text('searching')
 	start = time.time()
@@ -31,7 +36,7 @@ def search(msg, text, method):
 	if reply2:
 		forwardDebug(reply2)
 	forwardDebug(msg)
-	if len(result) < 40:
+	if not goodEnough(result, text):
 		result = method(text)
 		reply3 = sendResult(msg, result)
 		if reply2:
