@@ -80,7 +80,7 @@ def removeKey(key):
 
 def updateAll(posts):
 	for post in posts:
-		dbase.update(post)
+		update(post)
 	ids = [post.post_id for post in posts[1:] if post.post_id != 0]
 	if not ids:
 		return
