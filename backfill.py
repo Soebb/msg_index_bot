@@ -74,6 +74,8 @@ def slowBackfill(channel):
 	print('slowBackfill end', '@' + channel, post_id)
 
 def shouldBackfill(channel):
+	if not index.get(channel + '/0'): # testing, remove
+		return False
 	if not dbase.isCNGoodChannel(channel):
 		dbase.suspect.add(channel)
 		return False
