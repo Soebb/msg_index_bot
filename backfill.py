@@ -7,7 +7,7 @@ import dbase
 from dbase import index, channels, timestamp
 
 if 'test' in sys.argv:
-	time_limit = 1
+	time_limit = 10
 else:
 	time_limit = 10 * 60
 
