@@ -73,7 +73,6 @@ def update(post):
 	updateTime(post.channel + '/0', post.time)
 
 def removeKey(key):
-	print('removeKey',key) # testing
 	index._db.items.pop(key, None)
 	maintext._db.items.pop(key, None)
 	timestamp._db.items.pop(key, None)
