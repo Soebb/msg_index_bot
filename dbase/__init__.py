@@ -70,6 +70,7 @@ def update(post):
 	updateIndex(post.getKey(), post.getIndex(), post.channel)
 	updateMaintext(post.getKey(), post.getMaintext())
 	updateTime(post.getKey(), post.time)
+	updateTime(post.channel + '/0', post.time)
 
 def removeKey(key):
 	index._db.items.pop(key, None)
