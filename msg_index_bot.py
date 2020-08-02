@@ -39,7 +39,8 @@ def indexBackfill():
 		if time.time() - last_record > 60 * 60:
 			last_record = time.time()
 			sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
-			sendDebugMessage('indexBackfillProcess count', count, persistent=True)
+		if count % 1000 == 0:
+			sendDebugMessage('indexBackfillProcess count', count)
 	sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 
 @log_call()
