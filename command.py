@@ -9,11 +9,11 @@ def sendResult(msg, result):
 	if not result:
 		return
 	try:
-		return msg.reply_text('\n'.join(getHtmlReply(result)), 
+		return msg.reply_text('\n'.join(getHtmlReply(result[:20])), 
 				disable_web_page_preview = True, parse_mode = 'html')
 	except:
 		print(result)
-		return msg.reply_text('\n'.join(getMarkdownReply(result)), 
+		return msg.reply_text('\n'.join(getMarkdownReply(result[:20])), 
 			disable_web_page_preview = True, parse_mode = 'markdown')
 
 def forwardDebug(msg):
@@ -31,17 +31,17 @@ def search(msg, text, method):
 	if reply2:
 		forwardDebug(reply2)
 	forwardDebug(msg)
-	result = method(text)
-	reply3 = sendResult(msg, result)
-	if reply2:
-		tryDelete(reply2)
-	if not reply3: 
-		reply3 = msg.reply_text('no result')
+	if len(result) < 40:
+		result = method(text)
+		reply3 = sendResult(msg, result)
+		if reply2:
+			tryDelete(reply2)
+		if not reply3: 
+			reply3 = msg.reply_text('no result')
+		forwardDebug(reply3)
 	tryDelete(reply1)
-	forwardDebug(reply3)
 	debug_group.send_message('time elapse: ' + str(time.time() - start))
 	
-
 with open('help.md') as f:
 	HELP_MESSAGE = f.read()
 

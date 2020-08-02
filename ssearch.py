@@ -19,7 +19,7 @@ def getMarkdownReply(result):
 
 def finalTouch(result):
 	return [(result_index + 1, r[0], r[1]) for 
-		result_index, r in enumerate(itertools.islice(result, 20))]
+		result_index, r in enumerate(itertools.islice(result, 40))]
 
 def searchHit(target, item):
 	return matchKey(item[0] + item[1], [target])
