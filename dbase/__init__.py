@@ -120,6 +120,16 @@ def isCNGoodChannel(channel):
 		return False
 	return channel not in badByRefer
 
+def fillSuspect():
+	for key, desc in index.items():
+		if not key.endswith('/0'):
+			continue
+		channel = key.split('/')[0]
+		if channels.get(channel) in [0, 1]:
+			continue
+		if not isSimplified(desc):
+			suspect.add(channel)
+
 def resetStatus():
 	result = [int((time.time() - status.get('time', 0)) / 60),
 		'minutes', status.get('added', 0), 'new item']
@@ -154,3 +164,4 @@ def fillCoreIndex():
 	sendDebugMessage(*['fillCoreIndex finish', len(coreIndex)] + 
 		resetStatus(), persistent=True)
 	computeBadByRefer()
+	fillSuspect()
