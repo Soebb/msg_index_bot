@@ -44,7 +44,7 @@ def indexBackfill():
 def indexing():
 	if len(coreIndex) == 0:
 		dbase.fillCoreIndex()
-	indexingImp()
+	# indexingImp() # testing
 	indexBackfill()
 	threading.Timer(1, indexing).start()
 

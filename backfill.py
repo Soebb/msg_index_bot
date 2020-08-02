@@ -45,9 +45,7 @@ def _findLastMessage(channel):
 			if post.getIndex():
 				dbase.update(post)
 				hit = True
-				print(left, right, post_id, hit)
 				break
-			print(left, right, post_id, hit)
 		mid = int((left + right) / 2)
 		if hit:
 			if post_id > mid:
