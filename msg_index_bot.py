@@ -25,8 +25,7 @@ def indexingImp():
 		for post in posts:
 			dbase.update(post)
 		if len(posts) > 1: # save http call
-			for post in webgram.getPosts(channel):
-				dbase.update(post)
+			dbase.updateAll(webgram.getPosts(channel))
 	sendDebugMessage(*(['indexingImpDuration'] + dbase.resetStatus()), persistent=True)
 
 @log_on_fail(debug_group)

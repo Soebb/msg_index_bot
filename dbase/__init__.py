@@ -73,9 +73,20 @@ def update(post):
 	updateTime(post.channel + '/0', post.time)
 
 def removeKey(key):
+	print('removeKey',key) # testing
 	index._db.items.pop(key, None)
 	maintext._db.items.pop(key, None)
 	timestamp._db.items.pop(key, None)
+
+def updateAll(posts):
+	for post in posts:
+		dbase.update(post)
+	ids = [post.post_id for post in posts[1:] if post.post_id != 0]
+	if not ids:
+		return
+	for post_id in range(min(ids), max(ids)):
+		if post_id not in ids:
+			removeKey(post.channel + '/' + str(post_id))
 
 def computeBadByRefer():
 	total_count = {}

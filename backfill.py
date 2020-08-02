@@ -18,8 +18,7 @@ def quickBackfill(channel):
 	post_id = 1
 	while True:
 		posts = webgram.getPosts(channel, post_id)
-		for post in posts[1:]:
-			dbase.update(post)
+		dbase.updateAll(posts[1:])
 		if post_id == posts[-1].post_id + 1:
 			break
 		post_id = posts[-1].post_id + 1
@@ -60,6 +59,7 @@ def slowBackfill(channel):
 	post_id = _findLastMessage(channel)
 	sendDebugMessage('slowBackfill', '@' + channel, post_id)
 	start_time = time.time()
+	findNew = False
 	while post_id > 1:
 		post_id -= 1
 		key = channel + '/' + str(post_id)
@@ -68,7 +68,10 @@ def slowBackfill(channel):
 			continue
 		post = webgram.getPost(channel, post_id)
 		if post.getIndex():
+			findNew = True
 			dbase.update(post)
+		elif findNew:
+			dbase.removeKey(key)
 		if time.time() - start_time > time_limit:
 			break
 	print('slowBackfill end', '@' + channel, post_id)
