@@ -19,9 +19,9 @@ def quickBackfill(channel):
 	while True:
 		posts = webgram.getPosts(channel, post_id)
 		dbase.updateAll(posts[1:])
-		if post_id == posts[-1].post_id + 1:
+		if len(posts) <= 1:
 			break
-		post_id = posts[-1].post_id + 1
+		post_id = posts[-1].post_id
 		if time.time() - start_time > time_limit:
 			break
 	sendDebugMessage('quickBackfill end', '@' + channel, post_id)
