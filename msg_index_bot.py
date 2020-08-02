@@ -17,7 +17,7 @@ import time
 @log_call()
 def indexingImp():
 	for channel, score in channels.items():
-		if score < 0 or random.random() > 1.0 / (score * score + 1):
+		if score < 0 or random.random() > 1.0 / (score ** 2.5 + 1):
 			continue
 		if 'test' in sys.argv and random.random() > 0.1:
 			continue # better testing
