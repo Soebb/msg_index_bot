@@ -92,7 +92,6 @@ def computeBadByRefer():
 	for channel in bad_count:
 		if bad_count[channel] * 5 > total_count[channel]:
 			badByRefer.add(channel)
-	print(badByRefer)
 
 def isCNGoodChannel(channel):
 	post = webgram.get(channel)
