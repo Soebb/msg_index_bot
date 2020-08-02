@@ -26,8 +26,7 @@ def forwardDebug(msg):
 def goodEnough(result, text):
 	if not len(result) == 40:
 		return False
-	print(text.split(), result[19][2], searchHitAll(text.split(), result[19][2]))
-	return searchHitAll(text.split(), result[19][2])
+	return searchHitAll(text.split(), result[19][1:])
 
 def search(msg, text, method):
 	reply1 = msg.reply_text('searching')
