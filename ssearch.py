@@ -32,7 +32,7 @@ def searchHitAll(targets, item):
 
 def searchRaw(targets, searchCore=False):
 	if searchCore:
-		space = [(x, index.get(x)) for x in list(coreIndex)]
+		space = [(x, index.get(x, '')) for x in list(coreIndex)]
 	else:
 		space = index.items()
 	for target in targets:
