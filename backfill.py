@@ -78,7 +78,7 @@ def shouldBackfill(channel):
 		dbase.suspect.add(channel)
 		return False
 	dbase.suspect.remove(channel)
-	return random.random() > 0.005
+	return random.random() > 0.0005 # testing, need to change back to 0.005
 
 def backfill(channel):
 	if not shouldBackfill(channel):
