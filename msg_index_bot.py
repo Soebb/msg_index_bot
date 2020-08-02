@@ -32,23 +32,19 @@ def indexingImp():
 @log_call()
 def indexBackfill():
 	last_record = time.time()
-	count = 0
 	for channel, score in channels.items():
-		count += 1
 		backfill.backfill(channel)
 		if time.time() - last_record > 60 * 60:
 			last_record = time.time()
 			sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
-		if count % 100 == 0:
-			sendDebugMessage('indexBackfillProcess count', count)
 	sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 
 @log_call()
 def indexing():
 	if len(coreIndex) == 0:
 		dbase.fillCoreIndex()
-	indexBackfill()
 	indexingImp()
+	indexBackfill()
 	threading.Timer(1, indexing).start()
 
 if __name__ == '__main__':
