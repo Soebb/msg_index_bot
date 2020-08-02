@@ -78,6 +78,9 @@ def shouldFlipFirst(key):
 		return False
 	if matchKey(index.get(key), blocklist.items()):
 		return False
+	return False
+
+def isCNIndex(key):
 	for c in index.get(key):
 		if isCN(c):
 			return True
@@ -114,6 +117,7 @@ def searchTextRaw(targets, searchCore=False):
 		key.split('/')[0]) != -2, sendAfter=False)
 	result = dedupResult(result, lambda key: maintext.get(
 		key), sendAfter=False)
+	result = flipFirst(result, lambda key: isCNIndex(key))
 	result = flipFirst(result, lambda key: (key.split('/')[0] 
 		not in suspect._db.items))
 	result = flipFirst(result, lambda key: searchHitAll(
