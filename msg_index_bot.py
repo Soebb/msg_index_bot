@@ -39,23 +39,10 @@ def indexBackfill():
 			sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 	sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 
-@log_on_fail(debug_group)
-@log_call()
-def onceTimeFillChannelIndex():
-	count = 0
-	for key, _ in dbase.index.items():
-		if key.endswith('/0'):
-			post = webgram.get(key.split('/')[0])
-			dbase.update(post)
-			count += 1
-			if count % 100 == 0:
-				print('onceTimeFillChannelIndex', count)
-
 @log_call()
 def indexing():
 	if len(coreIndex) == 0:
 		dbase.fillCoreIndex()
-	onceTimeFillChannelIndex()
 	indexingImp()
 	indexBackfill()
 	threading.Timer(1, indexing).start()
