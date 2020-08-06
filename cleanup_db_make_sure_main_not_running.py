@@ -9,7 +9,7 @@ import plain_db
 from telegram_util import removeOldFiles, matchKey
 import dbase
 from dbase import index, maintext, timestamp, channels, suspect
-from common import log_call, isSimplified
+from common import log_call
 import time
 from telegram_util import isCN
 
@@ -39,11 +39,9 @@ def cleanupRedundant():
 	for text, keys in bucket.items():
 		key_score = [(getScore(key), key) for key in keys]
 		key_score.sort()
-		for score, key in key_score[1:]:
+		for score, key in key_score[10:]:
 			dbase.removeKey(key)
 			count += 1
-		if key_score[0][0] == 1:
-			dbase.removeKey(key_score[0][1])
 	print('cleanupRedundant', count)
 
 @log_call()
@@ -60,13 +58,22 @@ def getKeyScore(key):
 		return 1
 	return 0
 
+def notCNEN(text):
+	if not text:
+		return True
+	for c in text:
+		if isCN(c):
+			return False
+	# TODO: keep en channel as well, for now, delete them
+	return True
+
 def cleanupChannel(keys, keepChinese=True):
 	if not keys or len(keys) <= 100:
 		return 0 
 	if keepChinese:
 		result_keys = []
 		for key in keys:
-			if not isSimplified(index.get(key)):
+			if notCNEN(index.get(key)):
 				result_keys.append(key)
 		keys = result_keys
 	if len(keys) <= 50:
@@ -79,15 +86,6 @@ def cleanupChannel(keys, keepChinese=True):
 		count += 1
 	return count
 
-def notCNEN(text):
-	if not text:
-		return True
-	for c in text:
-		if isCN(c):
-			return False
-	# TODO: keep en channel as well, for now, delete them
-	return True
-
 def cleanupChannelNonCNEN(keys):
 	result_keys = []
 	for key in keys:
@@ -96,7 +94,7 @@ def cleanupChannelNonCNEN(keys):
 	sort_keys = [(getKeyScore(key), key) for key in result_keys]
 	sort_keys.sort(reverse=True)
 	count = 0
-	for key in sort_keys[10:]:
+	for key in sort_keys[100:]:
 		dbase.removeKey(key[1])
 		count += 1
 	return count
