@@ -64,7 +64,7 @@ def shouldRemove(key):
 @log_call()
 def cleanupKey():
 	count = 0
-	for key, text in maintext.items:
+	for key, text in maintext.items():
 		if not text or shouldRemove(key):
 			dbase.removeKey(key)
 			count += 1
@@ -99,8 +99,9 @@ def cleanupSuspect():
 @log_on_fail(debug_group)
 @log_call()
 def indexClean():
-	cleanupRedundant()
-	save()
+	# testing
+	# cleanupRedundant()
+	# save()
 	cleanupKey()
 	save()
 	cleanupSuspect()
