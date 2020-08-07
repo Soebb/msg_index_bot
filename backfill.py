@@ -20,15 +20,16 @@ def postTooOld(post):
 
 @log_call()
 def quickBackfill(channel):
-	posts = webgram.getPosts(channel)[1:]
+	posts = webgram.getPosts(channel)
 	dbase.updateAll(posts)
+	posts = posts[1:]
 	for _ in range(getMaxIteration(channel)):
 		if not posts or postTooOld(posts[0]):
 			return
 		post_id = posts[0].post_id
 		# I suspect post_id will be more like a round number, so caching will be possible
 		print('quickBackfill', post_id, channel) 
-		posts = webgram.getPosts(channel, post_id, direction='before')
+		posts = webgram.getPosts(channel, post_id, direction='before')[1:]
 		dbase.updateAll(posts)
 		
 def getMaxInIndex(channel):
