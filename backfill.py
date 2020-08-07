@@ -22,7 +22,7 @@ def postTooOld(post):
 def quickBackfill(channel):
 	posts = webgram.getPosts(channel)[1:]
 	dbase.updateAll(posts)
-	for _ in range(getMaxIteration(channel))
+	for _ in range(getMaxIteration(channel)):
 		if not posts or postTooOld(posts[0]):
 			return
 		post_id = posts[0].post_id
@@ -64,7 +64,7 @@ def slowBackfill(channel):
 	post_id = _findLastMessage(channel)
 	sendDebugMessage('slowBackfill', '@' + channel, post_id)
 	findNew = False
-	for _ in range(getMaxIteration(channel))
+	for _ in range(getMaxIteration(channel)):
 		post_id -= 1
 		if post_id <= 1:
 			break
