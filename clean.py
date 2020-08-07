@@ -68,6 +68,7 @@ def shouldRemove(key):
 def cleanupOldOrBad(keys):
 	keys.sort()
 	keys = keys[1:-1] # leave the last one
+	count = 0
 	for key in keys:
 		if shouldRemove(key):
 			dbase.removeKey(key)
