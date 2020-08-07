@@ -81,7 +81,7 @@ def containCN(text):
 	return False
 
 def cleanupChannel(keys):
-	keys = [key for key in keys is not containCN(index.get(key))]
+	keys = [key for key in keys if not containCN(index.get(key))]
 	return cleanKeys(keys, 10)
 
 @log_call()
