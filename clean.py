@@ -71,6 +71,7 @@ def cleanupKey():
 			dbase.removeKey(key)
 			count += 1
 	print('cleanupKey removed %d items' % count)
+	return count
 
 def containCN(text):
 	if not text:
@@ -81,6 +82,8 @@ def containCN(text):
 	return False
 
 def cleanupChannel(keys):
+	if not keys:
+		return 0
 	keys = [key for key in keys if not containCN(index.get(key))]
 	return cleanKeys(keys, 10)
 
