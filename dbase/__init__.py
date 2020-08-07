@@ -64,9 +64,19 @@ def updateTime(key, time):
 		return
 	timestamp.update(key, time)
 
+def shouldGetReferers(post):
+	if post.time < time.time() - 365 * 60 * 60 * 24:
+		return False
+	if 0 <= channels.get(post.channel) <= 3:
+		return True
+	if post.channel in suspect._db.items:
+		return False
+	return True
+
 def update(post):
-	for channel in webgram.yieldReferers(post):
-		updateChannel(channel, post.channel)
+	if shouldGetReferers(post):
+		for channel in webgram.yieldReferers(post):
+			updateChannel(channel, post.channel)
 	updateIndex(post.getKey(), post.getIndex(), post.channel)
 	updateMaintext(post.getKey(), post.getMaintext())
 	updateTime(post.getKey(), post.time)
