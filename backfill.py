@@ -1,4 +1,3 @@
-from common import sendDebugMessage, log_call, isSimplified
 import time
 import random
 import sys
@@ -18,7 +17,6 @@ def getMaxIteration(channel):
 def postTooOld(post):
 	return post.time < time.time() - 365 * 60 * 60 * 24
 
-@log_call()
 def quickBackfill(channel):
 	posts = webgram.getPosts(channel)
 	dbase.updateAll(posts)
@@ -58,10 +56,9 @@ def _findLastMessage(channel):
 			right = mid
 	return left
 
-@log_call()
 def slowBackfill(channel):
 	post_id = _findLastMessage(channel)
-	sendDebugMessage('slowBackfill', '@' + channel, post_id)
+	print('slowBackfill', 'https://t.me/' + channel, post_id)
 	findNew = False
 	for _ in range(getMaxIteration(channel)):
 		post_id -= 1
