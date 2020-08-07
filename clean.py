@@ -59,6 +59,9 @@ def shouldRemove(key):
 		return False
 	if 0 <= channels.get(channel) < 3:
 		return False
+	if not timestamp.get(key):
+		print('notimestamp', key, maintext.get(key))
+		return False
 	if timestamp.get(key) < time.time() - 365 * 60 * 60 * 24:
 		return True
 	return False
