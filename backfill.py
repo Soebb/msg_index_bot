@@ -80,6 +80,7 @@ def slowBackfill(channel):
 		elif findNew:
 			dbase.removeKey(key)
 		if postTooOld(post):
+			print('postTooOld', key, post.time)
 			break
 	print('slowBackfill end', '@' + channel, post_id)
 
