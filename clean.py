@@ -52,6 +52,8 @@ def cleanupRedundant():
 def shouldRemove(key):
 	if key.endswith('/0'):
 		return False
+	if not maintext.get(key):
+		return True
 	channel = key.split('/')[0]
 	if channels.get(channel) == -2:
 		return True
@@ -63,14 +65,13 @@ def shouldRemove(key):
 		return True
 	return False
 
-@log_call()
-def cleanupKey():
-	count = 0
-	for key, text in maintext.items():
-		if not text or shouldRemove(key):
+def cleanupOldOrBad(keys):
+	keys.sort()
+	keys = keys[1:-1] # leave the last one
+	for key in keys:
+		if shouldRemove(key):
 			dbase.removeKey(key)
 			count += 1
-	print('cleanupKey removed %d items' % count)
 	return count
 
 def containCN(text):
@@ -88,7 +89,7 @@ def cleanupChannel(keys):
 	return cleanKeys(keys, 10)
 
 @log_call()
-def cleanupSuspect():
+def cleanupSuspectAndOld():
 	items = [(item[0], item[0].split('/')[0]) for item in maintext.items()]
 	items = [item for item in items if not item[0].endswith('/0')]
 	bucket = createBucket(items)
@@ -96,6 +97,7 @@ def cleanupSuspect():
 	for channel in bucket:
 		if channels.get(channel) <= -1:
 			count += cleanupChannel(bucket[channel])
+		count += cleanupOldOrBad(bucket[channel])
 	for channel in suspect.items():
 		if channels.get(channel) >= 3:
 			count += cleanupChannel(bucket.get(channel))
@@ -107,8 +109,6 @@ def indexClean():
 	# testing
 	# cleanupRedundant()
 	# save()
-	cleanupKey()
-	save()
-	cleanupSuspect()
+	cleanupSuspectAndOld()
 	save()
 	
