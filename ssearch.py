@@ -92,7 +92,7 @@ def shouldFlipFirstForChannel(key):
 		return False
 	if channel in suspect._db.items or channels.get(channel) == -1:
 		return False
-	return timestamp.get(key) > time.time() - 24 * 7 * 60 * 60
+	return timestamp.get(key, 0) > time.time() - 24 * 7 * 60 * 60
 
 def populateMaintext(result):
 	for key in result:
