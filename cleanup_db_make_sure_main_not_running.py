@@ -114,6 +114,9 @@ def cleanupSuspect():
 	for channel in bucket:
 		if channels.get(channel) <= -1:
 			count += cleanupChannel(bucket[channel], keepChinese=False)
+		if channels.get(channel) == -2:
+			for key in bucket[channel]:
+				dbase.removeKey(key)
 	for channel in suspect.items():
 		if channels.get(channel) > 5:
 			count += cleanupChannel(bucket.get(channel))
