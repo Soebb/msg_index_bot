@@ -1,6 +1,7 @@
-from common import sendDebugMessage, log_call, debug_group
+from common import log_call, debug_group
 from telegram_util import log_on_fail
 from dbase import channels, timestamp, index, maintext, suspect
+import dbase
 
 def getScore(key):
 	c_score = channels.get(key.split('/')[0])
@@ -13,7 +14,10 @@ def getScore(key):
 
 @log_call()
 def save():
-	...
+	index.save_dont_call_in_prod()
+	maintext.save_dont_call_in_prod()
+	timestamp.save_dont_call_in_prod()
+	channels.save_dont_call_in_prod()
 
 def createBucket(items):
 	bucket = {}
@@ -42,4 +46,6 @@ def cleanupRedundant():
 @log_on_fail(debug_group)
 @log_call()
 def indexClean():
+	cleanupRedundant()
+	save()
 	
