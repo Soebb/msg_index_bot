@@ -11,21 +11,26 @@ if 'test' in sys.argv:
 else:
 	time_limit = 10 * 60
 
+def getMaxIteration(channel):
+	score = channels.get(channel)
+	return max(0, 1000 - score ** 2) + 20
+
+def postTooOld(post):
+	return post.time < time.time() - 365 * 60 * 60 * 24
+
 @log_call()
 def quickBackfill(channel):
-	sendDebugMessage('quickBackfill start', '@' + channel)
-	start_time = time.time()
-	post_id = 1
-	while True:
-		posts = webgram.getPosts(channel, post_id)
-		dbase.updateAll(posts[1:])
-		if len(posts) <= 1:
-			break
-		post_id = posts[-1].post_id
-		if time.time() - start_time > time_limit:
-			break
-	sendDebugMessage('quickBackfill end', '@' + channel, post_id)
-
+	posts = webgram.getPosts(channel)[1:]
+	dbase.updateAll(posts)
+	for _ in range(getMaxIteration(channel))
+		if not posts or postTooOld(posts[0]):
+			return
+		post_id = posts[0].post_id
+		# I suspect post_id will be more like a round number, so caching will be possible
+		print('quickBackfill', post_id, channel) 
+		posts = webgram.getPosts(channel, post_id, direction='before')
+		dbase.updateAll(posts)
+		
 def getMaxInIndex(channel):
 	result = 1
 	for post, _ in index.items():
@@ -58,10 +63,11 @@ def _findLastMessage(channel):
 def slowBackfill(channel):
 	post_id = _findLastMessage(channel)
 	sendDebugMessage('slowBackfill', '@' + channel, post_id)
-	start_time = time.time()
 	findNew = False
-	while post_id > 1:
+	for _ in range(getMaxIteration(channel))
 		post_id -= 1
+		if post_id <= 1:
+			break
 		key = channel + '/' + str(post_id)
 		if index.get(key):
 			post_id -= int(random.random() * 100)
@@ -72,7 +78,7 @@ def slowBackfill(channel):
 			dbase.update(post)
 		elif findNew:
 			dbase.removeKey(key)
-		if time.time() - start_time > time_limit:
+		if postTooOld(post):
 			break
 	print('slowBackfill end', '@' + channel, post_id)
 
