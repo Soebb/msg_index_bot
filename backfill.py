@@ -66,6 +66,7 @@ def slowBackfill(channel):
 	sendDebugMessage('slowBackfill', '@' + channel, post_id)
 	findNew = False
 	for _ in range(getMaxIteration(channel)):
+		print(post_id)
 		post_id -= 1
 		if post_id <= 1:
 			break
