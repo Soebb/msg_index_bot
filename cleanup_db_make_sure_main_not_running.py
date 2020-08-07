@@ -144,7 +144,6 @@ def cleanupNonCNEN():
 
 @log_call()
 def save():
-	start = time.time()
 	index.save_dont_call_in_prod()
 	maintext.save_dont_call_in_prod()
 	timestamp.save_dont_call_in_prod()

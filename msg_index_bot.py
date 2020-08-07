@@ -7,6 +7,7 @@ from command import setupCommand
 import threading
 import random
 import backfill
+import clean
 import sys
 import dbase
 from dbase import channels, coreIndex
@@ -43,6 +44,8 @@ def indexBackfill():
 def indexing():
 	if len(coreIndex) == 0:
 		dbase.fillCoreIndex()
+	if len(index.items()) > 2700000:
+		clean.indexClean()
 	indexingImp()
 	indexBackfill()
 	threading.Timer(1, indexing).start()
