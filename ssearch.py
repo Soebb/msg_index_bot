@@ -115,8 +115,6 @@ def searchTextRaw(targets, searchCore=False):
 	result = [item[1] for item in result]
 	result = flipFirst(result, lambda key: channels.get(
 		key.split('/')[0]) != -2, sendAfter=False)
-	result = dedupResult(result, lambda key: maintext.get(
-		key), sendAfter=False)
 	result = flipFirst(result, lambda key: isCNIndex(key))
 	result = flipFirst(result, lambda key: (key.split('/')[0] 
 		not in suspect._db.items))
@@ -129,6 +127,8 @@ def searchTextRaw(targets, searchCore=False):
 def searchText(text, searchCore=False):
 	targets = text.split()
 	result = searchTextRaw(targets, searchCore=searchCore)
+	result = dedupResult(result, lambda key: maintext.get(
+		key), sendAfter=False)
 	result = populateMaintext(result)
 	return finalTouch(result)
 
