@@ -74,13 +74,13 @@ def shouldGetReferers(post):
 	return True
 
 def update(post):
-	if shouldGetReferers(post):
-		for channel in webgram.yieldReferers(post):
-			updateChannel(channel, post.channel)
 	updateIndex(post.getKey(), post.getIndex(), post.channel)
 	updateMaintext(post.getKey(), post.getMaintext())
 	updateTime(post.getKey(), post.time)
 	updateTime(post.channel + '/0', post.time)
+	if shouldGetReferers(post):
+		for channel in webgram.yieldReferers(post):
+			updateChannel(channel, post.channel)
 
 def removeKey(key):
 	index._db.items.pop(key, None)
