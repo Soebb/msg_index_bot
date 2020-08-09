@@ -144,7 +144,7 @@ def isCore(key):
 	if not index.get(key) or not maintext.get(key):
 		return False
 	channel = key.split('/')[0]
-	if not (0 <= channels.get(channel) <=5):
+	if not (0 <= channels.get(channel) <= 3):
 		return False
 	if 0 <= channels.get(channel) <=1:
 		return True
