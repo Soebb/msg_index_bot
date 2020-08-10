@@ -131,7 +131,8 @@ def isCNGoodChannel(channel):
 
 def resetStatus():
 	result = [int((time.time() - status.get('time', 0)) / 60),
-		'minutes', status.get('added', 0), 'new item']
+		'minutes,', status.get('added', 0), 'new item,', 
+		len(index.items()), 'total']
 	status['time'] = time.time()
 	status['added'] = 0
 	return result
