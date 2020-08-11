@@ -1,5 +1,5 @@
 from telegram.ext import Updater
-from telegram_util import isCN
+from telegram_util import isCN, tryDelete
 import hanzidentifier
 import os
 
@@ -26,7 +26,7 @@ def sendDebugMessage(*args, persistent=False):
 		return
 	global last_debug_message
 	if last_debug_message:
-		last_debug_message.delete()
+		tryDelete(last_debug_message)
 	last_debug_message = debug_group.send_message(message)
 
 def log_call():
