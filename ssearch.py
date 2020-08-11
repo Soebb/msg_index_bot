@@ -81,7 +81,10 @@ def shouldFlipFirst(key):
 	return False
 
 def isCNIndex(key):
-	for c in index.get(key):
+	text = index.get(key)
+	if not text:
+		return False
+	for c in text:
 		if isCN(c):
 			return True
 	return False
