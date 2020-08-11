@@ -14,6 +14,7 @@ def getMaxIteration(channel):
 	score = channels.get(channel)
 	return max(0, 100 - score ** 2) * 10 + 20
 
+# TODO: set different limit for different channel based on channel score
 def postTooOld(post):
 	return post.time < time.time() - 365 * 60 * 60 * 24
 
