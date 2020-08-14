@@ -23,7 +23,7 @@ def finalTouch(result):
 
 def searchHit(target, item):
 	if not item[1]:
-		print('seems no maintext', index.get(item[0]))
+		print('seems no maintext', item[0], index.get(item[0]))
 		return False
 	return matchKey(item[0] + item[1], [target])
 
