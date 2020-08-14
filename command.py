@@ -39,7 +39,7 @@ def search(msg, text, method):
 	if not goodEnough(result, text):
 		result = method(text)
 		reply3 = sendResult(msg, result)
-		if reply2:
+		if reply2 and msg.chat.id != debug_group.id:
 			tryDelete(reply2)
 		if not reply3: 
 			reply3 = msg.reply_text('no result')
