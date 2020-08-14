@@ -22,6 +22,9 @@ def finalTouch(result):
 		result_index, r in enumerate(itertools.islice(result, 40))]
 
 def searchHit(target, item):
+	if not item[1]:
+		print('seems no maintext', index.get(item[0]))
+		return False
 	return matchKey(item[0] + item[1], [target])
 
 def searchHitAll(targets, item):
