@@ -79,6 +79,10 @@ def handleCommand(update, context):
 			dbase.setChannelScore(text)
 			msg.reply_text('success')
 			return
+		if command == '/abl' and len(text) >= 2:
+			dbase.blocklist.add(text)
+			msg.reply_text('success')
+			return
 	if msg.chat_id > 0:
 		msg.reply_text(HELP_MESSAGE, disable_web_page_preview=True)
 		return
