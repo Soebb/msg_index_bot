@@ -141,8 +141,11 @@ def shouldDelay(channel):
 		if isCN(ch):
 			return False
 	for ch in index.get(key, ''):
-		if matchKey(unicodedata.name(ch), ['arabic', 'cyrillic']):
-			return True
+		try:
+			if matchKey(unicodedata.name(ch), ['arabic', 'cyrillic']):
+				return True
+		except Exception as e:
+			print('exception unicodedata', str(e), ch)
 	return False
 
 def updateDelayStatus(channel):
