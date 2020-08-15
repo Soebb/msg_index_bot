@@ -77,10 +77,14 @@ def slowBackfill(channel):
 			dbase.removeKey(key)
 		if postTooOld(post):
 			break
+	if not findNew:
+		dbase.updateDelayStatus(channel)
 	print('slowBackfill end', '@' + channel, post_id)
 
 def shouldBackfill(channel):
 	if random.random() > 0.01:
+		return False
+	if channel in dbase.delay._db.items and random.random() > 0.01:
 		return False
 	if not dbase.isCNGoodChannel(channel):
 		dbase.suspect.add(channel)

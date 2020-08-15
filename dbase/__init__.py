@@ -1,8 +1,9 @@
 import plain_db
 import webgram
-from telegram_util import matchKey, log_on_fail
+from telegram_util import matchKey, log_on_fail, isCN
 from common import isSimplified, log_call, debug_group, sendDebugMessage
 import time
+import unicodedata
 
 blocklist = plain_db.loadKeyOnlyDB('blocklist')
 channels = plain_db.loadLargeDB('channels', isIntValue = True, default = 100)
@@ -11,6 +12,7 @@ maintext = plain_db.loadLargeDB('maintext')
 timestamp = plain_db.loadLargeDB('timestamp', isIntValue = True)
 channelrefer = plain_db.loadKeyOnlyDB('channelrefer')
 suspect = plain_db.loadKeyOnlyDB('suspect')
+delay = plain_db.loadKeyOnlyDB('delay')
 
 status = {}
 badByRefer = set()
@@ -128,6 +130,26 @@ def isCNGoodChannel(channel):
 	if matchKey(post.getIndex() + post.getKey(), blocklist._db.items.keys()):
 		return False
 	return channel not in badByRefer
+
+def shouldDelay(channel):
+	key = channel + '/0'
+	if timestamp.get(key) < time.time() - 60 * 24 * 60 * 60:
+		return True
+	if channel not in suspect._db.item:
+		return False
+	for ch in index.get(key, ''):
+		if isCN(ch):
+			return False
+	for ch in index.get(key, ''):
+		if matchKey(unicodedata.name(ch), ['arabic', 'cyrillic']):
+			return True
+	return False
+
+def updateDelayStatus(channel):
+	if shouldDelay(channel):
+		delay.add(channel)
+	else:
+		delay.remove(channel)
 
 def resetStatus():
 	result = [int((time.time() - status.get('time', 0)) / 60),

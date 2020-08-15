@@ -23,11 +23,15 @@ def indexingImp():
 			continue
 		if 'test' in sys.argv and random.random() > 0.1:
 			continue # better testing
+		if channel in dbase.delay._db.items and random.random() > 0.01:
+			continue
 		posts = webgram.getPosts(channel, 1) # force cache
 		for post in posts:
 			dbase.update(post)
-		if len(posts) > 1: # save http call
-			dbase.updateAll(webgram.getPosts(channel))
+		if len(posts) <= 1: # save http call
+			continue
+		dbase.updateAll(webgram.getPosts(channel))
+		dbase.updateDelayStatus(channel)
 	sendDebugMessage(*(['indexingImpDuration'] + dbase.resetStatus()), persistent=True)
 
 @log_on_fail(debug_group)
@@ -41,30 +45,10 @@ def indexBackfill():
 			sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 	sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 
-@log_on_fail(debug_group)
-@log_call()
-def outputChannels():
-	fn = 'db/channel_output.html'
-	with open(fn, 'w') as f:
-		f.write('')
-	for channel, score in dbase.channels.items():
-		if not 0 <= score <= 2:
-			continue
-		key = channel + '/0'
-		if dbase.timestamp.get(key, 0) < time.time() - 60 * 24 * 24 * 7:
-			continue
-		line = '%s https://t.me/%s %d %s\n\n' % (
-			dbase.maintext.get(key, ''),
-			channel, score,
-			dbase.index.get(key, ''))
-		with open(fn, 'a') as f:
-			f.write(line)
-
 @log_call()
 def indexing():
 	if len(coreIndex) == 0:
 		dbase.fillCoreIndex()
-	outputChannels()
 	if len(dbase.maintext.items()) > 2500000:
 		clean.indexClean()
 	indexingImp() 
