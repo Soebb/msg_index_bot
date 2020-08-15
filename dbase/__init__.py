@@ -135,7 +135,7 @@ def shouldDelay(channel):
 	key = channel + '/0'
 	if timestamp.get(key) < time.time() - 60 * 24 * 60 * 60:
 		return True
-	if channel not in suspect._db.item:
+	if channel not in suspect._db.items:
 		return False
 	for ch in index.get(key, ''):
 		if isCN(ch):
