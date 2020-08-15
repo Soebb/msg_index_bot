@@ -82,7 +82,6 @@ def shouldRemove(key):
 	if 0 <= channels.get(channel) < 3:
 		return False
 	if noCNnoEN(index.get(key)):
-		print('noCNnoEN', key, maintext.get(key), index.get(key))
 		return True
 	if matchKey(index.get(key), ['hasFile', 'hasLink']):
 		return False
