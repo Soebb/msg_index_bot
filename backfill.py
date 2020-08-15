@@ -5,11 +5,6 @@ import webgram
 import dbase
 from dbase import index, channels, timestamp
 
-if 'test' in sys.argv:
-	time_limit = 10
-else:
-	time_limit = 10 * 60
-
 def getMaxIteration(channel):
 	score = channels.get(channel)
 	return max(0, 100 - score ** 2) * 10 + 20
@@ -77,8 +72,6 @@ def slowBackfill(channel):
 			dbase.removeKey(key)
 		if postTooOld(post):
 			break
-	if not findNew:
-		updateDelayStatus(channel)
 	print('slowBackfill end', '@' + channel, post_id)
 
 def shouldBackfill(channel):
