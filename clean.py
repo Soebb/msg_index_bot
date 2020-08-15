@@ -104,9 +104,20 @@ def cleanupSuspectAndOld():
 			count += cleanupChannel(bucket.get(channel))
 	print('cleanupSuspect removed %d items' % count)
 
+def countChannelMessage():
+	items = [(item[0], item[0].split('/')[0]) for item in maintext.items()]
+	bucket = createBucket(items)
+	bucket = [(len(item[1]), item[0]) for item in bucket.items()]
+	bucket.sort(reverse=True)
+	for i in range(100):
+		size, channel = bucket[i]
+		print('https://t.me/s/%s %d', channel, size)
+
 @log_on_fail(debug_group)
 @log_call()
 def indexClean():
+	countChannelMessage() # testing
+	return # testing
 	cleanupRedundant()
 	save()
 	cleanupSuspectAndOld()
