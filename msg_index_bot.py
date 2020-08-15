@@ -50,10 +50,13 @@ def outputChannels():
 	for channel, score in dbase.channels.items():
 		if not 0 <= score <= 2:
 			continue
+		key = channel + '/0'
+		if dbase.timestamp.get(key, 0) < time.time() - 60 * 24 * 24 * 7:
+			continue
 		line = '%s https://t.me/%s %d %s\n\n' % (
-			dbase.maintext.get(channel + '/0', ''),
+			dbase.maintext.get(key, ''),
 			channel, score,
-			dbase.index.get(channel + '/0', ''))
+			dbase.index.get(key, ''))
 		with open(fn, 'a') as f:
 			f.write(line)
 
