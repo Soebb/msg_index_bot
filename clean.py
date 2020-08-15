@@ -65,7 +65,7 @@ def noCNnoEN(text):
 		return False
 	for c in text:
 		try:
-			if matchKey(unicodedata.name(ch), ['arabic', 'cyrillic']):
+			if matchKey(unicodedata.name(c), ['arabic', 'cyrillic']):
 				return True
 		except:
 			...
