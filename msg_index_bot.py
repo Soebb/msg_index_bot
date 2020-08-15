@@ -44,11 +44,11 @@ def indexBackfill():
 @log_on_fail(debug_group)
 @log_call()
 def outputChannels():
-	fn = 'db/channel_output.txt'
+	fn = 'db/channel_output.html'
 	with open(fn, 'w') as f:
 		f.write('')
 	for channel, score in dbase.channels.items():
-		if score > 2:
+		if not 0 <= score <= 2:
 			continue
 		line = '%s https://t.me/%s %d %s\n' % (
 			dbase.maintext.get(channel + '/0', ''),
