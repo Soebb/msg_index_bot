@@ -41,10 +41,27 @@ def indexBackfill():
 			sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 	sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 
+@log_on_fail(debug_group)
+@log_call()
+def outputChannels():
+	fn = 'db/channel_output.txt'
+	with open(fn, 'w') as f:
+		f.write('')
+	for channel, score in dbase.channels.items():
+		if score > 2:
+			continue
+		line = '%s https://t.me/%s %d %s\n' % (
+			dbase.maintext.get(channel + '/0', ''),
+			channel, score,
+			dbase.index.get(channel + '/0', ''))
+		with open(fn, 'a') as f:
+			f.write(line)
+
 @log_call()
 def indexing():
 	if len(coreIndex) == 0:
 		dbase.fillCoreIndex()
+	outputChannels()
 	if len(dbase.maintext.items()) > 2500000:
 		clean.indexClean()
 	indexingImp() 
