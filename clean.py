@@ -3,6 +3,7 @@ from telegram_util import log_on_fail, matchKey, isCN
 from dbase import channels, timestamp, index, maintext, suspect
 import dbase
 import time
+import unicodedata
 
 def getScore(key):
 	c_score = channels.get(key.split('/')[0])
@@ -49,6 +50,27 @@ def cleanupRedundant():
 		count += cleanKeys(keys, 1)
 	print('cleanupRedundant removed %d items' % count)
 
+def containCN(text):
+	if not text:
+		return False
+	for c in text:
+		if isCN(c):
+			return True
+	return False
+
+def noCNnoEN(text):
+	if not text:
+		return True
+	if containCN(text):
+		return False
+	for c in text:
+		try:
+			if matchKey(unicodedata.name(ch), ['arabic', 'cyrillic']):
+				return True
+		except:
+			...
+	return False
+
 def shouldRemove(key):
 	if key.endswith('/0'):
 		return False
@@ -57,9 +79,12 @@ def shouldRemove(key):
 	channel = key.split('/')[0]
 	if channels.get(channel) == -2:
 		return True
-	if matchKey(index.get(key), ['hasFile', 'hasLink']):
-		return False
 	if 0 <= channels.get(channel) < 3:
+		return False
+	if noCNnoEN(index.get(key)):
+		print(key, index.get(key))
+		return True
+	if matchKey(index.get(key), ['hasFile', 'hasLink']):
 		return False
 	if timestamp.get(key, 0) < time.time() - 365 * 60 * 60 * 24:
 		return True
@@ -74,14 +99,6 @@ def cleanupOldOrBad(keys):
 			dbase.removeKey(key)
 			count += 1
 	return count
-
-def containCN(text):
-	if not text:
-		return False
-	for c in text:
-		if isCN(c):
-			return True
-	return False
 
 def cleanupChannel(keys):
 	if not keys:
@@ -107,8 +124,8 @@ def cleanupSuspectAndOld():
 @log_on_fail(debug_group)
 @log_call()
 def indexClean():
-	cleanupRedundant()
-	save()
+	# cleanupRedundant()
+	# save()
 	cleanupSuspectAndOld()
 	save()
 	
