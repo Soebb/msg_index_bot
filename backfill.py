@@ -78,7 +78,7 @@ def slowBackfill(channel):
 		if postTooOld(post):
 			break
 	if not findNew:
-		dbase.updateDelayStatus(channel)
+		updateDelayStatus(channel)
 	print('slowBackfill end', '@' + channel, post_id)
 
 def shouldBackfill(channel):
