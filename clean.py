@@ -111,7 +111,8 @@ def countChannelMessage():
 	bucket.sort(reverse=True)
 	for i in range(100):
 		size, channel = bucket[i]
-		print('https://t.me/s/%s %d' % (channel, size))
+		print('https://t.me/s/%s %s %d' % (channel, 
+			maintext.get(channel + '/0', ''), size))
 
 @log_on_fail(debug_group)
 @log_call()
