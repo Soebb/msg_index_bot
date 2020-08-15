@@ -91,7 +91,6 @@ def handleCommand(update, context):
 def handleSearch(update, context):
 	msg = update.message
 	text = msg.text.strip()
-	print('here1')
 	search(msg, text, searchText)
 
 @log_on_fail(debug_group)
