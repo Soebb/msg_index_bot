@@ -89,8 +89,6 @@ def cleanupChannel(keys):
 	keys = [key for key in keys if not containCN(index.get(key))]
 	return cleanKeys(keys, 10)
 
-only_keep_current = ['taobao1024']
-
 @log_call()
 def cleanupSuspectAndOld():
 	items = [(item[0], item[0].split('/')[0]) for item in maintext.items()]
@@ -104,25 +102,11 @@ def cleanupSuspectAndOld():
 	for channel in suspect.items():
 		if channels.get(channel) >= 3:
 			count += cleanupChannel(bucket.get(channel))
-	for channel in only_keep_current:
-		count += cleanupChannel(bucket.get(channel))
 	print('cleanupSuspect removed %d items' % count)
-
-def countChannelMessage():
-	items = [(item[0], item[0].split('/')[0]) for item in maintext.items()]
-	bucket = createBucket(items)
-	bucket = [(len(item[1]), item[0]) for item in bucket.items()]
-	bucket.sort(reverse=True)
-	for i in range(100):
-		size, channel = bucket[i]
-		print('https://t.me/s/%s %s %s %d' % (channel, 
-			channel, maintext.get(channel + '/0', ''), size))
 
 @log_on_fail(debug_group)
 @log_call()
 def indexClean():
-	countChannelMessage() # testing
-	return # testing
 	cleanupRedundant()
 	save()
 	cleanupSuspectAndOld()
