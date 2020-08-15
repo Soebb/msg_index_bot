@@ -50,7 +50,7 @@ def outputChannels():
 	for channel, score in dbase.channels.items():
 		if not 0 <= score <= 2:
 			continue
-		line = '%s https://t.me/%s %d %s\n' % (
+		line = '%s https://t.me/%s %d %s\n\n' % (
 			dbase.maintext.get(channel + '/0', ''),
 			channel, score,
 			dbase.index.get(channel + '/0', ''))
