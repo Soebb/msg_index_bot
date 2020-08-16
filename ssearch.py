@@ -118,8 +118,11 @@ def searchTextRaw(targets, searchCore=False):
 		channels.get(key.split('/')[0]) * 1000, key) for key in result]
 	result.sort(reverse=True)
 	result = [item[1] for item in result]
+	print([(key, channels.get(key.split('/')[0])) for key in result[:20]])
 	result = flipFirst(result, lambda key: channels.get(
 		key.split('/')[0]) != -2, sendAfter=False)
+	result = list(result)
+	print([(key, channels.get(key.split('/')[0])) for key in result[:20]])
 	result = flipFirst(result, lambda key: isCNIndex(key))
 	result = flipFirst(result, lambda key: (key.split('/')[0] 
 		not in suspect._db.items))
