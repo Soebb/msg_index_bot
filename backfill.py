@@ -5,13 +5,14 @@ import webgram
 import dbase
 from dbase import index, channels, timestamp
 
+YEAR = 365 * 60 * 60 * 24
+
 def getMaxIteration(channel):
 	score = channels.get(channel)
 	return max(0, 100 - score ** 2) * 10 + 20
 
-# TODO: set different limit for different channel based on channel score
 def postTooOld(post):
-	return post.time < time.time() - 365 * 60 * 60 * 24
+	return post.time < min(dbase.getRetain(post.channel), time.time() - YEAR)
 
 def quickBackfill(channel):
 	posts = webgram.getPosts(channel)

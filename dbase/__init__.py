@@ -131,6 +131,16 @@ def isCNGoodChannel(channel):
 		return False
 	return channel not in badByRefer
 
+YEAR = 365 * 60 * 60 * 24
+
+def getRetain(channel):
+	score = channels.get(channel)
+	if 0 <= score < 2:
+		return 0
+	if score < 0:
+		return time.time() - 0.1 * YEAR
+	return time.time() - (0.5 + 2.0 / (score + 2)) * YEAR
+
 def shouldDelay(channel):
 	key = channel + '/0'
 	if timestamp.get(key) < time.time() - 60 * 24 * 60 * 60:
@@ -172,7 +182,7 @@ def isCore(key):
 	channel = key.split('/')[0]
 	if not (0 <= channels.get(channel) <= 3):
 		return False
-	if 0 <= channels.get(channel) <=1:
+	if 0 <= channels.get(channel) <= 1:
 		return timestamp.get(key, 0) > time.time() - 180 * 60 * 60 * 24
 	if channel in suspect._db.items:
 		return False

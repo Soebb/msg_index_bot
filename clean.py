@@ -79,13 +79,13 @@ def shouldRemove(key):
 	channel = key.split('/')[0]
 	if channels.get(channel) == -2:
 		return True
-	if 0 <= channels.get(channel) < 3:
+	if 0 <= channels.get(channel) < 2:
 		return False
 	if noCNnoEN(index.get(key)):
 		return True
 	if matchKey(index.get(key), ['hasFile', 'hasLink']):
 		return False
-	if timestamp.get(key, 0) < time.time() - 365 * 60 * 60 * 24:
+	if timestamp.get(key, 0) < dbase.getRetain(key.split('/')[0]):
 		return True
 	return False
 
