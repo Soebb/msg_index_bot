@@ -138,8 +138,7 @@ def cleanupSuspectAndOld():
 @log_on_fail(debug_group)
 @log_call()
 def indexClean():
-	# cleanupRedundant()
-	# save()
 	cleanupSuspectAndOld()
 	save()
-	
+	cleanupRedundant()
+	save()	
