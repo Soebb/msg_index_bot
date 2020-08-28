@@ -40,7 +40,7 @@ def searchRaw(targets, searchCore=False):
 		space = index.items()
 	for target in targets:
 		space = [item for item in space if searchHit(target, item)]
-	return [item[0] for item in space[:1000]]
+	return [item[0] for item in space]
 
 def flipFirst(result, func, sendAfter=True):
 	rest = []
