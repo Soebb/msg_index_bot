@@ -89,14 +89,29 @@ def shouldRemove(key):
 		return True
 	return False
 
+def getRetainLen(channel):
+	score = channels.get(channel)
+	if score < 0:
+		return 30
+	return int(300 + 6000 / (1 + score))
+
 def cleanupOldOrBad(keys):
 	keys.sort()
 	keys = keys[1:-1] # leave the last one
 	count = 0
+	rest = []
 	for key in keys:
 		if shouldRemove(key):
 			dbase.removeKey(key)
 			count += 1
+		else:
+			rest.append(key)
+	if len(rest) < 300:
+		return count
+	retain_len = getRetainLen(rest[0].split('/')[0])
+	for key in rest[:-retain_len]:
+		dbase.removeKey(key)
+		count += 1
 	return count
 
 def cleanupChannel(keys):
