@@ -33,6 +33,8 @@ def searchHitAll(targets, item):
 	return True
 
 def searchRaw(targets, searchCore=False):
+	if not targets: # optimization of /s and /sc
+		return [(x, index.get(x)) for x in list(coreIndex)[:1000] if index.get(x)]
 	if searchCore:
 		# after index cleanup, x might not in index anymore
 		space = [(x, index.get(x)) for x in list(coreIndex) if index.get(x)]
@@ -40,7 +42,7 @@ def searchRaw(targets, searchCore=False):
 		space = index.items()
 	for target in targets:
 		space = [item for item in space if searchHit(target, item)]
-	return [item[0] for item in space][-10000:]
+	return [item[0] for item in space]
 
 def flipFirst(result, func, sendAfter=True):
 	rest = []
