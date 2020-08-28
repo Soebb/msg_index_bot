@@ -34,13 +34,13 @@ def searchHitAll(targets, item):
 
 def searchRaw(targets, searchCore=False):
 	if searchCore:
-		space = [(x, index.get(x, '')) for x in list(coreIndex)]
+		# after index cleanup, x might not in index anymore
+		space = [(x, index.get(x)) for x in list(coreIndex) if index.get(x)]
 	else:
 		space = index.items()
 	for target in targets:
 		space = [item for item in space if searchHit(target, item)]
-	for item in space:
-		yield item[0]
+	return [key for key in space[:1000]]
 
 def flipFirst(result, func, sendAfter=True):
 	rest = []
@@ -113,7 +113,6 @@ def populateChannelTitle(result):
 
 def searchTextRaw(targets, searchCore=False):
 	result = searchRaw(targets, searchCore=searchCore)
-	result = itertools.islice(result, 1000)
 	result = [(timestamp.get(key, 0) - 
 		channels.get(key.split('/')[0]) * 1000, key) for key in result]
 	result.sort(reverse=True)
