@@ -34,7 +34,7 @@ def searchHitAll(targets, item):
 
 def searchRaw(targets, searchCore=False):
 	if not targets: # optimization of /s and /sc
-		return [(x, index.get(x)) for x in list(coreIndex)[:1000] if index.get(x)]
+		return [x for x in list(coreIndex)[:1000] if index.get(x)]
 	if searchCore:
 		# after index cleanup, x might not in index anymore
 		space = [(x, index.get(x)) for x in list(coreIndex) if index.get(x)]
