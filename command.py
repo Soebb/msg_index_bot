@@ -56,7 +56,9 @@ def handleCommand(update, context):
 	if not msg or not msg.text:
 		return
 	command, text = splitCommand(msg.text)
-	command = command.strip('@msg_index_bot')
+	command = (command.split('@msg_index_bot')[0] + 
+		''.join(command.split('@msg_index_bot')[1:]))
+	print('here', command, text)
 	# for people who miss a space between command and text
 	if not text and command != '/start': 
 		if command.startswith('/sc'):
