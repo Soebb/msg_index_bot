@@ -17,13 +17,18 @@ delay = plain_db.loadKeyOnlyDB('delay')
 status = {}
 badByRefer = set()
 
-def setBadWord(text):
-	blocklist.add(text)
+def setChannelBatch(targets, score):
+	targets = [target.strip('/').split('/')[-1].lower() for target in targets]
+	updated = 0
+	for channel, _ in channels.items():
+		if channel.lower() in targets:
+			channels.update(channel, score)
+			updated += 1
+	return 'Updated %d channels' % updated
 
 def setChannelScore(text):
 	score = int(text.split()[-1])
-	text = text.split()[0].strip('/').split('/')[-1]
-	channels.update(text, score)
+	return setChannelBatch(text.split()[0], score)
 
 def updateChannel(name, referer):
 	referer_score = channels.get(referer)

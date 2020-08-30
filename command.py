@@ -82,13 +82,11 @@ def handleCommand(update, context):
 		tryDelete(reply1)
 		return
 	if msg.from_user and msg.from_user.id == debug_group.id:
-		if command == '/sb':
-			dbase.setBadWord(text)
-			msg.reply_text('success')
-			return
 		if command in ['/ss']:
-			dbase.setChannelScore(text)
-			msg.reply_text('success')
+			msg.reply_text(dbase.setChannelScore(text))
+			return
+		if command in ['/ss_batch_bad']:
+			msg.reply_text(dbase.setChannelBatch(text.split(), -2))
 			return
 		if command == '/abl' and len(text) >= 2:
 			dbase.blocklist.add(text)
