@@ -85,7 +85,7 @@ def handleCommand(update, context):
 		reply1 = msg.reply_text('searching')
 		result = searchRelated(text)
 		reply2 = sendResult(msg, result)
-		if reply2:
+		if not reply2:
 			reply2 = msg.reply_text('no result')
 		forwardDebug(reply2)
 		tryDelete(reply1)

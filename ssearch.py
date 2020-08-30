@@ -136,8 +136,9 @@ def searchRelated(text):
 		return []
 	result = set()
 	for item in dbase.channelrefer.items():
-		if text in item.split(':'):
-			result.update(item.split(':'))
+		if text in item[0].split(':'):
+			print(item[0].split(':'))
+			result.update(item[0].split(':'))
 	result.discard(text)
 	result = [channel + '/0' for channel in result 
 		if maintext.get(channel + '/0')]
