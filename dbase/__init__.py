@@ -28,7 +28,7 @@ def setChannelBatch(targets, score):
 
 def setChannelScore(text):
 	score = int(text.split()[-1])
-	return setChannelBatch(text.split()[0], score)
+	return setChannelBatch([text.split()[0]], score)
 
 def updateChannel(name, referer):
 	referer_score = channels.get(referer)
