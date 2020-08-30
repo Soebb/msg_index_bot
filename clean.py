@@ -127,6 +127,8 @@ def cleanupSuspectAndOld():
 	bucket = createBucket(items)
 	count = 0
 	for channel in bucket:
+		if channels.get(channel) == -2:
+			count += cleanKeys(bucket[channel], 0)
 		if channels.get(channel) <= -1:
 			count += cleanupChannel(bucket[channel])
 		count += cleanupOldOrBad(bucket[channel])
