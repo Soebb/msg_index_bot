@@ -59,16 +59,7 @@ def handleCommand(update, context):
 	if not msg or not msg.text:
 		return
 	command, text = splitCommand(msg.text)
-	command = (command.split('@msg_index_bot')[0] + 
-		''.join(command.split('@msg_index_bot')[1:]))
-	print('here', command, text)
-	# for people who miss a space between command and text
-	if not text and command != '/start': 
-		if command.startswith('/sc'):
-			command, text = '/sc', command[3:]
-		elif (command.startswith('/s')
-				and (command not in ['/search_channel', '/search'])):
-			command, text = '/s', command[2:]
+	command = command.split('@msg_index_bot')[0]
 	if 'channel' in command or command == '/sc':
 		search(msg, text, searchChannel)
 		return
@@ -111,6 +102,12 @@ def handleCommand(update, context):
 def handleSearch(update, context):
 	msg = update.message
 	text = msg.text.strip()
+	if text.startswith('/sc'):
+		search(msg, text[3:], searchChannel)
+		return
+	if text.startswith('/s'):
+		search(msg, text[2:], searchChannel)
+		return
 	search(msg, text, searchText)
 
 @log_on_fail(debug_group)
