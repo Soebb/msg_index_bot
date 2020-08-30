@@ -77,11 +77,6 @@ def shouldFlipFirst(key):
 		return False
 	if 0 <= channels.get(channel) <= 2:
 		return True
-	if len(index.get(key)) < 20 and not matchKey(
-		index.get(key), ['hasFile', 'hasLink']):
-		return False
-	if matchKey(index.get(key), blocklist.items()):
-		return False
 	return False
 
 def isCNIndex(key):
@@ -113,8 +108,7 @@ def populateChannelTitle(result):
 	for key in result:
 		yield key, getChannelTitle(key)	
 
-def searchTextRaw(targets, searchCore=False):
-	result = searchRaw(targets, searchCore=searchCore)
+def sortAndClean(result):
 	result = [(timestamp.get(key, 0) - 
 		channels.get(key.split('/')[0]) * 1000, key) for key in result]
 	result.sort(reverse=True)
@@ -124,11 +118,31 @@ def searchTextRaw(targets, searchCore=False):
 	result = flipFirst(result, lambda key: isCNIndex(key))
 	result = flipFirst(result, lambda key: (key.split('/')[0] 
 		not in suspect._db.items))
-	result = flipFirst(result, lambda key: searchHitAll(
-		targets, (key, maintext.get(key))))
-	result = dedupResult(result, lambda key: key.split('/')[0])
 	result = flipFirst(result, lambda key: shouldFlipFirst(key))
 	return result
+
+def searchTextRaw(targets, searchCore=False):
+	result = searchRaw(targets, searchCore=searchCore)
+	result = sortAndClean(result)
+	result = flipFirst(result, lambda key: searchHitAll(
+		targets, (key, maintext.get(key))))
+	result = flipFirst(result, lambda key: shouldFlipFirst(key))
+	result = dedupResult(result, lambda key: key.split('/')[0])
+	return result
+
+def searchRelated(text):
+	text = text.split('/')[-1]
+	if not text:
+		return []
+	result = set()
+	for item in channelrefer.items():
+		if text in item.split(':'):
+			result.update(item.split(':'))
+	result.discard(text)
+	result = [channel + '/0' for channel in result 
+		if maintext.get(channel + '/0')]
+	result = sortAndClean(result)
+	return finalTouch(result)
 
 def searchText(text, searchCore=False):
 	targets = text.split()
