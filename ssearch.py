@@ -135,7 +135,7 @@ def searchRelated(text):
 	if not text:
 		return []
 	result = set()
-	for item in channelrefer.items():
+	for item in dbase.channelrefer.items():
 		if text in item.split(':'):
 			result.update(item.split(':'))
 	result.discard(text)
