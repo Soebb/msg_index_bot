@@ -76,7 +76,7 @@ def slowBackfill(channel):
 	print('slowBackfill end', '@' + channel, post_id)
 
 def shouldBackfill(channel):
-	if random.random() > 0.1:
+	if random.random() > 0.01:
 		return False
 	
 	if not dbase.isCNGoodChannel(channel):
@@ -86,10 +86,7 @@ def shouldBackfill(channel):
 
 	if channel in dbase.delay._db.items and random.random() > 0.1:
 		return False
-	if (0 <= channels.get(channel) <= 3 and 
-		'isGroup' in index.get(channel + '/0')):
-		return True
-	return random.random() < 0.1
+	return True
 
 def backfill(channel):
 	if not shouldBackfill(channel):
