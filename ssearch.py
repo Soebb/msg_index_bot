@@ -142,8 +142,6 @@ def searchRelated(text):
 	result = [channel + '/0' for channel in result 
 		if maintext.get(channel + '/0')]
 	result = sortAndClean(result)
-	result = list(result)
-	print(result)
 	result = populateMaintext(result)
 	return finalTouch(result)
 
