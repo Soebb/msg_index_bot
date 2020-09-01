@@ -141,6 +141,11 @@ def cleanupSuspectAndOld():
 @log_call()
 def removeNonExistChannel():
 	channel_to_remove = set()
+	for key, title in maintext.items():
+		if not key.endswith('/0'):
+			continue
+		if not title:
+			channel_to_remove.add(key.split('/')[0])
 	items = [(item[0], item[0].split('/')[0].lower()) for item in maintext.items()]
 	bucket = createBucket(items)
 	for channel_lower in bucket:
