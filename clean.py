@@ -138,12 +138,9 @@ def cleanupSuspectAndOld():
 			count += cleanupChannel(bucket.get(channel))
 	print('cleanupSuspect removed %d items' % count)
 
+@log_call()
 def removeNonExistChannel():
 	channel_to_remove = set()
-	for channel, score in channels.items():
-		post = webgram.get(channel)
-		if not post.exist:
-			channel_to_remove.add(channel)
 	items = [(item[0], item[0].split('/')[0].lower()) for item in maintext.items()]
 	bucket = createBucket(items)
 	for channel_lower in bucket:
