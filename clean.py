@@ -161,7 +161,6 @@ def removeNonExistChannel():
 	for channel in channel_to_remove:
 		channels._db.items.pop(channel, None)
 
-
 @log_on_fail(debug_group)
 @log_call()
 def indexClean():
