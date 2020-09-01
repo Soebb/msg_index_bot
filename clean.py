@@ -4,6 +4,7 @@ from dbase import channels, timestamp, index, maintext, suspect
 import dbase
 import time
 import unicodedata
+import webgram
 
 def getScore(key):
 	c_score = channels.get(key.split('/')[0])
@@ -137,9 +138,38 @@ def cleanupSuspectAndOld():
 			count += cleanupChannel(bucket.get(channel))
 	print('cleanupSuspect removed %d items' % count)
 
+def removeNonExistChannel():
+	channel_to_remove = set()
+	for channel, score in channels.items():
+		post = webgram.get(channel)
+		if not post.exist:
+			channel_to_remove.add(channel)
+	items = [(item[0], item[0].split('/')[0].lower()) for item in maintext.items()]
+	bucket = createBucket(items)
+	for channel_lower in bucket:
+		items = bucket[channel_lower]
+		items = [(item, item.split('/')[0]) for item in items]
+		sub_bucket = createBucket(items)
+		sub_bucket = [(len(item[1]), item[0]) for item in sub_bucket.items()]
+		sub_bucket.sort(reverse=True)
+		for _, channel in sub_bucket[1:]:
+			channel_to_remove.add(channel)
+	print('remove channel count', len(channel_to_remove))
+	count = 0
+	for key, _ in maintext.items():
+		if key.split('/')[0] in channel_to_remove:
+			dbase.removeKey(key)
+			count += 1
+	print('remove non exist', count)
+	for channel in channel_to_remove:
+		channels._db.items.pop(channel, None)
+
+
 @log_on_fail(debug_group)
 @log_call()
 def indexClean():
+	removeNonExistChannel()
+	save()
 	cleanupSuspectAndOld()
 	save()
 	cleanupRedundant()
