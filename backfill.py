@@ -23,12 +23,12 @@ def quickBackfill(channel):
 	count = 0
 	for _ in range(getMaxIteration(channel)):
 		if not posts or postTooOld(posts[0]):
+			print('updated ', channel, count)
 			return
 		post_id = posts[0].post_id
 		posts = webgram.getPosts(channel, post_id, direction='before')[1:]
 		dbase.updateAll(posts)
 		count += len(posts)
-	print('updated ', count)
 		
 def getMaxInIndex(channel):
 	result = 1
