@@ -25,7 +25,6 @@ def quickBackfill(channel):
 		post_id = posts[0].post_id
 		posts = webgram.getPosts(channel, post_id, direction='before')[1:]
 		dbase.updateAll(posts)
-		count += len(posts)
 		
 def getMaxInIndex(channel):
 	result = 1
