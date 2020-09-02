@@ -15,7 +15,6 @@ def getMaxIteration(channel):
 def postTooOld(post):
 	return post.time < max(dbase.getRetain(post.channel), time.time() - YEAR)
 
-@log_time()
 def quickBackfill(channel):
 	posts = webgram.getPosts(channel)
 	dbase.updateAll(posts)
@@ -56,7 +55,6 @@ def _findLastMessage(channel):
 			right = mid
 	return left
 
-@log_time()
 def slowBackfill(channel):
 	post_id = _findLastMessage(channel)
 	findNew = False
