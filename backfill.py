@@ -4,6 +4,7 @@ import sys
 import webgram
 import dbase
 from dbase import index, channels, timestamp
+from common import log_time
 
 YEAR = 365 * 60 * 60 * 24
 
@@ -14,6 +15,7 @@ def getMaxIteration(channel):
 def postTooOld(post):
 	return post.time < max(dbase.getRetain(post.channel), time.time() - YEAR)
 
+@log_time()
 def quickBackfill(channel):
 	posts = webgram.getPosts(channel)
 	dbase.updateAll(posts)
@@ -53,6 +55,7 @@ def _findLastMessage(channel):
 			right = mid
 	return left
 
+@log_time()
 def slowBackfill(channel):
 	post_id = _findLastMessage(channel)
 	print('slowBackfill', 'https://t.me/' + channel, post_id)

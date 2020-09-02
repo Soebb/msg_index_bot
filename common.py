@@ -2,6 +2,7 @@ from telegram.ext import Updater
 from telegram_util import isCN, tryDelete
 import hanzidentifier
 import os
+import time
 
 with open('token') as f:
 	token = f.read().strip()
@@ -37,5 +38,15 @@ def log_call():
 			f(*args,**kwargs)
 			new_args[-1] = 'end'
 			sendDebugMessage(*new_args)
+		return applicator
+	return decorate
+
+def log_time():
+	def decorate(f):
+		def applicator(*args, **kwargs):
+			start = time.time()
+			f(*args,**kwargs)
+			to_print = [f.__name__] + list(args) + [int(time.time() - start)]
+			print(*to_print)
 		return applicator
 	return decorate
