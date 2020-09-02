@@ -12,7 +12,7 @@ def getMaxIteration(channel):
 	return max(0, 10 - score) ** 3 + 20
 
 def postTooOld(post):
-	return post.time < min(dbase.getRetain(post.channel), time.time() - YEAR)
+	return post.time < max(dbase.getRetain(post.channel), time.time() - YEAR)
 
 def quickBackfill(channel):
 	posts = webgram.getPosts(channel)
