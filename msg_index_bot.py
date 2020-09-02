@@ -51,7 +51,7 @@ def indexing():
 		dbase.fillCoreIndex()
 	if len(dbase.maintext.items()) > 2000000:
 		clean.indexClean()
-	indexingImp()
+	# indexingImp()
 	indexBackfill()
 	threading.Timer(1, indexing).start()
 
