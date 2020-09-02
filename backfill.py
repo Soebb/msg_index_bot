@@ -61,7 +61,6 @@ def _findLastMessage(channel):
 @log_time()
 def slowBackfill(channel):
 	post_id = _findLastMessage(channel)
-	print('slowBackfill', 'https://t.me/' + channel, post_id)
 	findNew = False
 	for _ in range(getMaxIteration(channel)):
 		post_id -= 1
@@ -79,7 +78,6 @@ def slowBackfill(channel):
 			dbase.removeKey(key)
 		if postTooOld(post):
 			break
-	print('slowBackfill end', '@' + channel, post_id)
 
 def shouldBackfill(channel):
 	if random.random() > 0.01:
