@@ -126,7 +126,6 @@ def searchTextRaw(targets, searchCore=False):
 	result = sortAndClean(result)
 	result = flipFirst(result, lambda key: searchHitAll(
 		targets, (key, maintext.get(key))))
-	result = flipFirst(result, lambda key: shouldFlipFirst(key))
 	result = dedupResult(result, lambda key: key.split('/')[0])
 	return result
 
