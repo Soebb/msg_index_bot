@@ -118,7 +118,7 @@ def computeBadByRefer():
 			for channel in channel_list:
 				bad_count[channel] = bad_count.get(channel, 0) + 1
 	for channel in bad_count:
-		if (bad_count[channel] * 2 > total_count[channel] or 
+		if (bad_count[channel] * 5 > total_count[channel] or 
 			bad_count[channel] ** 2 > total_count[channel]):
 			badByRefer.add(channel)
 
