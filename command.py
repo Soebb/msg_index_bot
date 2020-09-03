@@ -9,11 +9,11 @@ def sendResult(msg, result):
 	if not result:
 		return
 	try:
-		return msg.reply_text('\n'.join(getHtmlReply(result[:20])), 
+		return msg.reply_text('\n'.join(getHtmlReply(result[:100])), 
 				disable_web_page_preview = True, parse_mode = 'html')
 	except:
 		print(result)
-		return msg.reply_text('\n'.join(getMarkdownReply(result[:20])), 
+		return msg.reply_text('\n'.join(getMarkdownReply(result[:100])), 
 			disable_web_page_preview = True, parse_mode = 'markdown')
 
 def forwardDebug(msg):
@@ -121,7 +121,7 @@ def handleGroup(update, context):
 	text = ' '.join(text.split())
 	prefix = 'hasFile ' if msg.document else ''
 	dbase.updateIndex(post_link, prefix + text, msg.chat.username)
-	dbase.updateMaintext(post_link, text[:20])
+	dbase.updateMaintext(post_link, text[:100])
 	dbase.updateTime(post_link, int(time.time()))
 
 def setupCommand(dp):
