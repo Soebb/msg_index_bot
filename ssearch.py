@@ -71,14 +71,6 @@ def dedupResult(result, func, sendAfter=True):
 		for key in rest:
 			yield key
 
-def shouldFlipFirst(key):
-	channel = key.split('/')[0]
-	if channels.get(channel) == -1:
-		return False
-	if 0 <= channels.get(channel) <= 2:
-		return True
-	return False
-
 def isCNIndex(key):
 	text = index.get(key)
 	if not text:
@@ -118,7 +110,7 @@ def sortAndClean(result):
 	result = flipFirst(result, lambda key: isCNIndex(key))
 	result = flipFirst(result, lambda key: (key.split('/')[0] 
 		not in suspect._db.items))
-	result = flipFirst(result, lambda key: shouldFlipFirst(key))
+	result = flipFirst(result, lambda key: key in coreIndex)
 	return result
 
 def searchTextRaw(targets, searchCore=False):
