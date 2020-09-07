@@ -1,5 +1,5 @@
 from telegram.ext import MessageHandler, Filters
-from telegram_util import log_on_fail, splitCommand, tryDelete
+from telegram_util import log_on_fail, splitCommand, tryDelete, matchKey
 from common import debug_group
 import dbase
 from ssearch import searchText, searchChannel, searchRelated, getHtmlReply, getMarkdownReply, searchHitAll
