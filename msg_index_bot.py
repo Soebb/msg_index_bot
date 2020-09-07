@@ -47,13 +47,15 @@ def indexBackfill():
 
 @log_call()
 def indexing():
+	start = time.time()
 	if len(coreIndex) == 0:
 		dbase.fillCoreIndex()
 	if len(dbase.maintext.items()) > 2000000:
 		clean.indexClean()
 	indexingImp()
 	indexBackfill()
-	threading.Timer(1, indexing).start()
+	pause = max(1, 2 * 60 * 60 + time.time() - start)
+	threading.Timer(pause, indexing).start()
 
 if __name__ == '__main__':
 	setupCommand(tele.dispatcher)
