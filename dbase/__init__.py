@@ -18,7 +18,8 @@ status = {}
 badByRefer = set()
 
 def setChannelBatch(targets, score):
-	targets = [target.strip('/').split('/')[-1].lower() for target in targets]
+	targets = [piece.lower() for piece in target.strip('/').split('/') 
+		for target in targets]
 	updated = 0
 	for channel, _ in channels.items():
 		if channel.lower() in targets:

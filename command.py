@@ -24,6 +24,8 @@ def forwardDebug(msg):
 	msg.forward(debug_group.id)
 
 def goodEnough(result, text):
+	if matchKey(text, dbase.blocklist.items()):
+		return True
 	if not len(result) == 40:
 		return False
 	return searchHitAll(text.split(), result[19][1:])
@@ -44,6 +46,8 @@ def search(msg, text, method):
 		if not reply3: 
 			reply3 = msg.reply_text('no result')
 		forwardDebug(reply3)
+	elif not reply2: # search blocked item (usually porn related)
+		msg.reply_text('no result')
 	tryDelete(reply1)
 	debug_group.send_message('time elapse: ' + str(time.time() - start))
 	
