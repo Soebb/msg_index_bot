@@ -1,5 +1,5 @@
 from common import log_call, debug_group
-from telegram_util import log_on_fail, matchKey, isCN
+from telegram_util import log_on_fail, matchKey, isCN, removeOldFiles
 from dbase import channels, timestamp, index, maintext, suspect
 import dbase
 import time
@@ -174,4 +174,5 @@ def indexClean():
 	cleanupSuspectAndOld()
 	save()
 	cleanupRedundant()
-	save()	
+	save()
+	removeOldFiles('tmp', day = 2)	
