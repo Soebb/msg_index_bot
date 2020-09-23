@@ -5,6 +5,7 @@ import dbase
 import time
 import unicodedata
 import webgram
+import os
 
 def getScore(key):
 	c_score = channels.get(key.split('/')[0])
@@ -169,10 +170,11 @@ def removeNonExistChannel():
 @log_on_fail(debug_group)
 @log_call()
 def indexClean():
+	removeOldFiles('tmp', day = 2)	
+	os.system('rm tmp/*embed*')
 	removeNonExistChannel()
 	save()
 	cleanupSuspectAndOld()
 	save()
 	cleanupRedundant()
 	save()
-	removeOldFiles('tmp', day = 2)	
