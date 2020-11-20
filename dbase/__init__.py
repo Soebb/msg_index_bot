@@ -145,8 +145,8 @@ def getRetain(channel):
 	if 0 <= score < 2:
 		return 0
 	if score < 0:
-		return time.time() - 0.1 * YEAR
-	return time.time() - (0.5 + 2.0 / (score + 2)) * YEAR
+		return time.time() - 0.05 * YEAR
+	return time.time() - (0.1 + 3 / (score + 2)) * YEAR
 
 def shouldDelay(channel):
 	key = channel + '/0'
