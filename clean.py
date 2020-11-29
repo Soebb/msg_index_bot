@@ -167,14 +167,20 @@ def removeNonExistChannel():
 	for channel in channel_to_remove:
 		channels._db.items.pop(channel, None)
 
+def rescore():
+	for channel in channels._db.items:
+		if channels.get(channel) >= 1:
+			channels._db.items[channel] += 1
+	channels.save_dont_call_in_prod()
+
 @log_on_fail(debug_group)
 @log_call()
 def indexClean():
 	removeOldFiles('tmp', day = 2)	
 	os.system('rm tmp/*embed*')
+	rescore()
 	removeNonExistChannel()
-	save()
 	cleanupSuspectAndOld()
-	save()
 	cleanupRedundant()
 	save()
+

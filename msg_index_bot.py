@@ -50,7 +50,7 @@ def indexing():
 	start = time.time()
 	if len(coreIndex) == 0:
 		dbase.fillCoreIndex()
-	if len(dbase.maintext.items()) > 2000000:
+	if True: # len(dbase.maintext.items()) > 2000000:
 		clean.indexClean()
 	indexingImp()
 	indexBackfill()
