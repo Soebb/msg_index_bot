@@ -178,9 +178,9 @@ def rescore():
 def indexClean():
 	removeOldFiles('tmp', day = 2)	
 	os.system('rm tmp/*embed*')
-	rescore()
 	removeNonExistChannel()
 	cleanupSuspectAndOld()
 	cleanupRedundant()
 	save()
+	rescore()
 
