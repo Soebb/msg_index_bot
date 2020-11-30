@@ -54,7 +54,7 @@ def indexing():
 		clean.indexClean()
 	indexingImp()
 	indexBackfill()
-	pause = max(1, 2 * 60 * 60 - time.time() + start)
+	pause = max(1, 60 * 60 - time.time() + start)
 	threading.Timer(pause, indexing).start()
 
 if __name__ == '__main__':

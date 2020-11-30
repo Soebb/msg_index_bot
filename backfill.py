@@ -75,7 +75,7 @@ def slowBackfill(channel):
 			break
 
 def shouldBackfill(channel):
-	if random.random() > 0.01:
+	if random.random() > 0.005:
 		return False
 	
 	if not dbase.isCNGoodChannel(channel):
