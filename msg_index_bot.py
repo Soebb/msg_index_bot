@@ -37,12 +37,8 @@ def indexingImp():
 @log_on_fail(debug_group)
 @log_call()
 def indexBackfill():
-	last_record = time.time()
 	for channel, score in channels.items():
 		backfill.backfill(channel)
-		if time.time() - last_record > 60 * 60:
-			last_record = time.time()
-			sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 	sendDebugMessage(*(['indexBackfillDuration'] + dbase.resetStatus()), persistent=True)
 
 @log_call()
