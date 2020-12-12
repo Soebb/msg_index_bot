@@ -79,7 +79,7 @@ def shouldRemove(key):
 	if not maintext.get(key):
 		return True
 	channel = key.split('/')[0]
-	if channels.get(channel) == -2:
+	if channels.get(channel) in [-2, 100]:
 		return True
 	if 0 <= channels.get(channel) < 2:
 		return False
