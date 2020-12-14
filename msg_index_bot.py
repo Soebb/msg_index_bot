@@ -50,8 +50,7 @@ def indexing():
 		clean.indexClean()
 	indexingImp()
 	indexBackfill()
-	# running in a local unstable environment, increase frequency of data refreshing
-	pause = 1 # max(1, 60 * 60 - time.time() + start)
+	pause = max(1, 60 * 60 - time.time() + start)
 	threading.Timer(pause, indexing).start()
 
 if __name__ == '__main__':
