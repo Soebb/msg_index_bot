@@ -125,7 +125,8 @@ def searchAuthor(text):
 	text = text.replace(' ', '_')
 	line = authors.get(text) or ''
 	items = line.split()
-
+	result = populateMaintextLoose(result)
+	return finalTouch(result)
 
 def searchRelated(text):
 	text = text.split('/')[-1]
