@@ -130,7 +130,7 @@ def searchAuthor(text):
 	text = text.replace(' ', '_')
 	line = authors.get(text) or ''
 	items = line.split()
-	result = populateMaintextLoose(result)
+	result = populateMaintextLoose(items)
 	return finalTouch(result)
 
 def searchRelated(text):

@@ -60,7 +60,7 @@ def reply(msg, result):
 	reply = sendResult(msg, result)
 	if not reply:
 		reply = msg.reply_text('no result')
-	forwardDebug(reply2)
+	forwardDebug(reply)
 
 @log_on_fail(debug_group)
 def handleCommand(update, context):
