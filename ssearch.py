@@ -133,6 +133,13 @@ def searchAuthor(text):
 	result = populateMaintextLoose(items)
 	return finalTouch(result)
 
+def searchAuthorChannel(text):
+	text = text.replace(' ', '_')
+	line = authors.get(text) or ''
+	items = line.split()
+	result = populateChannelTitleLoose(items)
+	return finalTouch(result)
+
 def searchRelated(text):
 	text = text.split('/')[-1]
 	if not text:
