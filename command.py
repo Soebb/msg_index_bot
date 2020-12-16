@@ -2,7 +2,7 @@ from telegram.ext import MessageHandler, Filters
 from telegram_util import log_on_fail, splitCommand, tryDelete, matchKey
 from common import debug_group
 import dbase
-from ssearch import searchText, searchChannel, searchRelated, getHtmlReply, getMarkdownReply, searchHitAll
+from ssearch import searchText, searchChannel, searchRelated, getHtmlReply, getMarkdownReply, searchHitAll, searchAuthor
 import time
 
 def sendResult(msg, result):
@@ -56,6 +56,12 @@ with open('help.md') as f:
 with open('advance.md') as f:
 	ADVANCE_HELP_MESSAGE = f.read()
 
+def reply(msg, result):
+	reply = sendResult(msg, result)
+	if not reply:
+		reply = msg.reply_text('no result')
+	forwardDebug(reply2)
+
 @log_on_fail(debug_group)
 def handleCommand(update, context):
 	msg = update.message # Do not support command in channel
@@ -77,13 +83,11 @@ def handleCommand(update, context):
 		return
 	if 'relate' in command or command == '/r':
 		result = searchRelated(text)
-		reply = sendResult(msg, result)
-		if not reply:
-			reply = msg.reply_text('no result')
-		forwardDebug(reply2)
+		reply(msg, result)
 		return
 	if command == '/a':
 		result = searchAuthor(text)
+		reply(msg, result)
 		return
 	if msg.from_user and msg.from_user.id == debug_group.id:
 		if command in ['/ss']:

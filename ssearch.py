@@ -6,7 +6,7 @@
 
 from common import debug_group
 import dbase
-from dbase import maintext, blocklist, index, channels, timestamp, coreIndex, suspect
+from dbase import maintext, blocklist, index, channels, timestamp, coreIndex, suspect, authors
 from telegram_util import matchKey, isCN
 import itertools
 import time
@@ -120,6 +120,10 @@ def searchTextRaw(targets, searchCore=False):
 		targets, (key, maintext.get(key))))
 	result = dedupResult(result, lambda key: key.split('/')[0])
 	return result
+
+def searchAuthor(text):
+	text = text.replace(' ', '_')
+	line = authors.get(text) or ''
 
 def searchRelated(text):
 	text = text.split('/')[-1]
