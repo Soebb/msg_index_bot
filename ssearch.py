@@ -133,14 +133,15 @@ def searchTextRaw(targets, searchCore=False):
 def searchAuthor(text):
 	text = text.replace(' ', '_')
 	line = authors.get(text) or ''
-	items = line.split()
-	result = populateMaintextLoose(items)
+	result = line.split()
+	result = populateMaintextLoose(result)
 	return finalTouch(result)
 
 def searchAuthorChannel(text):
 	text = text.replace(' ', '_')
 	line = authors.get(text) or ''
-	items = line.split()
+	result = line.split()
+	result = dedupResult(result, lambda key: key.split('/')[0], sendAfter=False)
 	result = populateChannelTitleLoose(items)
 	return finalTouch(result)
 
