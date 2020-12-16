@@ -73,6 +73,8 @@ def updateTime(key, time):
 		return
 	timestamp.update(key, time)
 
+def updateAuthor(post):
+
 def shouldGetReferers(post):
 	if post.time < time.time() - 365 * 60 * 60 * 24:
 		return False
@@ -90,6 +92,7 @@ def update(post):
 	if shouldGetReferers(post):
 		for channel in webgram.yieldReferers(post):
 			updateChannel(channel, post.channel)
+	updateAuthor(post)
 
 def removeKey(key):
 	index._db.items.pop(key, None)
