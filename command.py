@@ -2,7 +2,7 @@ from telegram.ext import MessageHandler, Filters
 from telegram_util import log_on_fail, splitCommand, tryDelete, matchKey
 from common import debug_group
 import dbase
-from ssearch import searchText, searchChannel, searchRelated, getHtmlReply, getMarkdownReply, searchHitAll, searchAuthor
+from ssearch import searchText, searchChannel, searchRelated, getHtmlReply, getMarkdownReply, searchHitAll, searchAuthor, searchAuthorChannel
 import time
 
 def sendResult(msg, result):
@@ -85,7 +85,11 @@ def handleCommand(update, context):
 		result = searchRelated(text)
 		reply(msg, result)
 		return
-	if command == '/a':
+	if 'author_channel' in command or command == '/ac':
+		result = searchAuthorChannel(text)
+		reply(msg, result)
+		return
+	if 'author' in command or command == '/a':
 		result = searchAuthor(text)
 		reply(msg, result)
 		return
