@@ -124,6 +124,8 @@ def searchTextRaw(targets, searchCore=False):
 def searchAuthor(text):
 	text = text.replace(' ', '_')
 	line = authors.get(text) or ''
+	items = line.split(' ')
+	
 
 def searchRelated(text):
 	text = text.split('/')[-1]
