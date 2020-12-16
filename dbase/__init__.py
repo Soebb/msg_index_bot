@@ -74,13 +74,21 @@ def updateTime(key, time):
 	timestamp.update(key, time)
 
 def updateAuthor(post):
+	if post.post_id == 0:
+		return
 	for author in post.getAuthor():
-		line = authors.get(author) or ''
-		items = line.split()
-		if post.channel in line and len(items) > 20:
+		if author == post.channel:
 			continue
-		line = post.getKey() + ' ' + line
-		authors.update(author, line)
+		items = (authors.get(author) or '').split()
+		items = [post.getKey()] + line.split()
+		if len(items) > 40:
+			for item in items[20:][:]:
+				if post.channel in item:
+					items.remove(item)
+		items = items[:40]
+
+
+		authors.update(author, ' '.join(items))
 
 def shouldGetReferers(post):
 	if post.time < time.time() - 365 * 60 * 60 * 24:
