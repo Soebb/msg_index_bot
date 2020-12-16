@@ -80,11 +80,11 @@ def updateAuthor(post):
 		if author == post.channel:
 			continue
 		items = [post.getKey()] + (authors.get(author) or '').split()
-		if len(items) > 4: # todo: add 0
-			for item in items[2:][:]:
+		if len(items) > 40:
+			for item in items[20:][:]:
 				if post.channel in item:
 					items.remove(item)
-		items = items[:4]
+		items = items[:40]
 		authors.update(author, ' '.join(items))
 
 def shouldGetReferers(post):

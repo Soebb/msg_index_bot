@@ -92,6 +92,11 @@ def populateMaintext(result):
 	for key in result:
 		yield key, maintext.get(key)
 
+def populateMaintextLoose(result):
+	for key in result:
+		yield key, (maintext.get(key) or 
+			maintext.get(key.split('/') + '/0') or key)
+
 def getChannelTitle(key):
 	channel = key.split('/')[0]
 	return maintext.get(channel + '/0')
