@@ -12,7 +12,6 @@ def sendResult(msg, result):
 		return msg.reply_text('\n'.join(getHtmlReply(result[:20])), 
 				disable_web_page_preview = True, parse_mode = 'html')
 	except:
-		print(result)
 		return msg.reply_text('\n'.join(getMarkdownReply(result[:20])), 
 			disable_web_page_preview = True, parse_mode = 'markdown')
 
@@ -77,13 +76,14 @@ def handleCommand(update, context):
 		msg.reply_text(ADVANCE_HELP_MESSAGE, disable_web_page_preview=True)
 		return
 	if 'relate' in command or command == '/r':
-		reply1 = msg.reply_text('searching')
 		result = searchRelated(text)
-		reply2 = sendResult(msg, result)
-		if not reply2:
-			reply2 = msg.reply_text('no result')
+		reply = sendResult(msg, result)
+		if not reply:
+			reply = msg.reply_text('no result')
 		forwardDebug(reply2)
-		tryDelete(reply1)
+		return
+	if command == '/a':
+		result = searchAuthor(text)
 		return
 	if msg.from_user and msg.from_user.id == debug_group.id:
 		if command in ['/ss']:

@@ -76,7 +76,7 @@ def updateTime(key, time):
 def updateAuthor(post):
 	for author in post.getAuthor():
 		line = authors.get(author) or ''
-		items = existing.split()
+		items = line.split()
 		if post.channel in line and len(items) > 20:
 			continue
 		line = post.getKey() + ' ' + line
