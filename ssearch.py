@@ -142,7 +142,7 @@ def searchAuthorChannel(text):
 	line = authors.get(text) or ''
 	result = line.split()
 	result = dedupResult(result, lambda key: key.split('/')[0], sendAfter=False)
-	result = populateChannelTitleLoose(items)
+	result = populateChannelTitleLoose(result)
 	return finalTouch(result)
 
 def searchRelated(text):
