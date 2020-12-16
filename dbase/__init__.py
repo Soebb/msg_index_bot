@@ -13,6 +13,7 @@ timestamp = plain_db.loadLargeDB('timestamp', isIntValue = True)
 channelrefer = plain_db.loadKeyOnlyDB('channelrefer')
 suspect = plain_db.loadKeyOnlyDB('suspect')
 delay = plain_db.loadKeyOnlyDB('delay')
+author = plain_db.loadLargeDB('author')
 
 status = {}
 badByRefer = set()
