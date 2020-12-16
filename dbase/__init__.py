@@ -13,7 +13,7 @@ timestamp = plain_db.loadLargeDB('timestamp', isIntValue = True)
 channelrefer = plain_db.loadKeyOnlyDB('channelrefer')
 suspect = plain_db.loadKeyOnlyDB('suspect')
 delay = plain_db.loadKeyOnlyDB('delay')
-author = plain_db.loadLargeDB('author')
+authors = plain_db.loadLargeDB('authors')
 
 status = {}
 badByRefer = set()
@@ -74,6 +74,8 @@ def updateTime(key, time):
 	timestamp.update(key, time)
 
 def updateAuthor(post):
+	for author in post.getAuthor():
+		authors.get(author) or ''
 
 def shouldGetReferers(post):
 	if post.time < time.time() - 365 * 60 * 60 * 24:
