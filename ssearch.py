@@ -107,7 +107,7 @@ def populateChannelTitle(result):
 
 def populateChannelTitleLoose(result):
 	for key in result:
-		yield key, (getChannelTitle or key.split('/')[0])
+		yield key, (getChannelTitle(key) or key.split('/')[0])
 
 def sortAndClean(result):
 	result = [(timestamp.get(key, 0) - 
