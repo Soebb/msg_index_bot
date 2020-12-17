@@ -79,7 +79,10 @@ def updateAuthor(post):
 	for author in post.getAuthor():
 		if author == post.channel:
 			continue
-		items = [post.getKey()] + (authors.get(author) or '').split()
+		items = (authors.get(author) or '').split()
+		if post.getKey() in items:
+			continue
+		items = [post.getKey()] + items
 		if len(items) > 40:
 			for item in items[20:][:]:
 				if post.channel in item:
