@@ -124,7 +124,11 @@ def cleanupSuspect():
 
 @log_call()
 def cleanupBad():
-	
+	for channel in channels.items():
+		if channels.get(channel) <= -1
+		dbase.remove(key + '/0')
+	for channel in suspect.items():
+		dbase.remove(key + '/0')
 
 @log_call()
 def cleanupNonCNEN():
