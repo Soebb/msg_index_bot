@@ -147,10 +147,6 @@ def removeNonExistChannel():
 			continue
 		if not title:
 			channel_to_remove.add(key.split('/')[0])
-	# only once, todo: remove
-	for channel in suspect.items():
-		if channels.get(channel) >= 3:
-			channel_to_remove.add(channel)
 	items = [(item[0], item[0].split('/')[0].lower()) for item in maintext.items()]
 	bucket = createBucket(items)
 	for channel_lower in bucket:
