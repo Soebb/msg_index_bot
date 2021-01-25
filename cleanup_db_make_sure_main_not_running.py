@@ -123,6 +123,10 @@ def cleanupSuspect():
 	print('cleanupSuspect', count)
 
 @log_call()
+def cleanupBad():
+	
+
+@log_call()
 def cleanupNonCNEN():
 	bucket = {}
 	for key, text in maintext.items():
@@ -151,6 +155,7 @@ def save():
 	# removeOldFiles('tmp', day = 2)
 
 if __name__ == '__main__':
+	cleanupBad()
 	save()
 	cleanupNonCNEN()
 	save()
