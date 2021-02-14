@@ -19,7 +19,7 @@ import time
 def indexingImp():
 	for channel, score in channels.items():
 		if score < 0 or random.random() > 1.0 / min(
-				score ** 2.5 + 1, score ** 2 * 2 + 1):
+				score ** 3 + 1, score ** 2.5 * 2 + 1):
 			continue
 		if 'test' in sys.argv and random.random() > 0.1:
 			continue # better testing
