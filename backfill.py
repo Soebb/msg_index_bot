@@ -4,7 +4,6 @@ import sys
 import webgram
 import dbase
 from dbase import index, channels, timestamp
-from common import log_time
 
 YEAR = 365 * 60 * 60 * 24
 
