@@ -17,6 +17,7 @@ import time
 @log_on_fail(debug_group)
 @log_call()
 def indexingImp():
+	sendDebugMessage(*(['indexingImpStart'] + dbase.resetStatus()))
 	for channel, score in channels.items():
 		if score < 0 or random.random() > 1.0 / min(
 				score ** 3 + 1, score ** 2.5 * 2 + 1):

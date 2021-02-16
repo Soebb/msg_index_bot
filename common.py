@@ -19,7 +19,6 @@ def isSimplified(text):
 last_debug_message = None
 
 def sendDebugMessage(*args, persistent=False):
-	print(*args)
 	message = ' '.join([os.uname()[1].split('-')[0]] + 
 		[str(x) for x in args])
 	if persistent:
@@ -38,15 +37,5 @@ def log_call():
 			f(*args,**kwargs)
 			new_args[-1] = 'end'
 			sendDebugMessage(*new_args)
-		return applicator
-	return decorate
-
-def log_time():
-	def decorate(f):
-		def applicator(*args, **kwargs):
-			start = time.time()
-			f(*args,**kwargs)
-			to_print = [f.__name__] + list(args) + [int(time.time() - start)]
-			print(*to_print)
 		return applicator
 	return decorate
