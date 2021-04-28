@@ -2,17 +2,19 @@ from telegram.ext import MessageHandler, Filters
 from telegram_util import log_on_fail, splitCommand, tryDelete, matchKey
 from common import debug_group
 import dbase
-from ssearch import searchText, searchChannel, searchRelated, getHtmlReply, getMarkdownReply, searchHitAll, searchAuthor, searchAuthorChannel
+from ssearch import searchText, searchChannel, searchRelated, getHtmlReply, getMarkdownReply, searchHitAll, searchAuthor, searchAuthorChannel, SEARCH_LIMIT
 import time
+
+ITEM_LIMIT = 80
 
 def sendResult(msg, result):
 	if not result:
 		return
 	try:
-		return msg.reply_text('\n'.join(getHtmlReply(result[:20])), 
+		return msg.reply_text('\n'.join(getHtmlReply(result[:ITEM_LIMIT])), 
 				disable_web_page_preview = True, parse_mode = 'html')
 	except:
-		return msg.reply_text('\n'.join(getMarkdownReply(result[:20])), 
+		return msg.reply_text('\n'.join(getMarkdownReply(result[:ITEM_LIMIT])), 
 			disable_web_page_preview = True, parse_mode = 'markdown')
 
 def forwardDebug(msg):
@@ -25,9 +27,9 @@ def forwardDebug(msg):
 def goodEnough(result, text):
 	if matchKey(text, dbase.blocklist.items()):
 		return True
-	if not len(result) == 40:
+	if not len(result) == SEARCH_LIMIT:
 		return False
-	return searchHitAll(text.split(), result[19][1:])
+	return searchHitAll(text.split(), result[ITEM_LIMIT - 1][1:])
 
 def search(msg, text, method):
 	reply1 = msg.reply_text('searching')

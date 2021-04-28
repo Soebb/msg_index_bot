@@ -11,6 +11,8 @@ from telegram_util import matchKey, isCN
 import itertools
 import time
 
+SEARCH_LIMIT = 80
+
 def getHtmlReply(result):
 	return ['%d. <a href="https://t.me/%s">%s</a>' % r for r in result]
 
@@ -19,7 +21,7 @@ def getMarkdownReply(result):
 
 def finalTouch(result):
 	return [(result_index + 1, r[0], r[1]) for 
-		result_index, r in enumerate(itertools.islice(result, 40))]
+		result_index, r in enumerate(itertools.islice(result, SEARCH_LIMIT))]
 
 def searchHit(target, item):
 	if not item[1]:
@@ -146,14 +148,14 @@ def searchAuthorChannel(text):
 	return finalTouch(result)
 
 def searchRelated(text):
-	text = text.split('/')[-1]
+	text = set(text.split('/'))
 	if not text:
 		return []
 	result = set()
 	for item in dbase.channelrefer.items():
-		if text in item.split(':'):
+		if set(item.split(':')) & keys:
 			result.update(item.split(':'))
-	result.discard(text)
+	result -= keys
 	result = [channel + '/0' for channel in result 
 		if maintext.get(channel + '/0')]
 	result = sortAndClean(result)
