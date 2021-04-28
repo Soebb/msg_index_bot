@@ -11,7 +11,7 @@ from telegram_util import matchKey, isCN
 import itertools
 import time
 
-SEARCH_LIMIT = 80
+SEARCH_LIMIT = 20
 
 def getHtmlReply(result):
 	return ['%d. <a href="https://t.me/%s">%s</a>' % r for r in result]
