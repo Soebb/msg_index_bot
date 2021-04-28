@@ -148,9 +148,7 @@ def searchAuthorChannel(text):
 	return finalTouch(result)
 
 def searchRelated(text):
-	text = set(text.split('/'))
-	if not text:
-		return []
+	keys = set([item.strip() for item in text.split('/') if item.strip()])
 	result = set()
 	for item in dbase.channelrefer.items():
 		if set(item.split(':')) & keys:
