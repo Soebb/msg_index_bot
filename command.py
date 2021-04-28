@@ -5,7 +5,7 @@ import dbase
 from ssearch import searchText, searchChannel, searchRelated, getHtmlReply, getMarkdownReply, searchHitAll, searchAuthor, searchAuthorChannel, SEARCH_LIMIT
 import time
 
-ITEM_LIMIT = 40
+ITEM_LIMIT = 20
 
 def sendResult(msg, result):
 	if not result:
