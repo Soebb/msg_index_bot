@@ -6,7 +6,7 @@ import time
 
 token = os.environ.get('BOT_TOKEN')
 tele = Updater(token, use_context=True)  # @msg_index_bot
-debug_group = tele.bot.get_chat(-1001264182630)
+debug_group = tele.bot.get_chat(-1001000431759)
 
 def isSimplified(text):
 	cn = sum([isCN(c) + hanzidentifier.is_simplified(c) for c in text])
